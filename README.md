@@ -51,8 +51,8 @@ The development of this CLI tool will have five "releases" that relate to the co
 ## Using mrxcavator
 
 ### Installation
-1. Python >=3.6 is required for application compatibility (e.g. `brew install python`)
-2. Execute `git clone https://github.com/mstanislav/mrxcavator.git` to get it
+1. Python >=3.6 is required for application compatibility (e.g. `brew install python` on macOS)
+2. Execute `git clone https://github.com/mstanislav/mrxcavator.git` to download the repository
 3. Execute `cd mrxcavator` to enter the application's root folder
 4. Execute `pip3 install -r requirements.txt` to install Python dependencies
 
