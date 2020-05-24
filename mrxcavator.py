@@ -125,7 +125,7 @@ def submit_extension(id: str) -> bool:
     result = call_api("/submit", "POST", {"extension_id": id})
 
     if result["code"] == 802:
-        error(f"No extension called {id} was found. Please check your ID.")
+        error(f"{id} is not a valid extension ID. Please check your input.")
         return False
     else:
         print(f"\n\tYou've successfully submitted {id} to CRXcavator.\n")
