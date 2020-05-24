@@ -10,8 +10,8 @@ __version__ = "0.1"
 import sys
 import json
 import inspect
-import requests
 import argparse
+import requests
 
 crxcavator_api_base = "https://api.crxcavator.io/v1"
 
