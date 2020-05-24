@@ -1,6 +1,6 @@
 # mrxcavator
 
-mrxcavator is a CLI implementation for [CRXcavator](https://crxcavator.io) being built as part of DSU's CSC-842, "Security Tool Development" course.
+mrxcavator is a CLI client implementation for the service [CRXcavator.io](https://crxcavator.io) being built in relation to Dakota State University's course CSC-842, "Security Tool Development."
 
 ## Overview
 
