@@ -10,14 +10,14 @@ The following overview was taken from the service's [about](https://crxcavator.i
 The development of this CLI tool will have five "releases" that relate to the course submission deadlines. As releases are produced, this README.md will be updated to share the highlights. At a high-level, this tool will provide some amount of feature parity to the CRXcavator web experience.
 
 1. Release 1 - 05/24/2020
-  * Initial creation of mrxcavator, including this README, LICENSE, and requirements.txt
-  * Added support to show the installed version (-v or --version)
-  * Added support to submit an extension by id (-s or --submit)
-  * Added support to request an extension report by id (-r or --report)
-  * Generated application documentation (docs/mrxcavator.html) using `pdoc`
-  * Validated `flake8`, `mypy`, and `black` run cleanly against the application
-  * Commented blocks leverage Google's Python Style Guide for docstrings
-  * Functions leverage PEP 484 type hinting to improve documentation & linting
+    * Initial creation of mrxcavator, including this README, LICENSE, and requirements.txt
+    * Added support to show the installed version (-v or --version)
+    * Added support to submit an extension by id (-s or --submit)
+    * Added support to request an extension report by id (-r or --report)
+    * Generated application documentation (docs/mrxcavator.html) using `pdoc`
+    * Validated `flake8`, `mypy`, and `black` run cleanly against the application
+    * Commented blocks leverage Google's Python Style Guide for docstrings
+    * Functions leverage PEP 484 type hinting to improve documentation & linting
 2. Release 2 - 06/07/2020
 3. Release 3 - 06/21/2020
 4. Release 4 - 07/05/2020
@@ -50,7 +50,7 @@ The development of this CLI tool will have five "releases" that relate to the co
 
 ## Using mrxcavator
 
-## Installation
+### Installation
 1. Python >=3.6 is required for application compatibility (e.g. `brew install python`)
 2. Execute `git clone https://github.com/mstanislav/mrxcavator.git` to get it
 3. Execute `cd mrxcavator` to enter the application's root folder
