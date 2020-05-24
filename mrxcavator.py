@@ -78,10 +78,10 @@ def get_report_summary(result: dict) -> bool:
         True.
     """
 
-    id = result[0]["extension_id"]
-    version = result[0]["version"]
+    id = result[-1]["extension_id"]
+    version = result[-1]["version"]
 
-    result = result[0]["data"]
+    result = result[-1]["data"]
 
     print(
         inspect.cleandoc(
