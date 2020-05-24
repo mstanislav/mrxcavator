@@ -83,20 +83,21 @@ Overview
 ================================================================================
     Extension Name: LastPass: Free Password Manager
     Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
-    Newest Version: 4.18.0.4 (2018-10-09)
-    Store Rating:   4.594451 stars
+    Newest Version: 4.48.0.2 (2020-05-13)
+    Store Rating:   4.5433135 stars
 
 Risk
 ================================================================================
-    CSP Policy:     86
-    RetireJS:       100
-    Web Store:      6
+    CSP Policy:     69
+    RetireJS:       150
+    Web Store:      1
 
     Permissions:
       >Required:    110
-      >Optional:    85
+      >Optional:    25
 
-    ** Risk Score:  387 **
+    ** Risk Score:  355 **
+
 ```
 
 ### Get mrxcavator's Version
