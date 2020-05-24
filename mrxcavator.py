@@ -13,7 +13,7 @@ import inspect
 import requests
 import argparse
 
-crxcavator_api_base = 'https://api.crxcavator.io/v1'
+crxcavator_api_base = "https://api.crxcavator.io/v1"
 
 
 def error(message: str, fatal=False) -> bool:
@@ -48,15 +48,15 @@ def call_api(end_point: str, method: str, values=None) -> dict:
 
     endpoint = crxcavator_api_base + end_point
 
-    if method == 'GET':
+    if method == "GET":
         response = requests.get(endpoint)
-    elif method == 'POST':
+    elif method == "POST":
         response = requests.post(endpoint, json=values)
     else:
         error(f"'{method}' is not a valid HTTP method.")
 
     if response.status_code == 200:
-        return json.loads(response.content.decode('utf-8'))
+        return json.loads(response.content.decode("utf-8"))
     elif response.status_code == 401:
         error("401 - API Not Authorized - Please check your API token.")
     elif response.status_code == 403:
@@ -78,12 +78,14 @@ def get_report_summary(result: dict) -> bool:
         True.
     """
 
-    id = result[0]['extension_id']
-    version = result[0]['version']
+    id = result[0]["extension_id"]
+    version = result[0]["version"]
 
-    result = result[0]['data']
+    result = result[0]["data"]
 
-    print(inspect.cleandoc(f"""
+    print(
+        inspect.cleandoc(
+            f"""
             \t
             Overview
             {'='*80}
@@ -104,7 +106,9 @@ def get_report_summary(result: dict) -> bool:
             \t
             \t** Risk Score:\t{result['risk']['total']} **
             \t
-            """))
+            """
+        )
+    )
 
     return True
 
@@ -118,9 +122,9 @@ def submit_extension(id: str) -> bool:
     Returns:
         A boolean.
     """
-    result = call_api('/submit', 'POST', {'extension_id': id})
+    result = call_api("/submit", "POST", {"extension_id": id})
 
-    if result['code'] == 802:
+    if result["code"] == 802:
         error(f"No extension called {id} was found. Please check your ID.")
         return False
     else:
@@ -138,7 +142,7 @@ def get_report(id: str) -> bool:
     Returns:
         A boolean.
     """
-    result = call_api('/report/' + id, 'GET')
+    result = call_api("/report/" + id, "GET")
 
     if result is None:
         error(f"No reports were found for extension {id}.")
@@ -154,12 +158,15 @@ if __name__ == "__main__":
         sys.exit(1)
     else:
         parser = argparse.ArgumentParser()
-        parser.add_argument('-s', '--submit', metavar='id',
-                            help='submit extension')
-        parser.add_argument('-r', '--report', metavar='id',
-                            help='extension report')
-        parser.add_argument('-v', '--version', action='version',
-                            version='mrxcavator v' + __version__)
+        parser.add_argument(
+            "-s", "--submit", metavar="id", help="submit an extension"
+        )
+        parser.add_argument(
+            "-r", "--report", metavar="id", help="get an extension's report"
+        )
+        parser.add_argument(
+            "-v", "--version", action="version", version="v" + __version__
+        )
 
         if len(sys.argv) < 2:
             parser.print_help()
