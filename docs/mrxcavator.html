@@ -29,8 +29,22 @@
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="mrxcavator.build_config"><code class="name flex">
+<span>def <span class="ident">build_config</span></span>(<span>filename: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Builds a default configuration and says it
+to the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
 <dt id="mrxcavator.call_api"><code class="name flex">
-<span>def <span class="ident">call_api</span></span>(<span>end_point: str, method: str, values=None) -> dict</span>
+<span>def <span class="ident">call_api</span></span>(<span>end_point: str, method: str, values=None, headers=None) -> dict</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Calls an API endpoint with a passed-in HTTP method and an optional dict
@@ -43,6 +57,8 @@ of values for APIs that required parameters to be sent in the request.</p>
 <dd>The HTTP method string to use for the API call.</dd>
 <dt><strong><code>values</code></strong></dt>
 <dd>An optional dict of values to pass as API parameters.</dd>
+<dt><strong><code>headers</code></strong></dt>
+<dd>An optional dict of headers to pass to the API.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A dict of API results or an empty dict.</p></div>
@@ -59,6 +75,36 @@ of values for APIs that required parameters to be sent in the request.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>False or exits the application with a failure status code.</p></div>
+</dd>
+<dt id="mrxcavator.find_extension_directories"><code class="name flex">
+<span>def <span class="ident">find_extension_directories</span></span>(<span>path: str) -> list</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mrxcavator.get_crx_path"><code class="name flex">
+<span>def <span class="ident">get_crx_path</span></span>(<span>extension: str = '') -> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mrxcavator.get_extension_name"><code class="name flex">
+<span>def <span class="ident">get_extension_name</span></span>(<span>extension_dir: str) -> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mrxcavator.get_installed_extensions"><code class="name flex">
+<span>def <span class="ident">get_installed_extensions</span></span>(<span>path: str) -> dict</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="mrxcavator.get_latest_extension_version"><code class="name flex">
+<span>def <span class="ident">get_latest_extension_version</span></span>(<span>extension_dir: str) -> str</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="mrxcavator.get_report"><code class="name flex">
 <span>def <span class="ident">get_report</span></span>(<span>id: str) -> bool</span>
@@ -86,6 +132,49 @@ of values for APIs that required parameters to be sent in the request.</p>
 <h2 id="returns">Returns</h2>
 <p>True.</p></div>
 </dd>
+<dt id="mrxcavator.load_config"><code class="name flex">
+<span>def <span class="ident">load_config</span></span>(<span>filename: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Loads ConfigParser with configuration data from the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
+<dt id="mrxcavator.set_crxcavator_key"><code class="name flex">
+<span>def <span class="ident">set_crxcavator_key</span></span>(<span>filename: str, key: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configures the CRXcavator API key into the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
+<dt><strong><code>key</code></strong></dt>
+<dd>The CRXcavator API key as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
+<dt id="mrxcavator.set_crxcavator_uri"><code class="name flex">
+<span>def <span class="ident">set_crxcavator_uri</span></span>(<span>filename: str, uri: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configures the CRXcavator API URI into the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
+<dt><strong><code>uri</code></strong></dt>
+<dd>The CRXcavator URI for API calls as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
 <dt id="mrxcavator.submit_extension"><code class="name flex">
 <span>def <span class="ident">submit_extension</span></span>(<span>id: str) -> bool</span>
 </code></dt>
@@ -95,6 +184,45 @@ of values for APIs that required parameters to be sent in the request.</p>
 <dl>
 <dt><strong><code>id</code></strong></dt>
 <dd>An extension identifier string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
+<dt id="mrxcavator.test_crxcavator_key"><code class="name flex">
+<span>def <span class="ident">test_crxcavator_key</span></span>(<span>) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs an API call to CRXcavator to test the configured API key.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>None</code></strong></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
+<dt id="mrxcavator.test_crxcavator_uri"><code class="name flex">
+<span>def <span class="ident">test_crxcavator_uri</span></span>(<span>) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs an API call to CRXcavator to test the configured URI.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>None</code></strong></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
+<dt id="mrxcavator.write_config"><code class="name flex">
+<span>def <span class="ident">write_config</span></span>(<span>filename: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Writes the state of ConfigParser to the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A boolean.</p></div>
@@ -112,11 +240,23 @@ of values for APIs that required parameters to be sent in the request.</p>
 <ul id="index">
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="mrxcavator.build_config" href="#mrxcavator.build_config">build_config</a></code></li>
 <li><code><a title="mrxcavator.call_api" href="#mrxcavator.call_api">call_api</a></code></li>
 <li><code><a title="mrxcavator.error" href="#mrxcavator.error">error</a></code></li>
+<li><code><a title="mrxcavator.find_extension_directories" href="#mrxcavator.find_extension_directories">find_extension_directories</a></code></li>
+<li><code><a title="mrxcavator.get_crx_path" href="#mrxcavator.get_crx_path">get_crx_path</a></code></li>
+<li><code><a title="mrxcavator.get_extension_name" href="#mrxcavator.get_extension_name">get_extension_name</a></code></li>
+<li><code><a title="mrxcavator.get_installed_extensions" href="#mrxcavator.get_installed_extensions">get_installed_extensions</a></code></li>
+<li><code><a title="mrxcavator.get_latest_extension_version" href="#mrxcavator.get_latest_extension_version">get_latest_extension_version</a></code></li>
 <li><code><a title="mrxcavator.get_report" href="#mrxcavator.get_report">get_report</a></code></li>
 <li><code><a title="mrxcavator.get_report_summary" href="#mrxcavator.get_report_summary">get_report_summary</a></code></li>
+<li><code><a title="mrxcavator.load_config" href="#mrxcavator.load_config">load_config</a></code></li>
+<li><code><a title="mrxcavator.set_crxcavator_key" href="#mrxcavator.set_crxcavator_key">set_crxcavator_key</a></code></li>
+<li><code><a title="mrxcavator.set_crxcavator_uri" href="#mrxcavator.set_crxcavator_uri">set_crxcavator_uri</a></code></li>
 <li><code><a title="mrxcavator.submit_extension" href="#mrxcavator.submit_extension">submit_extension</a></code></li>
+<li><code><a title="mrxcavator.test_crxcavator_key" href="#mrxcavator.test_crxcavator_key">test_crxcavator_key</a></code></li>
+<li><code><a title="mrxcavator.test_crxcavator_uri" href="#mrxcavator.test_crxcavator_uri">test_crxcavator_uri</a></code></li>
+<li><code><a title="mrxcavator.write_config" href="#mrxcavator.write_config">write_config</a></code></li>
 </ul>
 </li>
 </ul>
