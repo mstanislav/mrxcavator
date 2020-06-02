@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.1"
+__version__ = "0.2"
 
 import os
 import re
@@ -311,8 +311,61 @@ def find_extension_directories(path: str) -> list:
     return directories
 
 
-def get_extension_name(extension_dir: str) -> str:
-    return ""
+def get_extension_messages_path(path: str) -> str:
+    messages_en = f"{path}/_locales/en/messages.json"
+    messages_en_US = f"{path}/_locales/en_US/messages.json"
+    messages_en_GB = f"{path}/_locales/en_GB/messages.json"
+
+    if os.path.isfile(messages_en_US):
+        path = messages_en_US
+    elif os.path.isfile(messages_en_GB):
+        path = messages_en_GB
+    elif os.path.isfile(messages_en):
+        path = messages_en
+    else:
+        path = ""
+
+    return path
+
+
+def get_extension_messages_name(name: str, messages: dict) -> str:
+    result = re.search("__MSG_(.+?)__", name)
+
+    if result.group(1):
+        switcher = {
+            "APP_NAME": "app_name",
+            "CHROME_EXTENSION_NAME": "chrome_extension_name",
+            "appName": "appName",
+            "extName": "extName",
+        }
+
+        key = switcher.get(result.group(1), "")
+        name = messages[key]["message"]
+    else:
+        name = ""
+
+    return name
+
+
+def get_extension_name(extension: str, version: str) -> str:
+    crx_base = f"{get_crx_path(extension)}/{version}/"
+    manifest_path = f"{crx_base}/manifest.json"
+    messages_path = get_extension_messages_path(crx_base)
+
+    with open(manifest_path) as manifestHandle:
+        manifest = json.load(manifestHandle)
+
+    if re.match("^__MSG", manifest["name"]) is None:
+        name = manifest["name"]
+    elif messages_path != "":
+        with open(messages_path) as messagesHandle:
+            messages = json.load(messagesHandle)
+
+        name = get_extension_messages_name(manifest["name"], messages)
+    else:
+        name = "**Unknown Name**"
+
+    return name
 
 
 def get_latest_extension_version(extension_dir: str) -> str:
@@ -328,8 +381,9 @@ def get_installed_extensions(path: str) -> dict:
     extensions: dict = {}
 
     for dir in find_extension_directories(path):
-        latest_version = get_latest_extension_version(dir)
-        print(f"Found {dir} with a latest version of {latest_version}")
+        version = get_latest_extension_version(dir)
+        name = get_extension_name(dir, version)
+        print(f"{name} [{version}] ({dir}) ")
 
     return extensions
 
