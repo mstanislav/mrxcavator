@@ -25,6 +25,18 @@ CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions"
 config = configparser.ConfigParser()
 
 
+def is_ignored(id: str) -> bool:
+    ignored = [
+        "nmmhkkegccagdldgiimedpiccmgmieda",
+        "pkedcjkdefgpdelpbcmbmeomcjbeemfm",
+    ]
+
+    if id in ignored:
+        return True
+    else:
+        return False
+
+
 def error(message: str, fatal=False) -> bool:
     """Prints a passed-in message and then exits with False or a failure exit.
 
@@ -134,12 +146,11 @@ def submit_extension(id: str) -> bool:
     """
     result = call_api("/submit", "POST", {"extension_id": id})
 
-    if result["code"] == 802:
-        error(f"{id} is not a valid extension. Please check your input.", True)
+    if result["code"] == 802 and is_ignored(id) is False:
+        error(f"{id} is not a valid extension. Please check your input.")
+        return False
     else:
-        print(f"\n\tYou've successfully submitted {id} to CRXcavator.\n")
-
-    return True
+        return True
 
 
 def get_report(id: str) -> bool:
@@ -377,15 +388,23 @@ def get_latest_extension_version(extension_dir: str) -> str:
     return str(max(vers))
 
 
-def get_installed_extensions(path: str) -> dict:
-    extensions: dict = {}
+def get_installed_extensions(path: str) -> list:
+    extensions: list = []
 
     for dir in find_extension_directories(path):
         version = get_latest_extension_version(dir)
         name = get_extension_name(dir, version)
-        print(f"{name} [{version}] ({dir}) ")
+        extensions.append({"name": name, "version": version, "id": dir})
 
     return extensions
+
+
+def submit_extensions(extensions: list):
+    for extension in extensions:
+        if submit_extension(extension["id"]):
+            print(f"\tYou've successfully submitted {extension['name']}.")
+        else:
+            error(f"{id} could not be found in the Chrome store")
 
 
 if __name__ == "__main__":
@@ -396,6 +415,11 @@ if __name__ == "__main__":
         parser = argparse.ArgumentParser()
         parser.add_argument(
             "-s", "--submit", metavar="id", help="submit an extension"
+        )
+        parser.add_argument(
+            "--submit_all",
+            action="store_true",
+            help="submit all installed extensions",
         )
         parser.add_argument(
             "-r", "--report", metavar="id", help="get an extension's report"
@@ -435,7 +459,8 @@ if __name__ == "__main__":
         load_config(CONFIG_FILE)
 
         if args.submit:
-            submit_extension(args.submit)
+            if submit_extension(args.submit):
+                print(f"\n\tYou've successfully submitted {args.submit}.\n")
         elif args.report:
             get_report(args.report)
         elif args.crxcavator_key:
@@ -453,4 +478,7 @@ if __name__ == "__main__":
             else:
                 error("The CRXcavator API URI returned an unexpected result.")
         elif args.extensions:
-            get_installed_extensions(CRX_PATH)
+            for ext in get_installed_extensions(CRX_PATH):
+                print(f"\t{ext['name']} [{ext['version']}] ({ext['id']})")
+        elif args.submit_all:
+            submit_extensions(get_installed_extensions(CRX_PATH))
