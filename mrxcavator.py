@@ -329,9 +329,9 @@ def get_extension_messages_path(path: str) -> str:
 
 
 def get_extension_messages_name(name: str, messages: dict) -> str:
-    result = re.search("__MSG_(.+?)__", name)
+    manifest_key = re.search("__MSG_(.+?)__", name).group(1)  # type: ignore
 
-    if result.group(1):
+    if manifest_key:
         switcher = {
             "APP_NAME": "app_name",
             "CHROME_EXTENSION_NAME": "chrome_extension_name",
@@ -339,8 +339,8 @@ def get_extension_messages_name(name: str, messages: dict) -> str:
             "extName": "extName",
         }
 
-        key = switcher.get(result.group(1), "")
-        name = messages[key]["message"]
+        messages_key = switcher.get(manifest_key, "")
+        name = messages[messages_key]["message"]
     else:
         name = ""
 
