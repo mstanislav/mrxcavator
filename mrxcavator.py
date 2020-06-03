@@ -26,6 +26,16 @@ config = configparser.ConfigParser()
 
 
 def is_ignored(id: str) -> bool:
+    """Returns a boolean to designate if a passed-in extension ID is within the
+    ignored list or not. These ignored extensions are ones that get installed
+    by Google and normally "hidden" from view (i.e. chrome:///extensions)
+
+    Args:
+        id: An extension identifier string.
+
+    Returns:
+        A bool.
+    """
     ignored = [
         "nmmhkkegccagdldgiimedpiccmgmieda",
         "pkedcjkdefgpdelpbcmbmeomcjbeemfm",
@@ -46,7 +56,6 @@ def error(message: str, fatal=False) -> bool:
     Returns:
         False or exits the application with a failure status code.
     """
-
     print(f"\n\t{message}\n")
     if fatal is True:
         sys.exit(1)
@@ -67,7 +76,6 @@ def call_api(end_point: str, method: str, values=None, headers=None) -> dict:
     Returns:
         A dict of API results or an empty dict.
     """
-
     endpoint = config.get("custom", "crxcavator_api_uri") + end_point
 
     if method == "GET":
@@ -91,19 +99,39 @@ def call_api(end_point: str, method: str, values=None, headers=None) -> dict:
     return {}
 
 
-def get_report_summary(result: dict) -> bool:
+def version_count(results: dict) -> int:
+    """Returns a count of CRXcavator-tracked versions for an extension.
+
+    Args:
+        results: A dict of CRXcavator extension results.
+
+    Returns:
+        An int.
+    """
+    total = 0
+
+    for result in results:
+        if result["version"]:
+            total += 1
+
+    return total
+
+
+def get_report_summary(results: dict) -> bool:
     """Prints a formatted report of information for the given extension.
 
     Args:
-        result: A dict of extension information.
+        results: A dict of all extension information.
+
     Returns:
         True.
     """
+    id = results[-1]["extension_id"]
+    version = results[-1]["version"]
+    versions = version_count(results)
 
-    id = result[-1]["extension_id"]
-    version = result[-1]["version"]
-
-    result = result[-1]["data"]
+    webstore = results[-1]["data"]["webstore"]
+    risk = results[-1]["data"]["risk"]
 
     print(
         inspect.cleandoc(
@@ -111,22 +139,23 @@ def get_report_summary(result: dict) -> bool:
             \t
             Overview
             {'='*80}
-            \tExtension Name:\t{result['webstore']['name']}
+            \tExtension Name:\t{webstore['name']}
             \tExtension ID:\t{id}
-            \tNewest Version:\t{version} ({result['webstore']['last_updated']})
-            \tStore Rating:\t{result['webstore']['rating']} stars
+            \tNewest Version:\t{version} ({webstore['last_updated']})
+            \tVersions Known:\t{versions}
+            \tStore Rating:\t{webstore['rating']} stars
             \t
             Risk
             {'='*80}
-            \tCSP Policy:\t{result['risk']['csp']['total']}
-            \tRetireJS: \t{result['risk']['retire']['total']}
-            \tWeb Store: \t{result['risk']['webstore']['total']}
+            \tCSP Policy:\t{risk['csp']['total']}
+            \tRetireJS: \t{risk['retire']['total']}
+            \tWeb Store: \t{risk['webstore']['total']}
             \t
             \tPermissions:
-              \t  >Required:\t{result['risk']['permissions']['total']}
-              \t  >Optional:\t{result['risk']['optional_permissions']['total']}
+              \t  >Required:\t{risk['permissions']['total']}
+              \t  >Optional:\t{risk['optional_permissions']['total']}
             \t
-            \t** Risk Score:\t{result['risk']['total']} **
+            \t** Risk Score:\t{risk['total']} **
             \t
             """
         )
@@ -308,11 +337,28 @@ def test_crxcavator_uri() -> bool:
         return False
 
 
-def get_crx_path(extension: str = "") -> str:
-    return os.path.expanduser(CRX_PATH) + "/" + extension
+def get_crx_path(id: str = "") -> str:
+    """Returns a filesystem path to the system's Chrome Extension directory. An
+    optional extentension ID may be passed in to append to the retuned path.
+
+    Args:
+        id: An optional extension identifier string.
+
+    Returns:
+        A string with the appropriate filesystem path.
+    """
+    return os.path.expanduser(CRX_PATH) + "/" + id
 
 
 def find_extension_directories(path: str) -> list:
+    """Return all valid Chrome extension directories from a passed-in path.
+
+    Args:
+        path: The filesystem path to Chrome extensions.
+
+    Returns:
+        A list containing Chrome extension directories.
+    """
     directories = []
 
     for dir in next(os.walk(get_crx_path()))[1]:
@@ -323,6 +369,14 @@ def find_extension_directories(path: str) -> list:
 
 
 def get_extension_messages_path(path: str) -> str:
+    """Return the path to an extension's most appropriate messages.json file.
+
+    Args:
+        path: The filesystem path to a specific Chrome extension.
+
+    Returns:
+        A string to the most appropriate messages.json file.
+    """
     messages_en = f"{path}/_locales/en/messages.json"
     messages_en_US = f"{path}/_locales/en_US/messages.json"
     messages_en_GB = f"{path}/_locales/en_GB/messages.json"
