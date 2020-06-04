@@ -19,6 +19,15 @@ The development of this CLI tool will have five "releases" that relate to the co
     * Commented blocks leverage Google's Python Style Guide for docstrings
     * Functions leverage PEP 484 type hinting to improve documentation & linting
 2. Release 2 - 06/07/2020
+    * Generated new documentation to reflect changes to functionality
+    * Integration of ConfigParser to enable user controllable configuration
+    * Support for identifier exclusions for extensions that Chrome bundles in
+    * Added API key support to HTTP calls to support future functionality
+    * Moved the API endpoint URI from a hardcoded to becoming user configured
+    * Add API key and API URI test functionality to validate configurations
+    * Added locally-installed extension discovery (only macOS for right now)
+    * Extension report now shows the count of versions that CRXcavator tracks
+    * Support the mass submission of extensions that are found locally installed
 3. Release 3 - 06/21/2020
 4. Release 4 - 07/05/2020
 5. Release 5 - 07/19/2020
