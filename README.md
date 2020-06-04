@@ -194,14 +194,14 @@ Locally Installed Chrome Extensions:
 
 ### Set the CRXcavator API URI Value
 ```
-➜  python3 ./mrxcavator.py --crxcavator_uri https://api.crxcavator.io/v1
+➜  python3 mrxcavator.py --crxcavator_uri https://api.crxcavator.io/v1
 
 	The CRXcavator API URI was set successfully!
 ```
 
 ### Set the CRXcavator API Key Value
 ```
-➜  python3 ./mrxcavator.py --crxcavator_key DEnDIwspwQkiMYZzuFbHOHUqDOpSaDIw
+➜  python3 mrxcavator.py --crxcavator_key DEnDIwspwQkiMYZzuFbHOHUqDOpSaDIw
 
 	The CRXcavator API key was set successfully!
 ```
