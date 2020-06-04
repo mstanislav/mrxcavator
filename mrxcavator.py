@@ -572,7 +572,11 @@ if __name__ == "__main__":
             else:
                 error("The CRXcavator API URI returned an unexpected result.")
         elif args.extensions:
+            print("\nLocally Installed Chrome Extensions:")
+            print("------------------------------------\n")
             for ext in get_installed_extensions(CRX_PATH):
-                print(f"\t{ext['name']} [{ext['version']}] ({ext['id']})")
+                print(f"* {ext['name']}")
+                print(f"  - Version:\t{ext['version']}")
+                print(f"  - Identifier: {ext['id']}\n")
         elif args.submit_all:
             submit_extensions(get_installed_extensions(CRX_PATH))
