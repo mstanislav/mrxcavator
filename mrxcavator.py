@@ -394,6 +394,15 @@ def get_extension_messages_path(path: str) -> str:
 
 
 def get_extension_messages_name(name: str, messages: dict) -> str:
+    """Returns the 'name' of a Chrome extension via a messages.json file.
+
+    Args:
+        name: The canonical reference string for a messages.json value.
+        messages: A dict representation for a represented messages.json file.
+
+    Returns:
+        A string for the 'name' of a Chrome extension via a messages.json file.
+    """
     manifest_key = re.search("__MSG_(.+?)__", name).group(1)  # type: ignore
 
     if manifest_key:
@@ -412,8 +421,17 @@ def get_extension_messages_name(name: str, messages: dict) -> str:
     return name
 
 
-def get_extension_name(extension: str, version: str) -> str:
-    crx_base = f"{get_crx_path(extension)}/{version}/"
+def get_extension_name(id: str, version: str) -> str:
+    """Returns the 'name' of a Chrome extension by finding the correct source.
+
+    Args:
+        id: An extension identifier string.
+        version: The extension version that is used to search file paths.
+
+    Returns:
+        A string for the 'name' of a Chrome extension.
+    """
+    crx_base = f"{get_crx_path(id)}/{version}/"
     manifest_path = f"{crx_base}/manifest.json"
     messages_path = get_extension_messages_path(crx_base)
 
@@ -433,7 +451,15 @@ def get_extension_name(extension: str, version: str) -> str:
     return name
 
 
-def get_latest_extension_version(extension_dir: str) -> str:
+def get_latest_local_version(extension_dir: str) -> str:
+    """Returns the latest local version for a passed-in extension path.
+
+    Args:
+        extension_dir: A string for the path to a given local extension.
+
+    Returns:
+        A string for the version of the most recent local version available.
+    """
     vers = []
 
     for dir in next(os.walk(get_crx_path(extension_dir)))[1]:
@@ -443,17 +469,33 @@ def get_latest_extension_version(extension_dir: str) -> str:
 
 
 def get_installed_extensions(path: str) -> list:
+    """Returns a list of installed extensions based on a passed-in path.
+
+    Args:
+        path: A string for the path to installed Chrome extensions.
+
+    Returns:
+        A list of extension identifiers that are locally installed for Chrome.
+    """
     extensions: list = []
 
     for dir in find_extension_directories(path):
-        version = get_latest_extension_version(dir)
+        version = get_latest_local_version(dir)
         name = get_extension_name(dir, version)
         extensions.append({"name": name, "version": version, "id": dir})
 
     return extensions
 
 
-def submit_extensions(extensions: list):
+def submit_extensions(extensions: list) -> None:
+    """Submits many extensions (by ID) for CRXcavator to process.
+
+    Args:
+        extensions: A list of extension identifier strings.
+
+    Returns:
+        None.
+    """
     for extension in extensions:
         if submit_extension(extension["id"]):
             print(f"\tYou've successfully submitted {extension['name']}.")

@@ -80,43 +80,97 @@ of values for APIs that required parameters to be sent in the request.</p>
 <span>def <span class="ident">find_extension_directories</span></span>(<span>path: str) -> list</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return all valid Chrome extension directories from a passed-in path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>The filesystem path to Chrome extensions.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list containing Chrome extension directories.</p></div>
 </dd>
 <dt id="mrxcavator.get_crx_path"><code class="name flex">
-<span>def <span class="ident">get_crx_path</span></span>(<span>extension: str = '') -> str</span>
+<span>def <span class="ident">get_crx_path</span></span>(<span>id: str = '') -> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns a filesystem path to the system's Chrome Extension directory. An
+optional extentension ID may be passed in to append to the retuned path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>An optional extension identifier string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string with the appropriate filesystem path.</p></div>
 </dd>
 <dt id="mrxcavator.get_extension_messages_name"><code class="name flex">
 <span>def <span class="ident">get_extension_messages_name</span></span>(<span>name: str, messages: dict) -> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the 'name' of a Chrome extension via a messages.json file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>The canonical reference string for a messages.json value.</dd>
+<dt><strong><code>messages</code></strong></dt>
+<dd>A dict representation for a represented messages.json file.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string for the 'name' of a Chrome extension via a messages.json file.</p></div>
 </dd>
 <dt id="mrxcavator.get_extension_messages_path"><code class="name flex">
 <span>def <span class="ident">get_extension_messages_path</span></span>(<span>path: str) -> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Return the path to an extension's most appropriate messages.json file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>The filesystem path to a specific Chrome extension.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string to the most appropriate messages.json file.</p></div>
 </dd>
 <dt id="mrxcavator.get_extension_name"><code class="name flex">
-<span>def <span class="ident">get_extension_name</span></span>(<span>extension: str, version: str) -> str</span>
+<span>def <span class="ident">get_extension_name</span></span>(<span>id: str, version: str) -> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the 'name' of a Chrome extension by finding the correct source.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>An extension identifier string.</dd>
+<dt><strong><code>version</code></strong></dt>
+<dd>The extension version that is used to search file paths.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string for the 'name' of a Chrome extension.</p></div>
 </dd>
 <dt id="mrxcavator.get_installed_extensions"><code class="name flex">
-<span>def <span class="ident">get_installed_extensions</span></span>(<span>path: str) -> dict</span>
+<span>def <span class="ident">get_installed_extensions</span></span>(<span>path: str) -> list</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns a list of installed extensions based on a passed-in path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>A string for the path to installed Chrome extensions.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list of extension identifiers that are locally installed for Chrome.</p></div>
 </dd>
-<dt id="mrxcavator.get_latest_extension_version"><code class="name flex">
-<span>def <span class="ident">get_latest_extension_version</span></span>(<span>extension_dir: str) -> str</span>
+<dt id="mrxcavator.get_latest_local_version"><code class="name flex">
+<span>def <span class="ident">get_latest_local_version</span></span>(<span>extension_dir: str) -> str</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns the latest local version for a passed-in extension path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>extension_dir</code></strong></dt>
+<dd>A string for the path to a given local extension.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string for the version of the most recent local version available.</p></div>
 </dd>
 <dt id="mrxcavator.get_report"><code class="name flex">
 <span>def <span class="ident">get_report</span></span>(<span>id: str) -> bool</span>
@@ -132,17 +186,32 @@ of values for APIs that required parameters to be sent in the request.</p>
 <p>A boolean.</p></div>
 </dd>
 <dt id="mrxcavator.get_report_summary"><code class="name flex">
-<span>def <span class="ident">get_report_summary</span></span>(<span>result: dict) -> bool</span>
+<span>def <span class="ident">get_report_summary</span></span>(<span>results: dict) -> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prints a formatted report of information for the given extension.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>result</code></strong></dt>
-<dd>A dict of extension information.</dd>
+<dt><strong><code>results</code></strong></dt>
+<dd>A dict of all extension information.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>True.</p></div>
+</dd>
+<dt id="mrxcavator.is_ignored"><code class="name flex">
+<span>def <span class="ident">is_ignored</span></span>(<span>id: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a boolean to designate if a passed-in extension ID is within the
+ignored list or not. These ignored extensions are ones that get installed
+by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>An extension identifier string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A bool.</p></div>
 </dd>
 <dt id="mrxcavator.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>filename: str) -> bool</span>
@@ -200,6 +269,19 @@ of values for APIs that required parameters to be sent in the request.</p>
 <h2 id="returns">Returns</h2>
 <p>A boolean.</p></div>
 </dd>
+<dt id="mrxcavator.submit_extensions"><code class="name flex">
+<span>def <span class="ident">submit_extensions</span></span>(<span>extensions: list) -> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Submits many extensions (by ID) for CRXcavator to process.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>extensions</code></strong></dt>
+<dd>A list of extension identifier strings.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None.</p></div>
+</dd>
 <dt id="mrxcavator.test_crxcavator_key"><code class="name flex">
 <span>def <span class="ident">test_crxcavator_key</span></span>(<span>) -> bool</span>
 </code></dt>
@@ -225,6 +307,19 @@ of values for APIs that required parameters to be sent in the request.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A boolean.</p></div>
+</dd>
+<dt id="mrxcavator.version_count"><code class="name flex">
+<span>def <span class="ident">version_count</span></span>(<span>results: dict) -> int</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a count of CRXcavator-tracked versions for an extension.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>results</code></strong></dt>
+<dd>A dict of CRXcavator extension results.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>An int.</p></div>
 </dd>
 <dt id="mrxcavator.write_config"><code class="name flex">
 <span>def <span class="ident">write_config</span></span>(<span>filename: str) -> bool</span>
@@ -261,15 +356,18 @@ of values for APIs that required parameters to be sent in the request.</p>
 <li><code><a title="mrxcavator.get_extension_messages_path" href="#mrxcavator.get_extension_messages_path">get_extension_messages_path</a></code></li>
 <li><code><a title="mrxcavator.get_extension_name" href="#mrxcavator.get_extension_name">get_extension_name</a></code></li>
 <li><code><a title="mrxcavator.get_installed_extensions" href="#mrxcavator.get_installed_extensions">get_installed_extensions</a></code></li>
-<li><code><a title="mrxcavator.get_latest_extension_version" href="#mrxcavator.get_latest_extension_version">get_latest_extension_version</a></code></li>
+<li><code><a title="mrxcavator.get_latest_local_version" href="#mrxcavator.get_latest_local_version">get_latest_local_version</a></code></li>
 <li><code><a title="mrxcavator.get_report" href="#mrxcavator.get_report">get_report</a></code></li>
 <li><code><a title="mrxcavator.get_report_summary" href="#mrxcavator.get_report_summary">get_report_summary</a></code></li>
+<li><code><a title="mrxcavator.is_ignored" href="#mrxcavator.is_ignored">is_ignored</a></code></li>
 <li><code><a title="mrxcavator.load_config" href="#mrxcavator.load_config">load_config</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_key" href="#mrxcavator.set_crxcavator_key">set_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_uri" href="#mrxcavator.set_crxcavator_uri">set_crxcavator_uri</a></code></li>
 <li><code><a title="mrxcavator.submit_extension" href="#mrxcavator.submit_extension">submit_extension</a></code></li>
+<li><code><a title="mrxcavator.submit_extensions" href="#mrxcavator.submit_extensions">submit_extensions</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_key" href="#mrxcavator.test_crxcavator_key">test_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_uri" href="#mrxcavator.test_crxcavator_uri">test_crxcavator_uri</a></code></li>
+<li><code><a title="mrxcavator.version_count" href="#mrxcavator.version_count">version_count</a></code></li>
 <li><code><a title="mrxcavator.write_config" href="#mrxcavator.write_config">write_config</a></code></li>
 </ul>
 </li>
