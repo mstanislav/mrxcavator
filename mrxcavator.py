@@ -34,7 +34,7 @@ def is_ignored(id: str) -> bool:
         id: An extension identifier string.
 
     Returns:
-        A bool.
+        A boolean result.
     """
     ignored = [
         "nmmhkkegccagdldgiimedpiccmgmieda",
@@ -106,7 +106,7 @@ def version_count(results: dict) -> int:
         results: A dict of CRXcavator extension results.
 
     Returns:
-        An int.
+        An integer count of versions.
     """
     total = 0
 
@@ -117,7 +117,7 @@ def version_count(results: dict) -> int:
     return total
 
 
-def get_report_summary(results: dict) -> bool:
+def get_report_summary(results: dict) -> None:
     """Prints a formatted report of information for the given extension.
 
     Args:
@@ -161,8 +161,6 @@ def get_report_summary(results: dict) -> bool:
         )
     )
 
-    return True
-
 
 def submit_extension(id: str) -> bool:
     """Submits an extension (by ID) for CRXcavator to process.
@@ -171,7 +169,7 @@ def submit_extension(id: str) -> bool:
         id: An extension identifier string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     result = call_api("/submit", "POST", {"extension_id": id})
 
@@ -189,7 +187,7 @@ def get_report(id: str) -> bool:
         id: An extension identifier string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     result = call_api("/report/" + id, "GET")
 
@@ -208,7 +206,7 @@ def write_config(filename: str) -> bool:
         filename: The mrxcavator configuration filename as a string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     try:
         with open(filename, "w") as fileHandle:
@@ -226,7 +224,7 @@ def build_config(filename: str) -> bool:
         filename: The mrxcavator configuration filename as a string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     config["DEFAULT"] = {"crxcavator_api_uri": "https://api.crxcavator.io/v1"}
     config.add_section("custom")
@@ -244,7 +242,7 @@ def load_config(filename: str) -> bool:
         filename: The mrxcavator configuration filename as a string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     config.read(filename)
 
@@ -265,7 +263,7 @@ def set_crxcavator_key(filename: str, key: str) -> bool:
         key: The CRXcavator API key as a string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     if len(key) != 32 or re.match("^[a-zA-Z]+$", key) is False:
         error(f"The provided API key, {key}, is incorrectly formatted.", True)
@@ -286,7 +284,7 @@ def set_crxcavator_uri(filename: str, uri: str) -> bool:
         uri: The CRXcavator URI for API calls as a string.
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     if validators.url(uri) is True:
         config.set("custom", "crxcavator_api_uri", uri)
@@ -306,7 +304,7 @@ def test_crxcavator_key() -> bool:
         None
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     key = config.get("custom", "crxcavator_api_key")
 
@@ -327,7 +325,7 @@ def test_crxcavator_uri() -> bool:
         None
 
     Returns:
-        A boolean.
+        A boolean result.
     """
     result = call_api("", "GET")
 
@@ -345,7 +343,7 @@ def get_crx_path(id: str = "") -> str:
         id: An optional extension identifier string.
 
     Returns:
-        A string with the appropriate filesystem path.
+        A string with the appropriate filesystem path for a(n) extension(s).
     """
     return os.path.expanduser(CRX_PATH) + "/" + id
 

@@ -41,7 +41,7 @@ to the passed-in filename.</p>
 <dd>The mrxcavator configuration filename as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.call_api"><code class="name flex">
 <span>def <span class="ident">call_api</span></span>(<span>end_point: str, method: str, values=None, headers=None) -> dict</span>
@@ -101,7 +101,7 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <dd>An optional extension identifier string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A string with the appropriate filesystem path.</p></div>
+<p>A string with the appropriate filesystem path for a(n) extension(s).</p></div>
 </dd>
 <dt id="mrxcavator.get_extension_messages_name"><code class="name flex">
 <span>def <span class="ident">get_extension_messages_name</span></span>(<span>name: str, messages: dict) -> str</span>
@@ -183,10 +183,10 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <dd>An extension identifier string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.get_report_summary"><code class="name flex">
-<span>def <span class="ident">get_report_summary</span></span>(<span>results: dict) -> bool</span>
+<span>def <span class="ident">get_report_summary</span></span>(<span>results: dict) -> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prints a formatted report of information for the given extension.</p>
@@ -211,7 +211,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>An extension identifier string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A bool.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>filename: str) -> bool</span>
@@ -224,7 +224,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>The mrxcavator configuration filename as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.set_crxcavator_key"><code class="name flex">
 <span>def <span class="ident">set_crxcavator_key</span></span>(<span>filename: str, key: str) -> bool</span>
@@ -239,7 +239,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>The CRXcavator API key as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.set_crxcavator_uri"><code class="name flex">
 <span>def <span class="ident">set_crxcavator_uri</span></span>(<span>filename: str, uri: str) -> bool</span>
@@ -254,7 +254,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>The CRXcavator URI for API calls as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.submit_extension"><code class="name flex">
 <span>def <span class="ident">submit_extension</span></span>(<span>id: str) -> bool</span>
@@ -267,7 +267,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>An extension identifier string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.submit_extensions"><code class="name flex">
 <span>def <span class="ident">submit_extensions</span></span>(<span>extensions: list) -> NoneType</span>
@@ -293,7 +293,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>&nbsp;</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.test_crxcavator_uri"><code class="name flex">
 <span>def <span class="ident">test_crxcavator_uri</span></span>(<span>) -> bool</span>
@@ -306,7 +306,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>&nbsp;</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.version_count"><code class="name flex">
 <span>def <span class="ident">version_count</span></span>(<span>results: dict) -> int</span>
@@ -319,7 +319,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>A dict of CRXcavator extension results.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>An int.</p></div>
+<p>An integer count of versions.</p></div>
 </dd>
 <dt id="mrxcavator.write_config"><code class="name flex">
 <span>def <span class="ident">write_config</span></span>(<span>filename: str) -> bool</span>
@@ -332,7 +332,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <dd>The mrxcavator configuration filename as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean.</p></div>
+<p>A boolean result.</p></div>
 </dd>
 </dl>
 </section>
