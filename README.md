@@ -67,33 +67,61 @@ The development of this CLI tool will have five "releases" that relate to the co
 
 ### Help Output
 ```
-➜  python3 mrxcavator.py
-usage: mrxcavator.py [-h] [-s id] [-r id] [-v]
+➜  python3 mrxcavator.py -h
+usage: mrxcavator.py [-h] [-s id] [--submit_all] [-r id]
+                     [--crxcavator_key key] [--crxcavator_uri uri]
+                     [--test_crxcavator_key] [--test_crxcavator_uri] [-e] [-v]
 
 optional arguments:
-  -h, --help          show this help message and exit
-  -s id, --submit id  submit an extension
-  -r id, --report id  get an extension's report
-  -v, --version       show program's version number and exit
+  -h, --help            show this help message and exit
+  -s id, --submit id    submit an extension
+  --submit_all          submit all installed extensions
+  -r id, --report id    get an extension's report
+  --crxcavator_key key  set CRXcavator API key
+  --crxcavator_uri uri  set CRXcavator API URI
+  --test_crxcavator_key
+                        test configured CRXcavator API key
+  --test_crxcavator_uri
+                        test configured CRXcavator API URI
+  -e, --extensions      list installed extensions
+  -v, --version         show program's version number and exit
 ```
 
 ### Submit an Extension
 ```
-➜  python3 mrxcavator.py --submit hdokiejnpimakedhajhdlcegeplioahd
+➜  python3 mrxcavator.py -s hdokiejnpimakedhajhdlcegeplioahd
 
-        You've successfully submitted hdokiejnpimakedhajhdlcegeplioahd to CRXcavator.
+	You've successfully submitted hdokiejnpimakedhajhdlcegeplioahd.
+```
+
+### Mass Submission of Locally Installed Extensions
+```
+➜  python3 mrxcavator.py --submit_all
+	You've successfully submitted Google Docs Offline.
+	You've successfully submitted Chrome Media Router.
+	You've successfully submitted Gmail.
+	You've successfully submitted Google Drive.
+	You've successfully submitted Application Launcher for Drive (by Google).
+	You've successfully submitted Slides.
+	You've successfully submitted Docs.
+	You've successfully submitted Google Keep Chrome Extension.
+	You've successfully submitted Chrome Web Store Payments.
+	You've successfully submitted Save to Google Drive.
+	You've successfully submitted YouTube.
+	You've successfully submitted Sheets.
 ```
 
 ### Get an Extension's Report
 ```
-➜  python3 mrxcavator.py --report hdokiejnpimakedhajhdlcegeplioahd
+➜  python3 mrxcavator.py -r hdokiejnpimakedhajhdlcegeplioahd
 
 Overview
 ================================================================================
     Extension Name: LastPass: Free Password Manager
     Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
-    Newest Version: 4.48.0.2 (2020-05-13)
-    Store Rating:   4.5433135 stars
+    Newest Version: 4.49.0.3 (2020-06-03)
+    Versions Known: 41
+    Store Rating:   4.543241 stars
 
 Risk
 ================================================================================
@@ -106,11 +134,94 @@ Risk
       >Optional:    25
 
     ** Risk Score:  355 **
+```
 
+### List Locally Installed Extensions
+```
+➜  python3 mrxcavator.py -e
+
+Locally Installed Chrome Extensions:
+------------------------------------
+
+* Google Docs Offline
+  - Version:	1.11.0_0
+  - Identifier: ghbmnnjooekpmoecnnnilnnbdlolhkhi
+
+* Chrome Media Router
+  - Version:	8320.407.0.1_0
+  - Identifier: pkedcjkdefgpdelpbcmbmeomcjbeemfm
+
+* Gmail
+  - Version:	8.2_0
+  - Identifier: pjkljhegncpnkpknbcohdijeoejaedia
+
+* Google Drive
+  - Version:	14.2_0
+  - Identifier: apdfllckaahabafndbhieahigkjlhalf
+
+* Application Launcher for Drive (by Google)
+  - Version:	3.2_1
+  - Identifier: lmjegmlicamnimmfhcmpkclmigmmcbeh
+
+* Slides
+  - Version:	0.10_1
+  - Identifier: aapocclcgogkmnckokdopfmhonfmgoek
+
+* Docs
+  - Version:	0.10_1
+  - Identifier: aohghmighlieiainnegkcijnfilokake
+
+* Google Keep Chrome Extension
+  - Version:	4.20222.540.1_0
+  - Identifier: lpcaedmchfhocbbapmcbpinfpgnhiddi
+
+* Chrome Web Store Payments
+  - Version:	1.0.0.5_0
+  - Identifier: nmmhkkegccagdldgiimedpiccmgmieda
+
+* Save to Google Drive
+  - Version:	2.1.1_0
+  - Identifier: gmbmikajjgmnabiglmofipeabaddhgne
+
+* YouTube
+  - Version:	4.2.8_0
+  - Identifier: blpcfgokakmgnkcojhhkbfbldkacnbeo
+
+* Sheets
+  - Version:	1.2_0
+  - Identifier: felcaaldnbdncclmgdcncolpebgiejap
+```
+
+### Set the CRXcavator API Key Value
+```
+➜  python3 ./mrxcavator.py --crxcavator_uri https://api.crxcavator.io/v1
+
+	The CRXcavator API URI was set successfully!
+```
+
+### Set the CRXcavator API URI Value
+```
+➜  python3 ./mrxcavator.py --crxcavator_key DEnDIwspwQkiMYZzuFbHOHUqDOpSaDIw
+
+	The CRXcavator API key was set successfully!
+```
+
+### Test Current CRXcavator API Key Setting
+```
+➜  python3 mrxcavator.py --test_crxcavator_key
+
+	The CRXcavator API key was successfully tested!
+```
+
+### Test Current CRXcavator API Base URI Setting
+```
+➜  python3 mrxcavator.py --test_crxcavator_uri
+
+	The CRXcavator API URI was successfully tested!
 ```
 
 ### Get mrxcavator's Version
 ```
 ➜  python3 mrxcavator.py --version
-v0.1
+v0.2
 ```
