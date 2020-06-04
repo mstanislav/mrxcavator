@@ -76,6 +76,21 @@ of values for APIs that required parameters to be sent in the request.</p>
 <h2 id="returns">Returns</h2>
 <p>False or exits the application with a failure status code.</p></div>
 </dd>
+<dt id="mrxcavator.extension_is_ignored"><code class="name flex">
+<span>def <span class="ident">extension_is_ignored</span></span>(<span>id: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a boolean to designate if a passed-in extension ID is within the
+ignored list or not. These ignored extensions are ones that get installed
+by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>An extension identifier string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean result.</p></div>
+</dd>
 <dt id="mrxcavator.find_extension_directories"><code class="name flex">
 <span>def <span class="ident">find_extension_directories</span></span>(<span>path: str) -> list</span>
 </code></dt>
@@ -197,21 +212,6 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>True.</p></div>
-</dd>
-<dt id="mrxcavator.is_ignored"><code class="name flex">
-<span>def <span class="ident">is_ignored</span></span>(<span>id: str) -> bool</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Returns a boolean to designate if a passed-in extension ID is within the
-ignored list or not. These ignored extensions are ones that get installed
-by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>id</code></strong></dt>
-<dd>An extension identifier string.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>filename: str) -> bool</span>
@@ -350,6 +350,7 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <li><code><a title="mrxcavator.build_config" href="#mrxcavator.build_config">build_config</a></code></li>
 <li><code><a title="mrxcavator.call_api" href="#mrxcavator.call_api">call_api</a></code></li>
 <li><code><a title="mrxcavator.error" href="#mrxcavator.error">error</a></code></li>
+<li><code><a title="mrxcavator.extension_is_ignored" href="#mrxcavator.extension_is_ignored">extension_is_ignored</a></code></li>
 <li><code><a title="mrxcavator.find_extension_directories" href="#mrxcavator.find_extension_directories">find_extension_directories</a></code></li>
 <li><code><a title="mrxcavator.get_crx_path" href="#mrxcavator.get_crx_path">get_crx_path</a></code></li>
 <li><code><a title="mrxcavator.get_extension_messages_name" href="#mrxcavator.get_extension_messages_name">get_extension_messages_name</a></code></li>
@@ -359,7 +360,6 @@ by Google and normally "hidden" from view (i.e. chrome:///extensions)</p>
 <li><code><a title="mrxcavator.get_latest_local_version" href="#mrxcavator.get_latest_local_version">get_latest_local_version</a></code></li>
 <li><code><a title="mrxcavator.get_report" href="#mrxcavator.get_report">get_report</a></code></li>
 <li><code><a title="mrxcavator.get_report_summary" href="#mrxcavator.get_report_summary">get_report_summary</a></code></li>
-<li><code><a title="mrxcavator.is_ignored" href="#mrxcavator.is_ignored">is_ignored</a></code></li>
 <li><code><a title="mrxcavator.load_config" href="#mrxcavator.load_config">load_config</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_key" href="#mrxcavator.set_crxcavator_key">set_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_uri" href="#mrxcavator.set_crxcavator_uri">set_crxcavator_uri</a></code></li>

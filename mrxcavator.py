@@ -25,7 +25,7 @@ CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions"
 config = configparser.ConfigParser()
 
 
-def is_ignored(id: str) -> bool:
+def extension_is_ignored(id: str) -> bool:
     """Returns a boolean to designate if a passed-in extension ID is within the
     ignored list or not. These ignored extensions are ones that get installed
     by Google and normally "hidden" from view (i.e. chrome:///extensions)
@@ -173,7 +173,7 @@ def submit_extension(id: str) -> bool:
     """
     result = call_api("/submit", "POST", {"extension_id": id})
 
-    if result["code"] == 802 and is_ignored(id) is False:
+    if result["code"] == 802 and extension_is_ignored(id) is False:
         error(f"{id} is not a valid extension. Please check your input.")
         return False
     else:
