@@ -225,3 +225,14 @@ Locally Installed Chrome Extensions:
 ➜  python3 mrxcavator.py --version
 v0.2
 ```
+
+### Example config.ini Contents
+```
+cat config.ini
+[DEFAULT]
+crxcavator_api_uri = https://api.crxcavator.io/v1
+
+[custom]
+crxcavator_api_key = DEnDIwspwQkiMYZzuFbHOHUqDOpSaDIw
+crxcavator_api_uri = https://api.crxcavator.io/v1
+```
