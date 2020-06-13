@@ -20,7 +20,7 @@ import configparser
 from packaging import version
 
 CONFIG_FILE_DEFAULT = "config.ini"
-CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions"
+CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
 
 config = configparser.ConfigParser()
 
@@ -228,7 +228,8 @@ def build_config(filename: str) -> bool:
     """
     config["DEFAULT"] = {
         "crxcavator_api_uri": "https://api.crxcavator.io/v1",
-        "crxcavator_api_key": ""
+        "crxcavator_api_key": "",
+        "extension_path": CRX_PATH
     }
     config.add_section("custom")
 
@@ -275,6 +276,30 @@ def set_crxcavator_key(filename: str, key: str) -> bool:
 
         if not write_config(filename):
             return False
+
+    return True
+
+
+def set_extension_path(filename: str, path: str) -> bool:
+    """Configures the system's directory path to Chrome extensions.
+
+    Args:
+        filename: The mrxcavator configuration filename as a string.
+        path: The system's directory path to Chrome extensions as a string.
+
+    Returns:
+        A boolean result.
+    """
+    if os.path.isdir(os.path.expanduser(path)) is True:
+        if path[-1] != "/":
+            path = path + "/"
+
+        config.set("custom", "extension_path", path)
+
+        if not write_config(filename):
+            return False
+    else:
+        error(f"The provided extension path, {path}, does not exist.", True)
 
     return True
 
@@ -348,7 +373,7 @@ def get_crx_path(id: str = "") -> str:
     Returns:
         A string with the appropriate filesystem path for a(n) extension(s).
     """
-    return os.path.expanduser(CRX_PATH) + "/" + id
+    return os.path.expanduser(extension_path) + id
 
 
 def find_extension_directories(path: str) -> list:
@@ -514,6 +539,11 @@ if __name__ == "__main__":
             "-c", "--config", metavar="path", help="specify a config file path"
         )
         parser.add_argument(
+            "--extension_path",
+            metavar="directory",
+            help="set path to local Chrome extensions",
+        )
+        parser.add_argument(
             "-s", "--submit", metavar="id", help="submit an extension"
         )
         parser.add_argument(
@@ -556,18 +586,23 @@ if __name__ == "__main__":
 
         args = parser.parse_args()
 
-        config_file = CONFIG_FILE_DEFAULT
-
         if args.config:
             config_file = args.config
+        else:
+            config_file = CONFIG_FILE_DEFAULT
 
         load_config(config_file)
+
+        extension_path = config.get("custom", "extension_path")
 
         if args.submit:
             if submit_extension(args.submit):
                 print(f"\n\tYou've successfully submitted {args.submit}.\n")
         elif args.report:
             get_report(args.report)
+        elif args.extension_path:
+            if set_extension_path(config_file, args.extension_path):
+                print(f"\n\tThe system extension path was set successfully!\n")
         elif args.crxcavator_key:
             if set_crxcavator_key(config_file, args.crxcavator_key):
                 print(f"\n\tThe CRXcavator API key was set successfully!\n")
@@ -583,11 +618,15 @@ if __name__ == "__main__":
             else:
                 error("The CRXcavator API URI returned an unexpected result.")
         elif args.extensions:
-            print("\nLocally Installed Chrome Extensions:")
-            print("------------------------------------\n")
-            for ext in get_installed_extensions(CRX_PATH):
-                print(f"* {ext['name']}")
-                print(f"  - Version:\t{ext['version']}")
-                print(f"  - Identifier: {ext['id']}\n")
+            extensions = get_installed_extensions(extension_path)
+            if len(extensions) == 0:
+                error("No extensions were found. Check your configuration.")
+            else:
+                print("\nLocally Installed Chrome Extensions:")
+                print("------------------------------------\n")
+                for extension in extensions:
+                    print(f"* {extension['name']}")
+                    print(f"  - Version:\t{extension['version']}")
+                    print(f"  - Identifier: {extension['id']}\n")
         elif args.submit_all:
-            submit_extensions(get_installed_extensions(CRX_PATH))
+            submit_extensions(get_installed_extensions(extension_path))
