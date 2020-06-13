@@ -199,15 +199,15 @@ def submit_extensions(extensions: list) -> None:
     for extension in tqdm(extensions, bar_format='{l_bar}{bar}'):
         if extension_is_ignored(extension["id"]) is False:
             if submit_extension(extension["id"]):
-                successful.sort()
                 successful.append(extension["name"])
             else:
-                failed.sort()
                 failed.append(extension["name"])
 
     if len(successful) > 0:
+        successful.sort()
         print("\nSuccessful:\n  - " + "\n  - ".join(successful))
     if len(failed) > 0:
+        failed.sort()
         print("\n\nFailed:\n  - " + "\n  - ".join(failed))
 
 def get_report(id: str) -> bool:
