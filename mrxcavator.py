@@ -18,6 +18,7 @@ import validators  # type: ignore
 import configparser
 
 from packaging import version
+from tqdm import tqdm
 
 CONFIG_FILE_DEFAULT = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
@@ -179,6 +180,35 @@ def submit_extension(id: str) -> bool:
     else:
         return True
 
+
+def submit_extensions(extensions: list) -> None:
+    """Submits many extensions (by ID) for CRXcavator to process.
+
+    Args:
+        extensions: A list of extension identifier strings.
+
+    Returns:
+        None.
+    """
+
+    successful = []
+    failed = []
+
+    print(f"\nSubmitting extensions found in {extension_path}\n")
+
+    for extension in tqdm(extensions, bar_format='{l_bar}{bar}'):
+        if extension_is_ignored(extension["id"]) is False:
+            if submit_extension(extension["id"]):
+                successful.sort()
+                successful.append(extension["name"])
+            else:
+                failed.sort()
+                failed.append(extension["name"])
+
+    if len(successful) > 0:
+        print("\nSuccessful:\n  - " + "\n  - ".join(successful))
+    if len(failed) > 0:
+        print("\n\nFailed:\n  - " + "\n  - ".join(failed))
 
 def get_report(id: str) -> bool:
     """Requests the CRXcavator report (in JSON) for the given extension ID.
@@ -513,22 +543,6 @@ def get_installed_extensions(path: str) -> list:
     return extensions
 
 
-def submit_extensions(extensions: list) -> None:
-    """Submits many extensions (by ID) for CRXcavator to process.
-
-    Args:
-        extensions: A list of extension identifier strings.
-
-    Returns:
-        None.
-    """
-    for extension in extensions:
-        if submit_extension(extension["id"]):
-            print(f"\tYou've successfully submitted {extension['name']}.")
-        else:
-            error(f"{id} could not be found in the Chrome store")
-
-
 if __name__ == "__main__":
     if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         print("Please use Python >=3.6 with this program.\n")
@@ -619,6 +633,8 @@ if __name__ == "__main__":
                 error("The CRXcavator API URI returned an unexpected result.")
         elif args.extensions:
             extensions = get_installed_extensions(extension_path)
+
+
             if len(extensions) == 0:
                 error("No extensions were found. Check your configuration.")
             else:
