@@ -19,7 +19,7 @@ import configparser
 
 from packaging import version
 
-CONFIG_FILE = "config.ini"
+CONFIG_FILE_DEFAULT = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions"
 
 config = configparser.ConfigParser()
@@ -226,7 +226,10 @@ def build_config(filename: str) -> bool:
     Returns:
         A boolean result.
     """
-    config["DEFAULT"] = {"crxcavator_api_uri": "https://api.crxcavator.io/v1"}
+    config["DEFAULT"] = {
+        "crxcavator_api_uri": "https://api.crxcavator.io/v1",
+        "crxcavator_api_key": ""
+    }
     config.add_section("custom")
 
     if write_config(filename):
@@ -508,6 +511,9 @@ if __name__ == "__main__":
     else:
         parser = argparse.ArgumentParser()
         parser.add_argument(
+            "-c", "--config", metavar="path", help="specify a config file path"
+        )
+        parser.add_argument(
             "-s", "--submit", metavar="id", help="submit an extension"
         )
         parser.add_argument(
@@ -550,7 +556,12 @@ if __name__ == "__main__":
 
         args = parser.parse_args()
 
-        load_config(CONFIG_FILE)
+        config_file = CONFIG_FILE_DEFAULT
+
+        if args.config:
+            config_file = args.config
+
+        load_config(config_file)
 
         if args.submit:
             if submit_extension(args.submit):
@@ -558,10 +569,10 @@ if __name__ == "__main__":
         elif args.report:
             get_report(args.report)
         elif args.crxcavator_key:
-            if set_crxcavator_key(CONFIG_FILE, args.crxcavator_key):
+            if set_crxcavator_key(config_file, args.crxcavator_key):
                 print(f"\n\tThe CRXcavator API key was set successfully!\n")
         elif args.crxcavator_uri:
-            if set_crxcavator_uri(CONFIG_FILE, args.crxcavator_uri):
+            if set_crxcavator_uri(config_file, args.crxcavator_uri):
                 print(f"\n\tThe CRXcavator API URI was set successfully!\n")
         elif args.test_crxcavator_key:
             if test_crxcavator_key():
