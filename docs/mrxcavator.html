@@ -188,7 +188,7 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <p>A string for the version of the most recent local version available.</p></div>
 </dd>
 <dt id="mrxcavator.get_report"><code class="name flex">
-<span>def <span class="ident">get_report</span></span>(<span>id: str) -> bool</span>
+<span>def <span class="ident">get_report</span></span>(<span>id: str) -> dict</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Requests the CRXcavator report (in JSON) for the given extension ID.</p>
@@ -198,10 +198,10 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <dd>An extension identifier string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>A boolean result.</p></div>
+<p>A dict of report results.</p></div>
 </dd>
 <dt id="mrxcavator.get_report_summary"><code class="name flex">
-<span>def <span class="ident">get_report_summary</span></span>(<span>results: dict) -> NoneType</span>
+<span>def <span class="ident">get_report_summary</span></span>(<span>results: dict) -> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prints a formatted report of information for the given extension.</p>
@@ -211,7 +211,20 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <dd>A dict of all extension information.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>True.</p></div>
+<p>A string of the report summary.</p></div>
+</dd>
+<dt id="mrxcavator.get_reports"><code class="name flex">
+<span>def <span class="ident">get_reports</span></span>(<span>extensions: list) -> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Retrieves a report summary for each passed-in extension ID in a list.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>extensions</code></strong></dt>
+<dd>A list of extension identifier strings.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None.</p></div>
 </dd>
 <dt id="mrxcavator.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>filename: str) -> bool</span>
@@ -225,6 +238,34 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A boolean result.</p></div>
+</dd>
+<dt id="mrxcavator.save_file"><code class="name flex">
+<span>def <span class="ident">save_file</span></span>(<span>filename: str, content: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Writes passed-in content to the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The chosen filename as a string.</dd>
+<dt><strong><code>content</code></strong></dt>
+<dd>The chosen content to write as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean result.</p></div>
+</dd>
+<dt id="mrxcavator.select_extension"><code class="name flex">
+<span>def <span class="ident">select_extension</span></span>(<span>extensions: list) -> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns an extension identifier from the passed-in list.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>extensions</code></strong></dt>
+<dd>A list of extension identifier strings.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string of an extension identifier.</p></div>
 </dd>
 <dt id="mrxcavator.set_crxcavator_key"><code class="name flex">
 <span>def <span class="ident">set_crxcavator_key</span></span>(<span>filename: str, key: str) -> bool</span>
@@ -252,6 +293,21 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <dd>The mrxcavator configuration filename as a string.</dd>
 <dt><strong><code>uri</code></strong></dt>
 <dd>The CRXcavator URI for API calls as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean result.</p></div>
+</dd>
+<dt id="mrxcavator.set_extension_path"><code class="name flex">
+<span>def <span class="ident">set_extension_path</span></span>(<span>filename: str, path: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configures the system's directory path to Chrome extensions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
+<dt><strong><code>path</code></strong></dt>
+<dd>The system's directory path to Chrome extensions as a string.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A boolean result.</p></div>
@@ -360,9 +416,13 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <li><code><a title="mrxcavator.get_latest_local_version" href="#mrxcavator.get_latest_local_version">get_latest_local_version</a></code></li>
 <li><code><a title="mrxcavator.get_report" href="#mrxcavator.get_report">get_report</a></code></li>
 <li><code><a title="mrxcavator.get_report_summary" href="#mrxcavator.get_report_summary">get_report_summary</a></code></li>
+<li><code><a title="mrxcavator.get_reports" href="#mrxcavator.get_reports">get_reports</a></code></li>
 <li><code><a title="mrxcavator.load_config" href="#mrxcavator.load_config">load_config</a></code></li>
+<li><code><a title="mrxcavator.save_file" href="#mrxcavator.save_file">save_file</a></code></li>
+<li><code><a title="mrxcavator.select_extension" href="#mrxcavator.select_extension">select_extension</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_key" href="#mrxcavator.set_crxcavator_key">set_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_uri" href="#mrxcavator.set_crxcavator_uri">set_crxcavator_uri</a></code></li>
+<li><code><a title="mrxcavator.set_extension_path" href="#mrxcavator.set_extension_path">set_extension_path</a></code></li>
 <li><code><a title="mrxcavator.submit_extension" href="#mrxcavator.submit_extension">submit_extension</a></code></li>
 <li><code><a title="mrxcavator.submit_extensions" href="#mrxcavator.submit_extensions">submit_extensions</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_key" href="#mrxcavator.test_crxcavator_key">test_crxcavator_key</a></code></li>
