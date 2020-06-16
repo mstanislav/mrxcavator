@@ -134,8 +134,7 @@ def get_report_summary(results: dict) -> str:
     webstore = results[-1]["data"]["webstore"]
     risk = results[-1]["data"]["risk"]
 
-    report = inspect.cleandoc(
-        f"""
+    report = f"""
         \t
         Overview
         {'='*80}
@@ -144,23 +143,32 @@ def get_report_summary(results: dict) -> str:
         \tNewest Version:\t{version} ({webstore['last_updated']})
         \tVersions Known:\t{versions}
         \tStore Rating:\t{webstore['rating']} stars
-        \t
-        Risk
-        {'='*80}
-        \tCSP Policy:\t{risk['csp']['total']}
-        \tRetireJS: \t{risk['retire']['total']}
-        \tWeb Store: \t{risk['webstore']['total']}
-        \t
-        \tPermissions:
-          \t  >Required:\t{risk['permissions']['total']}
-          \t  >Optional:\t{risk['optional_permissions']['total']}
-        \t
-        \t** Risk Score:\t{risk['total']} **
-        \t
-        """
-    )
 
-    return report
+        Risk
+        {'='*80}"""
+
+    if "csp" in risk:
+        report += f"\n\t\tCSP Policy:\t{risk['csp']['total']}"
+
+    if "retire" in risk:
+        report += f"\n\t\tRetireJS: \t{risk['retire']['total']}"
+
+    if "webstore" in risk:
+        report += f"\n\t\tWeb Store: \t{risk['webstore']['total']}"
+
+    if "permissions" in risk or "optional permissions" in risk:
+        report += f"\n\n\t\tPermissions:"
+
+        if "permissions" in risk:
+            report += f"\n\t\t  >Required:\t{risk['permissions']['total']}"
+
+        if "optional_permissions" in risk:
+            report += f"\n\t\t  >Optional:"
+            report += f"\t{risk['optional_permissions']['total']}"
+
+    report += f"\n\n\t\t** Risk Score:\t{risk['total']} **\t"
+
+    return inspect.cleandoc(report)
 
 
 def save_file(filename: str, content: str) -> bool:
