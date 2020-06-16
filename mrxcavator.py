@@ -725,11 +725,15 @@ if __name__ == "__main__":
             else:
                 id = args.report
 
-            report = get_report_summary(get_report(id))
+            results = get_report(id)
 
-            print(report)
+            if results:
+                report = get_report_summary(results)
+                print(report)
+            else:
+                error(f"The extension {id} was not found.")
 
-            if args.export:
+            if results and args.export:
                 if save_file(f"reports/{args.export}", report):
                     print(f"\n\n>> Report saved in reports/{args.export} <<\n")
 
