@@ -605,7 +605,7 @@ def select_extension(extensions: list) -> str:
         {
             "type": "list",
             "name": "id",
-            "message": "Which extension would you like a report for?",
+            "message": "Please select an extension...",
             "choices": choices,
         }
     ]
