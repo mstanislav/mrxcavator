@@ -332,6 +332,21 @@ Locally Installed Chrome Extensions:
 	The CRXcavator API key was successfully tested!
 ```
 
+### Use a Custom Configuration File
+```
+➜  python3 mrxcavator.py --config testing.ini
+
+	testing.ini does not exist, or is corrupted. Creating it...
+
+➜  cat testing.ini
+[DEFAULT]
+crxcavator_api_uri = https://api.crxcavator.io/v1
+crxcavator_api_key =
+extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
+
+[custom]
+```
+
 ### Get mrxcavator's Version
 ```
 ➜  python3 mrxcavator.py --version
