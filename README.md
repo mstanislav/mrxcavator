@@ -68,15 +68,24 @@ The development of this CLI tool will have five "releases" that relate to the co
 ### Help Output
 ```
 ➜  python3 mrxcavator.py -h
-usage: mrxcavator.py [-h] [-s id] [--submit_all] [-r id]
+usage: mrxcavator.py [-h] [-c path] [--extension_path directory] [-s [id]]
+                     [--submit_all] [-r [id]] [--export file] [--report_all]
                      [--crxcavator_key key] [--crxcavator_uri uri]
                      [--test_crxcavator_key] [--test_crxcavator_uri] [-e] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -s id, --submit id    submit an extension
+  -c path, --config path
+                        specify a config file path
+  --extension_path directory
+                        set path to local Chrome extensions
+  -s [id], --submit [id]
+                        submit an extension
   --submit_all          submit all installed extensions
-  -r id, --report id    get an extension's report
+  -r [id], --report [id]
+                        get an extension's report
+  --export file         export result to a specific file
+  --report_all          retrieve a report for all installed extensions
   --crxcavator_key key  set CRXcavator API key
   --crxcavator_uri uri  set CRXcavator API URI
   --test_crxcavator_key
@@ -94,21 +103,26 @@ optional arguments:
 	You've successfully submitted hdokiejnpimakedhajhdlcegeplioahd.
 ```
 
-### Mass Submission of Locally Installed Extensions
+### Submit All Locally Installed Extensions
 ```
 ➜  python3 mrxcavator.py --submit_all
-	You've successfully submitted Google Docs Offline.
-	You've successfully submitted Chrome Media Router.
-	You've successfully submitted Gmail.
-	You've successfully submitted Google Drive.
-	You've successfully submitted Application Launcher for Drive (by Google).
-	You've successfully submitted Slides.
-	You've successfully submitted Docs.
-	You've successfully submitted Google Keep Chrome Extension.
-	You've successfully submitted Chrome Web Store Payments.
-	You've successfully submitted Save to Google Drive.
-	You've successfully submitted YouTube.
-	You've successfully submitted Sheets.
+
+Submitting extensions found in ~/Library/Application Support/Google/Chrome/Default/Extensions/
+
+100%|████████████████████████████████████████████████████████████████████████
+
+Successful:
+  > Application Launcher for Drive (by Google)
+  > Docs
+  > Gmail
+  > Google Docs Offline
+  > Google Drive
+  > Google Keep Chrome Extension
+  > Save to Google Drive
+  > Sheets
+  > Slides
+  > YouTube
+  > Zoom
 ```
 
 ### Get an Extension's Report
@@ -117,23 +131,119 @@ optional arguments:
 
 Overview
 ================================================================================
-    Extension Name: LastPass: Free Password Manager
-    Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
-    Newest Version: 4.49.0.3 (2020-06-03)
-    Versions Known: 41
-    Store Rating:   4.543241 stars
+        Extension Name: LastPass: Free Password Manager
+        Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
+        Newest Version: 4.49.0.3 (2020-06-03)
+        Versions Known: 41
+        Store Rating:   4.54 stars
 
 Risk
 ================================================================================
-    CSP Policy:     69
-    RetireJS:       150
-    Web Store:      1
+        CSP Policy:     69
+        RetireJS:       150
+        Web Store:      1
 
-    Permissions:
-      >Required:    110
-      >Optional:    25
+        Permissions:
+          >Required:    110
+          >Optional:    25
 
-    ** Risk Score:  355 **
+        ** Risk Score:  355 **
+```
+
+### Save an Extension's Report to a File
+```
+➜   python3 mrxcavator.py -r hdokiejnpimakedhajhdlcegeplioahd --export lastpass.txt
+
+Overview
+================================================================================
+        Extension Name: LastPass: Free Password Manager
+        Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
+        Newest Version: 4.49.0.3 (2020-06-03)
+        Versions Known: 41
+        Store Rating:   4.54 stars
+
+Risk
+================================================================================
+        CSP Policy:     69
+        RetireJS:       150
+        Web Store:      1
+
+        Permissions:
+          >Required:    110
+          >Optional:    25
+
+        ** Risk Score:  355 **
+
+
+>> Report saved in reports/lastpass.txt <<
+
+➜  cat reports/lastpass.txt
+Overview
+================================================================================
+        Extension Name: LastPass: Free Password Manager
+        Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
+        Newest Version: 4.49.0.3 (2020-06-03)
+        Versions Known: 41
+        Store Rating:   4.54 stars
+
+Risk
+================================================================================
+        CSP Policy:     69
+        RetireJS:       150
+        Web Store:      1
+
+        Permissions:
+          >Required:    110
+          >Optional:    25
+
+        ** Risk Score:  355 **
+```
+
+### Get Reports For All Locally Installed Extensions
+```
+➜  python3 mrxcavator.py --report_all
+
+Retrieving extension report(s)...
+
+
+Overview
+================================================================================
+        Extension Name: Google Docs Offline
+        Extension ID:   ghbmnnjooekpmoecnnnilnnbdlolhkhi
+        Newest Version: 1.9.1 (2020-03-04)
+        Versions Known: 5
+        Store Rating:   2.87 stars
+
+Risk
+================================================================================
+        CSP Policy:     377
+        Web Store:      6
+
+        Permissions:
+          >Required:    40
+
+        ** Risk Score:  423 **
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Overview
+================================================================================
+        Extension Name: Gmail
+        Extension ID:   pjkljhegncpnkpknbcohdijeoejaedia
+        Newest Version: 8.2 (2019-03-26)
+        Versions Known: 2
+        Store Rating:   4.53 stars
+
+Risk
+================================================================================
+        Web Store:      10
+
+        Permissions:
+          >Required:    5
+
+        ** Risk Score:  15 **
+
+[...snip...]
 ```
 
 ### List Locally Installed Extensions
@@ -144,51 +254,51 @@ Locally Installed Chrome Extensions:
 ------------------------------------
 
 * Google Docs Offline
-  - Version:	1.11.0_0
+  - Version:	1.11.0
   - Identifier: ghbmnnjooekpmoecnnnilnnbdlolhkhi
 
 * Chrome Media Router
-  - Version:	8320.407.0.1_0
+  - Version:	8320.407.0.1
   - Identifier: pkedcjkdefgpdelpbcmbmeomcjbeemfm
 
 * Gmail
-  - Version:	8.2_0
+  - Version:	8.2
   - Identifier: pjkljhegncpnkpknbcohdijeoejaedia
 
 * Google Drive
-  - Version:	14.2_0
+  - Version:	14.2
   - Identifier: apdfllckaahabafndbhieahigkjlhalf
 
 * Application Launcher for Drive (by Google)
-  - Version:	3.2_1
+  - Version:	3.2
   - Identifier: lmjegmlicamnimmfhcmpkclmigmmcbeh
 
 * Slides
-  - Version:	0.10_1
+  - Version:	0.10
   - Identifier: aapocclcgogkmnckokdopfmhonfmgoek
 
 * Docs
-  - Version:	0.10_1
+  - Version:	0.10
   - Identifier: aohghmighlieiainnegkcijnfilokake
 
 * Google Keep Chrome Extension
-  - Version:	4.20222.540.1_0
+  - Version:	4.20222.540.1
   - Identifier: lpcaedmchfhocbbapmcbpinfpgnhiddi
 
 * Chrome Web Store Payments
-  - Version:	1.0.0.5_0
+  - Version:	1.0.0.5
   - Identifier: nmmhkkegccagdldgiimedpiccmgmieda
 
 * Save to Google Drive
-  - Version:	2.1.1_0
+  - Version:	2.1.1
   - Identifier: gmbmikajjgmnabiglmofipeabaddhgne
 
 * YouTube
-  - Version:	4.2.8_0
+  - Version:	4.2.8
   - Identifier: blpcfgokakmgnkcojhhkbfbldkacnbeo
 
 * Sheets
-  - Version:	1.2_0
+  - Version:	1.2
   - Identifier: felcaaldnbdncclmgdcncolpebgiejap
 ```
 
@@ -231,8 +341,8 @@ v0.2
 ➜  cat config.ini
 [DEFAULT]
 crxcavator_api_uri = https://api.crxcavator.io/v1
+crxcavator_api_key =
+extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 
 [custom]
-crxcavator_api_key = DEnDIwspwQkiMYZzuFbHOHUqDOpSaDIw
-crxcavator_api_uri = https://api.crxcavator.io/v1
 ```

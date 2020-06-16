@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.2"
+__version__ = "0.3"
 
 import os
 import re
@@ -167,7 +167,7 @@ def get_report_summary(results: dict) -> str:
             report += f"\n\t\t  >Optional:"
             report += f"\t{risk['optional_permissions']['total']}"
 
-    report += f"\n\n\t\t** Risk Score:\t{risk['total']} **\t"
+    report += f"\n\n\t\t** Risk Score:\t{risk['total']} **"
 
     return inspect.cleandoc(report)
 
