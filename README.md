@@ -34,7 +34,7 @@ The development of this CLI tool will have five "releases" that relate to the co
     * Added --export, which can be used with --report to specify a filename where a report will be saved in 'reports/'
     * Used `tqdm` to provide draw a progress bar for extension mass submission
     * Added --report_all to generate an extension report summary for all locally installed extensions
-    * Integrated `PyInquirer` to provide a keyboard-selected menu of all locally installed extensions when a report or submit flag is called, but no identifier is given
+    * `PyInquirer` now provides an interactive menu of locally installed extensions when a report or submit flag is called, but no identifier is given
     * Bug Fix: Removed the extension version sub-release from the folder name
     * Bug Fix: --test_crxcavator_key no longer breaks when an API key is not set
     * Bug Fix: An extension report summary now gracefully handled missing sections of content
