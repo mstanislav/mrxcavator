@@ -19,6 +19,7 @@ import configparser
 
 from packaging import version
 from tqdm import tqdm  # type: ignore
+from PyInquirer import prompt  # type: ignore
 
 CONFIG_FILE_DEFAULT = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
@@ -586,6 +587,27 @@ def get_installed_extensions(path: str) -> list:
     return extensions
 
 
+def select_extension(extensions: list) -> str:
+    choices = []
+
+    for extension in extensions:
+        if extension_is_ignored(extension["id"]) is False:
+            choices.append(
+                {"name": extension["name"], "value": extension["id"]}
+            )
+
+    question = [
+        {
+            "type": "list",
+            "name": "id",
+            "message": "Which extension would you like a report for?",
+            "choices": choices,
+        }
+    ]
+
+    return prompt(question)["id"]
+
+
 if __name__ == "__main__":
     if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         print("Please use Python >=3.6 with this program.\n")
@@ -601,7 +623,12 @@ if __name__ == "__main__":
             help="set path to local Chrome extensions",
         )
         parser.add_argument(
-            "-s", "--submit", metavar="id", help="submit an extension"
+            "-s",
+            "--submit",
+            nargs="?",
+            const="empty",
+            metavar="id",
+            help="submit an extension",
         )
         parser.add_argument(
             "--submit_all",
@@ -661,31 +688,43 @@ if __name__ == "__main__":
         extension_path = config.get("custom", "extension_path")
 
         if args.submit:
-            if submit_extension(args.submit):
-                print(f"\n\tYou've successfully submitted {args.submit}.\n")
+            if args.submit == "empty":
+                id = select_extension(get_installed_extensions(extension_path))
+            else:
+                id = args.submit
+
+            if submit_extension(id):
+                print(f"\n\tYou've submitted {id}.\n")
+
         elif args.report:
             report = get_report_summary(get_report(args.report))
-            print(report)
+
             if args.export:
                 if save_file(f"reports/{args.export}", report):
                     print(f"\n\n>> Report saved in reports/{args.export} <<\n")
+
         elif args.extension_path:
             if set_extension_path(config_file, args.extension_path):
                 print(f"\n\tThe system extension path was set successfully!\n")
+
         elif args.crxcavator_key:
             if set_crxcavator_key(config_file, args.crxcavator_key):
                 print(f"\n\tThe CRXcavator API key was set successfully!\n")
+
         elif args.crxcavator_uri:
             if set_crxcavator_uri(config_file, args.crxcavator_uri):
                 print(f"\n\tThe CRXcavator API URI was set successfully!\n")
+
         elif args.test_crxcavator_key:
             if test_crxcavator_key():
                 print(f"\n\tThe CRXcavator API key was successfully tested!\n")
+
         elif args.test_crxcavator_uri:
             if test_crxcavator_uri():
                 print(f"\n\tThe CRXcavator API URI was successfully tested!\n")
             else:
                 error("The CRXcavator API URI returned an unexpected result.")
+
         elif args.extensions:
             extensions = get_installed_extensions(extension_path)
 
@@ -698,7 +737,9 @@ if __name__ == "__main__":
                     print(f"* {ext['name']}")
                     print(f"  - Version:\t{ext['version'].split('_')[0]}")
                     print(f"  - Identifier: {ext['id']}\n")
+
         elif args.submit_all:
             submit_extensions(get_installed_extensions(extension_path))
+
         elif args.report_all:
             get_reports(get_installed_extensions(extension_path))

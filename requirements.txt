@@ -1,3 +1,4 @@
+PyInquirer==1.0.3
 requests==2.23.0
 tqdm==4.46.1
 validators==0.15.0
