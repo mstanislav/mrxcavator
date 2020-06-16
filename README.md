@@ -37,8 +37,8 @@ The development of this CLI tool will have five "releases" that relate to the co
     * `PyInquirer` now provides a menu of extensions when a report or submit flag is called, but no identifier is given
     * Bug Fix: Removed the extension version sub-release from the folder name
     * Bug Fix: --test_crxcavator_key no longer breaks when an API key is not set
-    * Bug Fix: An extension report summary now gracefully handled missing sections of content
-    * Bug Fix: The "Star Rating" had entirely too much specificity; now rounded
+    * Bug Fix: An extension report summary now gracefully handles missing sections of content
+    * Bug Fix: The Web Store "Star Rating" had entirely too much specificity; now it is rounded to two decimal places
 4. Release 4 - 07/05/2020
 5. Release 5 - 07/19/2020
 
