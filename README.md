@@ -97,6 +97,7 @@ optional arguments:
 ```
 
 ### Submit an Extension
+If no extension identifier is passed to the flag, a list of options of locally installed extensions will be given to select from.
 ```
 ➜  python3 mrxcavator.py -s hdokiejnpimakedhajhdlcegeplioahd
 
@@ -126,6 +127,7 @@ Successful:
 ```
 
 ### Get an Extension's Report
+If no extension identifier is passed to the flag, a list of options of locally installed extensions will be given to select from.
 ```
 ➜  python3 mrxcavator.py -r hdokiejnpimakedhajhdlcegeplioahd
 
