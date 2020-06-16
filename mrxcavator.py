@@ -18,7 +18,7 @@ import validators  # type: ignore
 import configparser
 
 from packaging import version
-from tqdm import tqdm
+from tqdm import tqdm  # type: ignore
 
 CONFIG_FILE_DEFAULT = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
@@ -118,14 +118,14 @@ def version_count(results: dict) -> int:
     return total
 
 
-def get_report_summary(results: dict) -> None:
+def get_report_summary(results: dict) -> str:
     """Prints a formatted report of information for the given extension.
 
     Args:
         results: A dict of all extension information.
 
     Returns:
-        True.
+        A string of the report summary.
     """
     id = results[-1]["extension_id"]
     version = results[-1]["version"]
@@ -134,33 +134,52 @@ def get_report_summary(results: dict) -> None:
     webstore = results[-1]["data"]["webstore"]
     risk = results[-1]["data"]["risk"]
 
-    print(
-        inspect.cleandoc(
-            f"""
-            \t
-            Overview
-            {'='*80}
-            \tExtension Name:\t{webstore['name']}
-            \tExtension ID:\t{id}
-            \tNewest Version:\t{version} ({webstore['last_updated']})
-            \tVersions Known:\t{versions}
-            \tStore Rating:\t{webstore['rating']} stars
-            \t
-            Risk
-            {'='*80}
-            \tCSP Policy:\t{risk['csp']['total']}
-            \tRetireJS: \t{risk['retire']['total']}
-            \tWeb Store: \t{risk['webstore']['total']}
-            \t
-            \tPermissions:
-              \t  >Required:\t{risk['permissions']['total']}
-              \t  >Optional:\t{risk['optional_permissions']['total']}
-            \t
-            \t** Risk Score:\t{risk['total']} **
-            \t
-            """
-        )
+    report = inspect.cleandoc(
+        f"""
+        \t
+        Overview
+        {'='*80}
+        \tExtension Name:\t{webstore['name']}
+        \tExtension ID:\t{id}
+        \tNewest Version:\t{version} ({webstore['last_updated']})
+        \tVersions Known:\t{versions}
+        \tStore Rating:\t{webstore['rating']} stars
+        \t
+        Risk
+        {'='*80}
+        \tCSP Policy:\t{risk['csp']['total']}
+        \tRetireJS: \t{risk['retire']['total']}
+        \tWeb Store: \t{risk['webstore']['total']}
+        \t
+        \tPermissions:
+          \t  >Required:\t{risk['permissions']['total']}
+          \t  >Optional:\t{risk['optional_permissions']['total']}
+        \t
+        \t** Risk Score:\t{risk['total']} **
+        \t
+        """
     )
+
+    return report
+
+
+def save_file(filename: str, content: str) -> bool:
+    """Writes passed-in content to the passed-in filename.
+
+    Args:
+        filename: The chosen filename as a string.
+        content: The chosen content to write as a string.
+
+    Returns:
+        A boolean result.
+    """
+    try:
+        with open(filename, "w") as fileHandle:
+            fileHandle.write(content.strip())
+    except IOError:
+        error(f"Cannot write to {filename}. Please check permissions.", True)
+
+    return True
 
 
 def submit_extension(id: str) -> bool:
@@ -190,13 +209,12 @@ def submit_extensions(extensions: list) -> None:
     Returns:
         None.
     """
-
     successful = []
     failed = []
 
     print(f"\nSubmitting extensions found in {extension_path}\n")
 
-    for extension in tqdm(extensions, bar_format='{l_bar}{bar}'):
+    for extension in tqdm(extensions, bar_format="{l_bar}{bar}"):
         if extension_is_ignored(extension["id"]) is False:
             if submit_extension(extension["id"]):
                 successful.append(extension["name"])
@@ -205,28 +223,27 @@ def submit_extensions(extensions: list) -> None:
 
     if len(successful) > 0:
         successful.sort()
-        print("\nSuccessful:\n  - " + "\n  - ".join(successful))
+        print("\nSuccessful:\n  > " + "\n  > ".join(successful))
     if len(failed) > 0:
         failed.sort()
-        print("\n\nFailed:\n  - " + "\n  - ".join(failed))
+        print("\n\nFailed:\n  > " + "\n  > ".join(failed))
 
-def get_report(id: str) -> bool:
+
+def get_report(id: str) -> dict:
     """Requests the CRXcavator report (in JSON) for the given extension ID.
 
     Args:
         id: An extension identifier string.
 
     Returns:
-        A boolean result.
+        A dict of report results.
     """
     result = call_api("/report/" + id, "GET")
 
     if result is None:
-        error(f"No reports were found for extension {id}.")
-        return False
+        return {}
     else:
-        get_report_summary(result)
-        return True
+        return result
 
 
 def write_config(filename: str) -> bool:
@@ -259,7 +276,7 @@ def build_config(filename: str) -> bool:
     config["DEFAULT"] = {
         "crxcavator_api_uri": "https://api.crxcavator.io/v1",
         "crxcavator_api_key": "",
-        "extension_path": CRX_PATH
+        "extension_path": CRX_PATH,
     }
     config.add_section("custom")
 
@@ -569,6 +586,9 @@ if __name__ == "__main__":
             "-r", "--report", metavar="id", help="get an extension's report"
         )
         parser.add_argument(
+            "--export", metavar="file", help="export result to a specific file"
+        )
+        parser.add_argument(
             "--crxcavator_key", metavar="key", help="set CRXcavator API key"
         )
         parser.add_argument(
@@ -613,7 +633,11 @@ if __name__ == "__main__":
             if submit_extension(args.submit):
                 print(f"\n\tYou've successfully submitted {args.submit}.\n")
         elif args.report:
-            get_report(args.report)
+            report = get_report_summary(get_report(args.report))
+            print(report)
+            if args.export:
+                if save_file(f"reports/{args.export}", report):
+                    print(f"\n\n>> Report saved in reports/{args.export} <<\n")
         elif args.extension_path:
             if set_extension_path(config_file, args.extension_path):
                 print(f"\n\tThe system extension path was set successfully!\n")
@@ -634,15 +658,14 @@ if __name__ == "__main__":
         elif args.extensions:
             extensions = get_installed_extensions(extension_path)
 
-
             if len(extensions) == 0:
                 error("No extensions were found. Check your configuration.")
             else:
                 print("\nLocally Installed Chrome Extensions:")
                 print("------------------------------------\n")
-                for extension in extensions:
-                    print(f"* {extension['name']}")
-                    print(f"  - Version:\t{extension['version']}")
-                    print(f"  - Identifier: {extension['id']}\n")
+                for ext in extensions:
+                    print(f"* {ext['name']}")
+                    print(f"  - Version:\t{ext['version'].split('_')[0]}")
+                    print(f"  - Identifier: {ext['id']}\n")
         elif args.submit_all:
             submit_extensions(get_installed_extensions(extension_path))
