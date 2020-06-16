@@ -142,7 +142,7 @@ def get_report_summary(results: dict) -> str:
         \tExtension ID:\t{id}
         \tNewest Version:\t{version} ({webstore['last_updated']})
         \tVersions Known:\t{versions}
-        \tStore Rating:\t{webstore['rating']} stars
+        \tStore Rating:\t{round(webstore['rating'],2)} stars
 
         Risk
         {'='*80}"""
@@ -252,6 +252,27 @@ def get_report(id: str) -> dict:
         return {}
     else:
         return result
+
+
+def get_reports(extensions: list) -> None:
+    """Retrieves a report summary for each passed-in extension ID in a list.
+
+    Args:
+        extensions: A list of extension identifier strings.
+
+    Returns:
+        None.
+    """
+    successful = []
+    failed = []
+
+    print(f"\nRetrieving extension report(s)...\n")
+
+    for extension in extensions:
+        if extension_is_ignored(extension["id"]) is False:
+            report = get_report(extension["id"])
+            if report:
+                print(f"{get_report_summary(report)}\n\n{80*'~'}")
 
 
 def write_config(filename: str) -> bool:
@@ -597,6 +618,11 @@ if __name__ == "__main__":
             "--export", metavar="file", help="export result to a specific file"
         )
         parser.add_argument(
+            "--report_all",
+            action="store_true",
+            help="retrieve a report for all installed extensions",
+        )
+        parser.add_argument(
             "--crxcavator_key", metavar="key", help="set CRXcavator API key"
         )
         parser.add_argument(
@@ -677,3 +703,5 @@ if __name__ == "__main__":
                     print(f"  - Identifier: {ext['id']}\n")
         elif args.submit_all:
             submit_extensions(get_installed_extensions(extension_path))
+        elif args.report_all:
+            get_reports(get_installed_extensions(extension_path))
