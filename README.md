@@ -333,7 +333,7 @@ Locally Installed Chrome Extensions:
 ### Get mrxcavator's Version
 ```
 ➜  python3 mrxcavator.py --version
-v0.2
+v0.3
 ```
 
 ### Example config.ini Contents
