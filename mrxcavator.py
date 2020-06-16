@@ -224,11 +224,10 @@ def submit_extensions(extensions: list) -> None:
     print(f"\nSubmitting extensions found in {extension_path}\n")
 
     for extension in tqdm(extensions, bar_format="{l_bar}{bar}"):
-        if extension_is_ignored(extension["id"]) is False:
-            if submit_extension(extension["id"]):
-                successful.append(extension["name"])
-            else:
-                failed.append(extension["name"])
+        if submit_extension(extension["id"]):
+            successful.append(extension["name"])
+        else:
+            failed.append(extension["name"])
 
     if len(successful) > 0:
         successful.sort()
@@ -267,10 +266,9 @@ def get_reports(extensions: list) -> None:
     print(f"\nRetrieving extension report(s)...\n")
 
     for extension in extensions:
-        if extension_is_ignored(extension["id"]) is False:
-            report = get_report(extension["id"])
-            if report:
-                print(f"{get_report_summary(report)}\n\n{80*'~'}")
+        report = get_report(extension["id"])
+        if report:
+            print(f"{get_report_summary(report)}\n\n{80*'~'}")
 
 
 def write_config(filename: str) -> bool:
@@ -582,19 +580,26 @@ def get_installed_extensions(path: str) -> list:
     for dir in find_extension_directories(path):
         version = get_latest_local_version(dir)
         name = get_extension_name(dir, version)
-        extensions.append({"name": name, "version": version, "id": dir})
+
+        if extension_is_ignored(dir) is False:
+            extensions.append({"name": name, "version": version, "id": dir})
 
     return extensions
 
 
 def select_extension(extensions: list) -> str:
+    """Returns an extension identifier from the passed-in list.
+
+    Args:
+        extensions: A list of extension identifier strings.
+
+    Returns:
+        A string of an extension identifier.
+    """
     choices = []
 
     for extension in extensions:
-        if extension_is_ignored(extension["id"]) is False:
-            choices.append(
-                {"name": extension["name"], "value": extension["id"]}
-            )
+        choices.append({"name": extension["name"], "value": extension["id"]})
 
     question = [
         {
@@ -614,14 +619,17 @@ if __name__ == "__main__":
         sys.exit(1)
     else:
         parser = argparse.ArgumentParser()
+
         parser.add_argument(
             "-c", "--config", metavar="path", help="specify a config file path"
         )
+
         parser.add_argument(
             "--extension_path",
             metavar="directory",
             help="set path to local Chrome extensions",
         )
+
         parser.add_argument(
             "-s",
             "--submit",
@@ -630,44 +638,59 @@ if __name__ == "__main__":
             metavar="id",
             help="submit an extension",
         )
+
         parser.add_argument(
             "--submit_all",
             action="store_true",
             help="submit all installed extensions",
         )
+
         parser.add_argument(
-            "-r", "--report", metavar="id", help="get an extension's report"
+            "-r",
+            "--report",
+            nargs="?",
+            const="empty",
+            metavar="id",
+            help="get an extension's report",
         )
+
         parser.add_argument(
             "--export", metavar="file", help="export result to a specific file"
         )
+
         parser.add_argument(
             "--report_all",
             action="store_true",
             help="retrieve a report for all installed extensions",
         )
+
         parser.add_argument(
             "--crxcavator_key", metavar="key", help="set CRXcavator API key"
         )
+
         parser.add_argument(
             "--crxcavator_uri", metavar="uri", help="set CRXcavator API URI"
         )
+
         parser.add_argument(
             "--test_crxcavator_key",
             action="store_true",
             help="test configured CRXcavator API key",
         )
+
         parser.add_argument(
             "--test_crxcavator_uri",
             action="store_true",
             help="test configured CRXcavator API URI",
         )
+
         parser.add_argument(
             "-e",
             "--extensions",
             action="store_true",
             help="list installed extensions",
         )
+
         parser.add_argument(
             "-v", "--version", action="version", version="v" + __version__
         )
@@ -697,7 +720,14 @@ if __name__ == "__main__":
                 print(f"\n\tYou've submitted {id}.\n")
 
         elif args.report:
-            report = get_report_summary(get_report(args.report))
+            if args.report == "empty":
+                id = select_extension(get_installed_extensions(extension_path))
+            else:
+                id = args.report
+
+            report = get_report_summary(get_report(id))
+
+            print(report)
 
             if args.export:
                 if save_file(f"reports/{args.export}", report):
