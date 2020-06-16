@@ -588,7 +588,7 @@ def get_installed_extensions(path: str) -> list:
 
 
 def select_extension(extensions: list) -> str:
-    """Returns an extension identifier from the passed-in list.
+    """Returns an extension identifier from the passed-in list via PyInquirer.
 
     Args:
         extensions: A list of extension identifier strings.
