@@ -263,9 +263,6 @@ def get_reports(extensions: list) -> None:
     Returns:
         None.
     """
-    successful = []
-    failed = []
-
     print(f"\nRetrieving extension report(s)...\n")
 
     for extension in extensions:
