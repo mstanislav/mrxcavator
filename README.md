@@ -29,6 +29,16 @@ The development of this CLI tool will have five "releases" that relate to the co
     * An extension report now shows the version count that CRXcavator tracks
     * Supports the mass submission of extensions that are installed locally
 3. Release 3 - 06/21/2020
+    * Added --config (-c) that lets a user to specify a configuration filename
+    * Added --extension_path that lets a user specify a path to their locally installed extensions
+    * Added --export, which can be used with --report to specify a filename (e.g. lastpass.txt) where an extension report will be saved in 'reports/'
+    * Used `tqdm` to provide draw a progress bar for extension mass submission
+    * Added --report_all to generate an extension report summary for all locally installed extensions
+    * Integrated `PyInquirer` to provide a keyboard-selected menu of all locally installed extensions when a report or submit flag is called, but no identifier is given
+    * Bug Fix: Removed the extension version sub-release from the folder name
+    * Bug Fix: --test_crxcavator_key no longer breaks when an API key is not set
+    * Bug Fix: An extension report summary now gracefully handled missing sections of content
+    * Bug Fix: The "Star Rating" had entirely too much specificity; now rounded
 4. Release 4 - 07/05/2020
 5. Release 5 - 07/19/2020
 
