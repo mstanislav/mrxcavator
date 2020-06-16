@@ -21,7 +21,7 @@ from packaging import version
 from tqdm import tqdm  # type: ignore
 from PyInquirer import prompt  # type: ignore
 
-CONFIG_FILE_DEFAULT = "config.ini"
+CONFIG_FILE = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
 
 config = configparser.ConfigParser()
@@ -704,7 +704,7 @@ if __name__ == "__main__":
         if args.config:
             config_file = args.config
         else:
-            config_file = CONFIG_FILE_DEFAULT
+            config_file = CONFIG_FILE
 
         load_config(config_file)
 
