@@ -41,6 +41,7 @@ The development of this CLI tool will have five "releases" that relate to the co
     * Bug Fix: The Web Store "Star Rating" had entirely too much specificity; now it is rounded to two decimal places
     * Bug Fix: An incorrect report identifier no longer returns a broken summary
 4. Release 4 - 07/05/2020
+    * 
 5. Release 5 - 07/19/2020
 
 ## Engineering Approach

@@ -5,13 +5,12 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.3"
+__version__ = "0.4"
 
 import os
 import re
 import sys
 import json
-import inspect
 import argparse
 import requests
 import validators  # type: ignore
@@ -135,41 +134,66 @@ def get_report_summary(results: dict) -> str:
     webstore = results[-1]["data"]["webstore"]
     risk = results[-1]["data"]["risk"]
 
-    report = f"""
-        \t
-        Overview
-        {'='*80}
-        \tExtension Name:\t{webstore['name']}
-        \tExtension ID:\t{id}
-        \tNewest Version:\t{version} ({webstore['last_updated']})
-        \tVersions Known:\t{versions}
-        \tStore Rating:\t{round(webstore['rating'],2)} stars
-
-        Risk
-        {'='*80}"""
+    report = f"\nExtension Overview\n{'='*60}\n"
+    report += f"  Extension Name:\t{webstore['name']}\n"
+    report += f"  Extension ID:\t\t{id}\n\n"
+    report += f"  Newest Version:\t{version} ({webstore['last_updated']})\n"
+    report += f"  Versions Known:\t{versions}\n"
+    report += f"  Store Rating:\t\t{round(webstore['rating'],2)} stars\n\n"
+    report += f"  Total Risk Score:\t{risk['total']}\n"
 
     if "csp" in risk:
-        report += f"\n\t\tCSP Policy:\t{risk['csp']['total']}"
+        report += f"\n\nContent Security Policy\n{'='*60}"
+        report += f"\n  {risk['csp'].get('total', 0)}\tTotal\n{'-'*60}"
+
+        csp_total = risk["csp"]["total"]
+        del risk["csp"]["total"]
+
+        csp_attribute_total = 0
+        for key in risk["csp"].keys():
+            report += f"\n  {risk['csp'][key]}\t{key}"
+            csp_attribute_total += int(risk["csp"][key])
+
+        if csp_total > csp_attribute_total:
+            remainder = csp_total - csp_attribute_total
+            missing = int(remainder / 25)
+            report += f"\n  {remainder}\t{missing} attributes not set"
 
     if "retire" in risk:
-        report += f"\n\t\tRetireJS: \t{risk['retire']['total']}"
+        report += f"\n\n\nRetireJS\n{'='*60}"
+        report += f"\n  {risk['retire'].get('total', '0')}\tTotal\n{'-'*60}"
+        report += f"\n  {risk['retire'].get('low', '0')}\tLow"
+        report += f"\n  {risk['retire'].get('medium', '0')}\tMedium"
+        report += f"\n  {risk['retire'].get('high', '0')}\tHigh"
+        report += f"\n  {risk['retire'].get('critical', '0')}\tCritical"
 
-    if "webstore" in risk:
-        report += f"\n\t\tWeb Store: \t{risk['webstore']['total']}"
+    report += f"\n\n\nWeb Store\n{'='*60}"
+    report += f"\n  {risk['webstore'].get('total', '0')}\tTotal\n{'-'*60}"
 
-    if "permissions" in risk or "optional permissions" in risk:
-        report += f"\n\n\t\tPermissions:"
+    del risk["webstore"]["total"]
 
-        if "permissions" in risk:
-            report += f"\n\t\t  >Required:\t{risk['permissions']['total']}"
+    for key in risk["webstore"].keys():
+        value = key.title().replace("_", " ")
+        report += f"\n  {risk['webstore'][key]}\t{value}"
 
-        if "optional_permissions" in risk:
-            report += f"\n\t\t  >Optional:"
-            report += f"\t{risk['optional_permissions']['total']}"
+    perms_total = 0
+    perms_required = 0
+    perms_optional = 0
 
-    report += f"\n\n\t\t** Risk Score:\t{risk['total']} **"
+    if "permissions" in risk:
+        perms_required = risk["permissions"].get("total", 0)
+        perms_total += perms_required
 
-    return inspect.cleandoc(report)
+    if "optional_permissions" in risk:
+        perms_optional = risk["optional_permissions"].get("total", 0)
+        perms_total += perms_optional
+
+    report += f"\n\n\nPermissions\n{'='*60}"
+    report += f"\n  {perms_total}\tTotal\n{'-'*60}"
+    report += f"\n  {perms_required}\tRequired"
+    report += f"\n  {perms_optional}\tOptional"
+
+    return report + "\n"
 
 
 def save_file(filename: str, content: str) -> bool:
@@ -655,7 +679,11 @@ if __name__ == "__main__":
         )
 
         parser.add_argument(
-            "--export", metavar="file", help="export result to a specific file"
+            "--export",
+            nargs="?",
+            const="empty",
+            metavar="file",
+            help="export result to a specific file",
         )
 
         parser.add_argument(
@@ -734,8 +762,12 @@ if __name__ == "__main__":
                 error(f"The extension {id} was not found.")
 
             if results and args.export:
-                if save_file(f"reports/{args.export}", report):
-                    print(f"\n\n>> Report saved in reports/{args.export} <<\n")
+                if args.export == "empty":
+                    filename = f"reports/{id}.txt"
+                else:
+                    filename = f"reports/{args.export}"
+                if save_file(filename, report):
+                    print(f"\n\n>> Report saved in {filename} <<\n")
 
         elif args.extension_path:
             if set_extension_path(config_file, args.extension_path):
