@@ -642,19 +642,43 @@ if __name__ == "__main__":
         print("Please use Python >=3.6 with this program.\n")
         sys.exit(1)
     else:
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(add_help=False)
 
-        parser.add_argument(
+        help_features = parser.add_argument_group("Features")
+        help_config = parser.add_argument_group("Configuration")
+        help_misc = parser.add_argument_group("Miscellaneous")
+
+        help_config.add_argument(
             "-c", "--config", metavar="path", help="specify a config file path"
         )
 
-        parser.add_argument(
+        help_config.add_argument(
             "--extension_path",
             metavar="directory",
             help="set path to local Chrome extensions",
         )
 
-        parser.add_argument(
+        help_config.add_argument(
+            "--crxcavator_key", metavar="key", help="set CRXcavator API key"
+        )
+
+        help_config.add_argument(
+            "--crxcavator_uri", metavar="uri", help="set CRXcavator API URI"
+        )
+
+        help_config.add_argument(
+            "--test_crxcavator_key",
+            action="store_true",
+            help="test CRXcavator API key",
+        )
+
+        help_config.add_argument(
+            "--test_crxcavator_uri",
+            action="store_true",
+            help="test CRXcavator API URI",
+        )
+
+        help_features.add_argument(
             "-s",
             "--submit",
             nargs="?",
@@ -663,13 +687,13 @@ if __name__ == "__main__":
             help="submit an extension",
         )
 
-        parser.add_argument(
+        help_features.add_argument(
             "--submit_all",
             action="store_true",
             help="submit all installed extensions",
         )
 
-        parser.add_argument(
+        help_features.add_argument(
             "-r",
             "--report",
             nargs="?",
@@ -678,7 +702,13 @@ if __name__ == "__main__":
             help="get an extension's report",
         )
 
-        parser.add_argument(
+        help_features.add_argument(
+            "--report_all",
+            action="store_true",
+            help="retrieve a report for all installed extensions",
+        )
+
+        help_features.add_argument(
             "--export",
             nargs="?",
             const="empty",
@@ -686,41 +716,22 @@ if __name__ == "__main__":
             help="export result to a specific file",
         )
 
-        parser.add_argument(
-            "--report_all",
-            action="store_true",
-            help="retrieve a report for all installed extensions",
-        )
-
-        parser.add_argument(
-            "--crxcavator_key", metavar="key", help="set CRXcavator API key"
-        )
-
-        parser.add_argument(
-            "--crxcavator_uri", metavar="uri", help="set CRXcavator API URI"
-        )
-
-        parser.add_argument(
-            "--test_crxcavator_key",
-            action="store_true",
-            help="test configured CRXcavator API key",
-        )
-
-        parser.add_argument(
-            "--test_crxcavator_uri",
-            action="store_true",
-            help="test configured CRXcavator API URI",
-        )
-
-        parser.add_argument(
+        help_features.add_argument(
             "-e",
             "--extensions",
             action="store_true",
             help="list installed extensions",
         )
 
-        parser.add_argument(
+        help_misc.add_argument(
             "-v", "--version", action="version", version="v" + __version__
+        )
+
+        help_misc.add_argument(
+            "-h",
+            "--help",
+            action="help",
+            help="show program's help information and exit",
         )
 
         if len(sys.argv) < 2:
