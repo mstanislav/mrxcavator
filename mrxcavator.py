@@ -118,6 +118,30 @@ def version_count(results: dict) -> int:
     return total
 
 
+def export_report(id: str, report: str, filename: str) -> bool:
+    """Exports a report summary to a file.
+
+    Args:
+        id: An extension identifier string.
+        report: A string of the report summary.
+        filename: The chosen filename as a string.
+
+    Returns:
+        A boolean result for exporting the report summary to a file.
+    """
+    if filename == "empty" or filename == "":
+        filename = f"reports/{id}.txt"
+    else:
+        filename = f"reports/{filename}"
+
+    if save_file(filename, report):
+        print(f"\n\n>> Report saved in {filename} <<\n")
+        return True
+    else:
+        error(f"A report for {id} could not be saved.")
+        return False
+
+
 def get_report_summary(results: dict) -> str:
     """Prints a formatted report of information for the given extension.
 
@@ -140,10 +164,10 @@ def get_report_summary(results: dict) -> str:
     report += f"  Newest Version:\t{version} ({webstore['last_updated']})\n"
     report += f"  Versions Known:\t{versions}\n"
     report += f"  Store Rating:\t\t{round(webstore['rating'],2)} stars\n\n"
-    report += f"  Total Risk Score:\t{risk['total']}\n"
+    report += f"  Total Risk Score:\t{risk['total']}"
 
     if "csp" in risk:
-        report += f"\n\nContent Security Policy\n{'='*60}"
+        report += f"\n\n\nContent Security Policy\n{'='*60}"
         report += f"\n  {risk['csp'].get('total', 0)}\tTotal\n{'-'*60}"
 
         csp_total = risk["csp"]["total"]
@@ -278,11 +302,12 @@ def get_report(id: str) -> dict:
         return result
 
 
-def get_reports(extensions: list) -> None:
+def get_reports(extensions: list, export: bool) -> None:
     """Retrieves a report summary for each passed-in extension ID in a list.
 
     Args:
         extensions: A list of extension identifier strings.
+        export: A boolean for whether to export each report to a file.
 
     Returns:
         None.
@@ -292,7 +317,10 @@ def get_reports(extensions: list) -> None:
     for extension in extensions:
         report = get_report(extension["id"])
         if report:
-            print(f"{get_report_summary(report)}\n\n{80*'~'}")
+            summary = get_report_summary(report)
+            print(f"{summary}\n\n{80*'~'}")
+            if export is True:
+                export_report(extension["id"], summary, "")
 
 
 def write_config(filename: str) -> bool:
@@ -773,12 +801,7 @@ if __name__ == "__main__":
                 error(f"The extension {id} was not found.")
 
             if results and args.export:
-                if args.export == "empty":
-                    filename = f"reports/{id}.txt"
-                else:
-                    filename = f"reports/{args.export}"
-                if save_file(filename, report):
-                    print(f"\n\n>> Report saved in {filename} <<\n")
+                export_report(id, report, args.export)
 
         elif args.extension_path:
             if set_extension_path(config_file, args.extension_path):
@@ -819,4 +842,9 @@ if __name__ == "__main__":
             submit_extensions(get_installed_extensions(extension_path))
 
         elif args.report_all:
-            get_reports(get_installed_extensions(extension_path))
+            if args.export:
+                export = True
+            else:
+                export = False
+
+            get_reports(get_installed_extensions(extension_path), export)

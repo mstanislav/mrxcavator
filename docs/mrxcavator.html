@@ -76,6 +76,23 @@ of values for APIs that required parameters to be sent in the request.</p>
 <h2 id="returns">Returns</h2>
 <p>False or exits the application with a failure status code.</p></div>
 </dd>
+<dt id="mrxcavator.export_report"><code class="name flex">
+<span>def <span class="ident">export_report</span></span>(<span>id: str, report: str, filename: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exports a report summary to a file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>An extension identifier string.</dd>
+<dt><strong><code>report</code></strong></dt>
+<dd>A string of the report summary.</dd>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The chosen filename as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean result for exporting the report summary to a file.</p></div>
+</dd>
 <dt id="mrxcavator.extension_is_ignored"><code class="name flex">
 <span>def <span class="ident">extension_is_ignored</span></span>(<span>id: str) -> bool</span>
 </code></dt>
@@ -214,7 +231,7 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <p>A string of the report summary.</p></div>
 </dd>
 <dt id="mrxcavator.get_reports"><code class="name flex">
-<span>def <span class="ident">get_reports</span></span>(<span>extensions: list) -> NoneType</span>
+<span>def <span class="ident">get_reports</span></span>(<span>extensions: list, export: bool) -> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Retrieves a report summary for each passed-in extension ID in a list.</p>
@@ -222,6 +239,8 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <dl>
 <dt><strong><code>extensions</code></strong></dt>
 <dd>A list of extension identifier strings.</dd>
+<dt><strong><code>export</code></strong></dt>
+<dd>A boolean for whether to export each report to a file.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>None.</p></div>
@@ -406,6 +425,7 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <li><code><a title="mrxcavator.build_config" href="#mrxcavator.build_config">build_config</a></code></li>
 <li><code><a title="mrxcavator.call_api" href="#mrxcavator.call_api">call_api</a></code></li>
 <li><code><a title="mrxcavator.error" href="#mrxcavator.error">error</a></code></li>
+<li><code><a title="mrxcavator.export_report" href="#mrxcavator.export_report">export_report</a></code></li>
 <li><code><a title="mrxcavator.extension_is_ignored" href="#mrxcavator.extension_is_ignored">extension_is_ignored</a></code></li>
 <li><code><a title="mrxcavator.find_extension_directories" href="#mrxcavator.find_extension_directories">find_extension_directories</a></code></li>
 <li><code><a title="mrxcavator.get_crx_path" href="#mrxcavator.get_crx_path">get_crx_path</a></code></li>
