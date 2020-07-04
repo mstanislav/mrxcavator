@@ -234,11 +234,14 @@ def save_file(filename: str, content: str) -> bool:
     Returns:
         A boolean result.
     """
-    if not os.path.isdir('reports'):
+    if not os.path.isdir("reports"):
         try:
-            os.mkdir('reports')
+            os.mkdir("reports")
         except IOError:
-            error("Unable to create the 'reports' directory in this location.", True)
+            error(
+                "Unable to create the 'reports' directory in this location.",
+                True,
+            )
 
     try:
         with open(filename, "w") as fileHandle:
