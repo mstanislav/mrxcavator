@@ -528,7 +528,7 @@ def test_virustotal_key() -> bool:
         if call_api(
             "/virustotal/report",
             "POST",
-            {"apiKey": "test", "urls": ["google.com"]},
+            {"apiKey": key, "urls": ["google.com"]},
             {},
         ):
             return True

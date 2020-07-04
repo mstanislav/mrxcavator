@@ -90,32 +90,45 @@ The development of this CLI tool will have five "releases" that relate to the co
 ### Help Output
 ```
 ➜  python3 mrxcavator.py -h
-usage: mrxcavator.py [-h] [-c path] [--extension_path directory] [-s [id]]
-                     [--submit_all] [-r [id]] [--export file] [--report_all]
-                     [--crxcavator_key key] [--crxcavator_uri uri]
-                     [--test_crxcavator_key] [--test_crxcavator_uri] [-e] [-v]
+usage: mrxcavator.py [-c path] [--extension_path path] [--crxcavator_key key]
+                     [--crxcavator_uri uri] [--virustotal_key key]
+                     [--test_crxcavator_key] [--test_crxcavator_uri]
+                     [--test_virustotal_key] [-s [id]] [--submit_all]
+                     [-r [id]] [--report_all] [--export [file]] [-e] [-g [id]]
+                     [-v] [-h]
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -c path, --config path
-                        specify a config file path
-  --extension_path directory
-                        set path to local Chrome extensions
+Features:
   -s [id], --submit [id]
                         submit an extension
   --submit_all          submit all installed extensions
   -r [id], --report [id]
                         get an extension's report
-  --export file         export result to a specific file
   --report_all          retrieve a report for all installed extensions
+  --export [file]       export result to a specific file
+  -e, --extensions      list installed extensions
+  -g [id], --graph [id]
+                        get a graph of an extension's risk
+
+Set Configuration:
+  -c path, --config path
+                        specify a config file path
+  --extension_path path
+                        set path to local Chrome extensions
   --crxcavator_key key  set CRXcavator API key
   --crxcavator_uri uri  set CRXcavator API URI
+  --virustotal_key key  set VirusTotal API key
+
+Test Configuration:
   --test_crxcavator_key
-                        test configured CRXcavator API key
+                        test CRXcavator API key
   --test_crxcavator_uri
-                        test configured CRXcavator API URI
-  -e, --extensions      list installed extensions
+                        test CRXcavator API URI
+  --test_virustotal_key
+                        test VirusTotal API key
+
+Miscellaneous:
   -v, --version         show program's version number and exit
+  -h, --help            show program's help information and exit
 ```
 
 ### Submit an Extension
@@ -151,27 +164,65 @@ Successful:
 ### Get an Extension's Report
 If no extension identifier is passed to the flag, a list of locally installed extensions will be given to select from.
 ```
-➜  python3 mrxcavator.py -r hdokiejnpimakedhajhdlcegeplioahd
+➜  python3 mrxcavator.py -r bmnlcjabgnpnenekpadlanbbkooimhnj
 
-Overview
-================================================================================
-        Extension Name: LastPass: Free Password Manager
-        Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
-        Newest Version: 4.49.0.3 (2020-06-03)
-        Versions Known: 41
-        Store Rating:   4.54 stars
+Extension Overview
+============================================================
+  Extension Name:	  Honey
+  Extension ID:		  bmnlcjabgnpnenekpadlanbbkooimhnj
 
-Risk
-================================================================================
-        CSP Policy:     69
-        RetireJS:       150
-        Web Store:      1
+  Newest Version:	  12.3.0 (2020-06-26)
+  Versions Known:	  42
+  Store Rating:		  4.84 stars
 
-        Permissions:
-          >Required:    110
-          >Optional:    25
+  Total Risk Score:	657
 
-        ** Risk Score:  355 **
+
+Content Security Policy
+============================================================
+  386	Total
+------------------------------------------------------------
+  25	child-src
+  25	connect-src
+  25	font-src
+  25	form-action
+  25	frame-ancestors
+  25	frame-src
+  25	img-src
+  25	manifest-src
+  25	media-src
+  1	  object-src
+  25	plugin-types
+  25	sandbox
+  10	script-src
+  25	strict-dynamic
+  25	style-src
+  25	upgrade-insecure-requests
+  25	worker-src
+
+
+RetireJS
+============================================================
+  130	Total
+------------------------------------------------------------
+  0	  Low
+  40	Medium
+  90	High
+  0	  Critical
+
+
+Web Store
+============================================================
+  0	Total
+------------------------------------------------------------
+
+
+Permissions
+============================================================
+  135	Total
+------------------------------------------------------------
+  135	Required
+  0	  Optional
 ```
 
 ### Save an Extension's Report to a File
@@ -230,42 +281,73 @@ Risk
 Retrieving extension report(s)...
 
 
-Overview
-================================================================================
-        Extension Name: Google Docs Offline
-        Extension ID:   ghbmnnjooekpmoecnnnilnnbdlolhkhi
-        Newest Version: 1.9.1 (2020-03-04)
-        Versions Known: 5
-        Store Rating:   2.87 stars
+Extension Overview
+============================================================
+  Extension Name:	YouTube
+  Extension ID:		blpcfgokakmgnkcojhhkbfbldkacnbeo
 
-Risk
-================================================================================
-        CSP Policy:     377
-        Web Store:      6
+  Newest Version:	4.2.8 (2015-09-24)
+  Versions Known:	1
+  Store Rating:		4.52 stars
 
-        Permissions:
-          >Required:    40
+  Total Risk Score:	11
 
-        ** Risk Score:  423 **
+
+Web Store
+============================================================
+  11	Total
+------------------------------------------------------------
+  1	Address
+  1	Email
+  5	Last Updated
+  1	Privacy Policy
+  1	Support Site
+  1	Users
+  1	Website
+
+
+Permissions
+============================================================
+  0	Total
+------------------------------------------------------------
+  0	Required
+  0	Optional
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Overview
-================================================================================
-        Extension Name: Gmail
-        Extension ID:   pjkljhegncpnkpknbcohdijeoejaedia
-        Newest Version: 8.2 (2019-03-26)
-        Versions Known: 2
-        Store Rating:   4.53 stars
+Extension Overview
+============================================================
+  Extension Name:	Sheets
+  Extension ID:		felcaaldnbdncclmgdcncolpebgiejap
 
-Risk
-================================================================================
-        Web Store:      10
+  Newest Version:	1.2 (2017-10-12)
+  Versions Known:	1
+  Store Rating:		4.15 stars
 
-        Permissions:
-          >Required:    5
+  Total Risk Score:	11
 
-        ** Risk Score:  15 **
+
+Web Store
+============================================================
+  11	Total
+------------------------------------------------------------
+  1	Address
+  1	Email
+  5	Last Updated
+  1	Privacy Policy
+  1	Support Site
+  1	Users
+  1	Website
+
+
+Permissions
+============================================================
+  0	Total
+------------------------------------------------------------
+  0	Required
+  0	Optional
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [...snip...]
 ```
@@ -274,56 +356,40 @@ Risk
 ```
 ➜  python3 mrxcavator.py -e
 
-Locally Installed Chrome Extensions:
-------------------------------------
-
-* Google Docs Offline
-  - Version:	1.11.0
-  - Identifier: ghbmnnjooekpmoecnnnilnnbdlolhkhi
-
-* Chrome Media Router
-  - Version:	8320.407.0.1
-  - Identifier: pkedcjkdefgpdelpbcmbmeomcjbeemfm
-
-* Gmail
-  - Version:	8.2
-  - Identifier: pjkljhegncpnkpknbcohdijeoejaedia
-
-* Google Drive
-  - Version:	14.2
-  - Identifier: apdfllckaahabafndbhieahigkjlhalf
-
-* Application Launcher for Drive (by Google)
-  - Version:	3.2
-  - Identifier: lmjegmlicamnimmfhcmpkclmigmmcbeh
-
-* Slides
-  - Version:	0.10
-  - Identifier: aapocclcgogkmnckokdopfmhonfmgoek
-
-* Docs
-  - Version:	0.10
-  - Identifier: aohghmighlieiainnegkcijnfilokake
-
-* Google Keep Chrome Extension
-  - Version:	4.20222.540.1
-  - Identifier: lpcaedmchfhocbbapmcbpinfpgnhiddi
-
-* Chrome Web Store Payments
-  - Version:	1.0.0.5
-  - Identifier: nmmhkkegccagdldgiimedpiccmgmieda
-
-* Save to Google Drive
-  - Version:	2.1.1
-  - Identifier: gmbmikajjgmnabiglmofipeabaddhgne
-
-* YouTube
-  - Version:	4.2.8
-  - Identifier: blpcfgokakmgnkcojhhkbfbldkacnbeo
-
-* Sheets
-  - Version:	1.2
-  - Identifier: felcaaldnbdncclmgdcncolpebgiejap
+Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensions/
+┌────────────────────────────────────────────┬───────────────┬──────────────────────────────────┐
+│ Name                                       │ Version       │ Identifier                       │
+╞════════════════════════════════════════════╪═══════════════╪══════════════════════════════════╡
+│ Google Docs Offline                        │ 1.11.0        │ ghbmnnjooekpmoecnnnilnnbdlolhkhi │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Honey                                      │ 12.2.1        │ bmnlcjabgnpnenekpadlanbbkooimhnj │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Gmail                                      │ 8.2           │ pjkljhegncpnkpknbcohdijeoejaedia │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Bitwarden - Free Password Manager          │ 1.45.0        │ nngceckbapebfimnlniiiahkandclblb │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Google Drive                               │ 14.2          │ apdfllckaahabafndbhieahigkjlhalf │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Application Launcher for Drive (by Google) │ 3.2           │ lmjegmlicamnimmfhcmpkclmigmmcbeh │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Slides                                     │ 0.10          │ aapocclcgogkmnckokdopfmhonfmgoek │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Cisco Webex Extension                      │ 1.9.0         │ jlhmfgmfgeifomenelglieieghnjghma │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Docs                                       │ 0.10          │ aohghmighlieiainnegkcijnfilokake │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Google Keep Chrome Extension               │ 4.20265.788.1 │ lpcaedmchfhocbbapmcbpinfpgnhiddi │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Zoom                                       │ 5.0.4169.628  │ hmbjbjdpkobdjplfobhljndfdfdipjhg │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Save to Pocket                             │ 3.0.6.8       │ niloccemoadcdkdjlinkgdfekeahmflj │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Save to Google Drive                       │ 2.1.1         │ gmbmikajjgmnabiglmofipeabaddhgne │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ YouTube                                    │ 4.2.8         │ blpcfgokakmgnkcojhhkbfbldkacnbeo │
+├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
+│ Sheets                                     │ 1.2           │ felcaaldnbdncclmgdcncolpebgiejap │
+└────────────────────────────────────────────┴───────────────┴──────────────────────────────────┘
 ```
 
 ### Set the CRXcavator API URI Value
@@ -364,6 +430,7 @@ Locally Installed Chrome Extensions:
 [DEFAULT]
 crxcavator_api_uri = https://api.crxcavator.io/v1
 crxcavator_api_key =
+virustotal_api_key =
 extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 
 [custom]
@@ -372,7 +439,7 @@ extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 ### Get mrxcavator's Version
 ```
 ➜  python3 mrxcavator.py --version
-v0.3
+v0.4
 ```
 
 ### Example config.ini Contents
@@ -381,6 +448,7 @@ v0.3
 [DEFAULT]
 crxcavator_api_uri = https://api.crxcavator.io/v1
 crxcavator_api_key =
+virustotal_api_key =
 extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 
 [custom]
