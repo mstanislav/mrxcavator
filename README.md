@@ -41,7 +41,17 @@ The development of this CLI tool will have five "releases" that relate to the co
     * Bug Fix: The Web Store "Star Rating" had entirely too much specificity; now it is rounded to two decimal places
     * Bug Fix: An incorrect report identifier no longer returns a broken summary
 4. Release 4 - 07/05/2020
-    * 
+    * The --report_all feature now supports also exporting each to a file
+    * Using --export now writes to a filename of extension_id.txt if one isn't given
+    * A VirusTotal API Key can now be configured and tested for functionality
+    * The --extensions command now shows results in a well-formatted table
+    * The "help" output now uses argparse "groups" to increase readability
+    * A new --graph (-g) command will chart out an extension's risk score over time
+    * Changed the overall extension report summary format
+    * Added CSP attribute scoring to the report summary
+    * Added RetireJS per-rating scores to the report summary
+    * The project now is configured to work with Poetry and published to PyPI
+    * Bug Fix: Gracefully handle a user cancelling PyInquirer's prompt
 5. Release 5 - 07/19/2020
 
 ## Engineering Approach
