@@ -456,7 +456,7 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 
 ### Show a Graph of an Extension's Risk Score Over Time
 ```
-➜  python3 mrxcavator.py -g bmnlcjabgnpnenekpadlanbbkooimhnj
+➜  python3 mrxcavator.py --graph bmnlcjabgnpnenekpadlanbbkooimhnj
      668 ┤
      655 ┤                                     ╭╮
      641 ┤                                     │╰──
