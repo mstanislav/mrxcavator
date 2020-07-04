@@ -331,6 +331,21 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <h2 id="returns">Returns</h2>
 <p>A boolean result.</p></div>
 </dd>
+<dt id="mrxcavator.set_virustotal_key"><code class="name flex">
+<span>def <span class="ident">set_virustotal_key</span></span>(<span>filename: str, key: str) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configures the VirusTotal API key into the passed-in filename.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The mrxcavator configuration filename as a string.</dd>
+<dt><strong><code>key</code></strong></dt>
+<dd>The VirusTotal API key as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean result.</p></div>
+</dd>
 <dt id="mrxcavator.submit_extension"><code class="name flex">
 <span>def <span class="ident">submit_extension</span></span>(<span>id: str) -> bool</span>
 </code></dt>
@@ -375,6 +390,19 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 </code></dt>
 <dd>
 <div class="desc"><p>Performs an API call to CRXcavator to test the configured URI.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>None</code></strong></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean result.</p></div>
+</dd>
+<dt id="mrxcavator.test_virustotal_key"><code class="name flex">
+<span>def <span class="ident">test_virustotal_key</span></span>(<span>) -> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Performs a VirusTotal API call to test the configured API key.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>None</code></strong></dt>
@@ -443,10 +471,12 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <li><code><a title="mrxcavator.set_crxcavator_key" href="#mrxcavator.set_crxcavator_key">set_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_uri" href="#mrxcavator.set_crxcavator_uri">set_crxcavator_uri</a></code></li>
 <li><code><a title="mrxcavator.set_extension_path" href="#mrxcavator.set_extension_path">set_extension_path</a></code></li>
+<li><code><a title="mrxcavator.set_virustotal_key" href="#mrxcavator.set_virustotal_key">set_virustotal_key</a></code></li>
 <li><code><a title="mrxcavator.submit_extension" href="#mrxcavator.submit_extension">submit_extension</a></code></li>
 <li><code><a title="mrxcavator.submit_extensions" href="#mrxcavator.submit_extensions">submit_extensions</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_key" href="#mrxcavator.test_crxcavator_key">test_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_uri" href="#mrxcavator.test_crxcavator_uri">test_crxcavator_uri</a></code></li>
+<li><code><a title="mrxcavator.test_virustotal_key" href="#mrxcavator.test_virustotal_key">test_virustotal_key</a></code></li>
 <li><code><a title="mrxcavator.version_count" href="#mrxcavator.version_count">version_count</a></code></li>
 <li><code><a title="mrxcavator.write_config" href="#mrxcavator.write_config">write_config</a></code></li>
 </ul>

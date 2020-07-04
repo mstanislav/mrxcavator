@@ -353,6 +353,7 @@ def build_config(filename: str) -> bool:
     config["DEFAULT"] = {
         "crxcavator_api_uri": "https://api.crxcavator.io/v1",
         "crxcavator_api_key": "",
+        "virustotal_api_key": "",
         "extension_path": CRX_PATH,
     }
     config.add_section("custom")
@@ -383,27 +384,6 @@ def load_config(filename: str) -> bool:
     return True
 
 
-def set_crxcavator_key(filename: str, key: str) -> bool:
-    """Configures the CRXcavator API key into the passed-in filename.
-
-    Args:
-        filename: The mrxcavator configuration filename as a string.
-        key: The CRXcavator API key as a string.
-
-    Returns:
-        A boolean result.
-    """
-    if len(key) != 32 or re.match("^[a-zA-Z]+$", key) is False:
-        error(f"The provided API key, {key}, is incorrectly formatted.", True)
-    else:
-        config.set("custom", "crxcavator_api_key", key)
-
-        if not write_config(filename):
-            return False
-
-    return True
-
-
 def set_extension_path(filename: str, path: str) -> bool:
     """Configures the system's directory path to Chrome extensions.
 
@@ -428,6 +408,27 @@ def set_extension_path(filename: str, path: str) -> bool:
     return True
 
 
+def set_crxcavator_key(filename: str, key: str) -> bool:
+    """Configures the CRXcavator API key into the passed-in filename.
+
+    Args:
+        filename: The mrxcavator configuration filename as a string.
+        key: The CRXcavator API key as a string.
+
+    Returns:
+        A boolean result.
+    """
+    if len(key) != 32 or re.match("^[a-zA-Z]+$", key) is False:
+        error(f"The provided API key, {key}, is incorrectly formatted.", True)
+    else:
+        config.set("custom", "crxcavator_api_key", key)
+
+        if not write_config(filename):
+            return False
+
+    return True
+
+
 def set_crxcavator_uri(filename: str, uri: str) -> bool:
     """Configures the CRXcavator API URI into the passed-in filename.
 
@@ -445,6 +446,27 @@ def set_crxcavator_uri(filename: str, uri: str) -> bool:
             return False
     else:
         error(f"The provided API URI, {uri}, is incorrectly formatted.", True)
+
+    return True
+
+
+def set_virustotal_key(filename: str, key: str) -> bool:
+    """Configures the VirusTotal API key into the passed-in filename.
+
+    Args:
+        filename: The mrxcavator configuration filename as a string.
+        key: The VirusTotal API key as a string.
+
+    Returns:
+        A boolean result.
+    """
+    if len(key) != 64 or re.match("^[a-f0-9]+$", key) is False:
+        error(f"The provided API key, {key}, is incorrectly formatted.", True)
+    else:
+        config.set("custom", "virustotal_api_key", key)
+
+        if not write_config(filename):
+            return False
 
     return True
 
@@ -484,6 +506,32 @@ def test_crxcavator_uri() -> bool:
     if result["text"] == "CRXcavator":
         return True
     else:
+        return False
+
+
+def test_virustotal_key() -> bool:
+    """Performs a VirusTotal API call to test the configured API key.
+
+    Args:
+        None
+
+    Returns:
+        A boolean result.
+    """
+    key = config.get("custom", "virustotal_api_key")
+
+    if key:
+        if call_api(
+            "/virustotal/report",
+            "POST",
+            {"apiKey": key, "urls": ["google.com"]},
+            {},
+        ):
+            return True
+        else:
+            return False
+    else:
+        error(f"No VirusTotal API key has been set yet.")
         return False
 
 
@@ -673,16 +721,17 @@ if __name__ == "__main__":
         parser = argparse.ArgumentParser(add_help=False)
 
         help_features = parser.add_argument_group("Features")
-        help_config = parser.add_argument_group("Configuration")
+        help_config = parser.add_argument_group("Set Configuration")
+        help_test = parser.add_argument_group("Test Configuration")
         help_misc = parser.add_argument_group("Miscellaneous")
 
-        help_config.add_argument(
+        help_features.add_argument(
             "-c", "--config", metavar="path", help="specify a config file path"
         )
 
         help_config.add_argument(
             "--extension_path",
-            metavar="directory",
+            metavar="path",
             help="set path to local Chrome extensions",
         )
 
@@ -695,15 +744,25 @@ if __name__ == "__main__":
         )
 
         help_config.add_argument(
+            "--virustotal_key", metavar="key", help="set VirusTotal API key"
+        )
+
+        help_test.add_argument(
             "--test_crxcavator_key",
             action="store_true",
             help="test CRXcavator API key",
         )
 
-        help_config.add_argument(
+        help_test.add_argument(
             "--test_crxcavator_uri",
             action="store_true",
             help="test CRXcavator API URI",
+        )
+
+        help_test.add_argument(
+            "--test_virustotal_key",
+            action="store_true",
+            help="test VirusTotal API key",
         )
 
         help_features.add_argument(
@@ -815,6 +874,10 @@ if __name__ == "__main__":
             if set_crxcavator_uri(config_file, args.crxcavator_uri):
                 print(f"\n\tThe CRXcavator API URI was set successfully!\n")
 
+        elif args.virustotal_key:
+            if set_virustotal_key(config_file, args.virustotal_key):
+                print(f"\n\tThe VirusTotal API key was set successfully!\n")
+
         elif args.test_crxcavator_key:
             if test_crxcavator_key():
                 print(f"\n\tThe CRXcavator API key was successfully tested!\n")
@@ -824,6 +887,10 @@ if __name__ == "__main__":
                 print(f"\n\tThe CRXcavator API URI was successfully tested!\n")
             else:
                 error("The CRXcavator API URI returned an unexpected result.")
+
+        elif args.test_virustotal_key:
+            if test_virustotal_key():
+                print(f"\n\tThe VirusTotal API key was successfully tested!\n")
 
         elif args.extensions:
             extensions = get_installed_extensions(extension_path)
