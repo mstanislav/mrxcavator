@@ -817,6 +817,7 @@ def select_extension(extensions: list) -> str:
         error("No extension was selected.\n", True)
         return ""
 
+
 def main():
     global config
     global extension_path
@@ -1034,6 +1035,7 @@ def main():
                 id = args.graph
 
             get_risk_graph(id)
+
 
 if __name__ == "__main__":
     main()
