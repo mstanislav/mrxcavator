@@ -13,6 +13,8 @@ import sys
 import json
 import argparse
 import requests
+import asciichart
+import termtables as tt
 import validators  # type: ignore
 import configparser
 
@@ -93,7 +95,9 @@ def call_api(end_point: str, method: str, values=None, headers=None) -> dict:
     elif response.status_code == 403:
         error("403 - API Error - Please check your API parameters.", True)
     elif response.status_code == 404:
-        error("404 - API Not Found - Please check your API endpoint.", True)
+        error("404 - API Not Found - Check your API configuration.", True)
+    elif response.status_code == 500:
+        error("500 - Server Error - Check your API configuration.", True)
     else:
         error("An unknown API error has occurred.", True)
 
@@ -524,7 +528,7 @@ def test_virustotal_key() -> bool:
         if call_api(
             "/virustotal/report",
             "POST",
-            {"apiKey": key, "urls": ["google.com"]},
+            {"apiKey": "test", "urls": ["google.com"]},
             {},
         ):
             return True
@@ -687,6 +691,28 @@ def get_installed_extensions(path: str) -> list:
     return extensions
 
 
+def get_extensions_table(extensions: dict, path: str) -> None:
+    print(f"\nExtensions Found in {path}")
+
+    data = []
+    for ext in extensions:
+        data.append([ext["name"], ext["version"].split("_")[0], ext["id"]])
+
+    header = [
+        "\033[1mName\033[0m",
+        "\033[1mVersion\033[0m",
+        "\033[1mIdentifier\033[0m",
+    ]
+
+    tt.print(
+        data,
+        header=header,
+        style=tt.styles.thin_double,
+        padding=(0, 1),
+        alignment="lll",
+    )
+
+
 def select_extension(extensions: list) -> str:
     """Returns an extension identifier from the passed-in list via PyInquirer.
 
@@ -725,7 +751,7 @@ if __name__ == "__main__":
         help_test = parser.add_argument_group("Test Configuration")
         help_misc = parser.add_argument_group("Miscellaneous")
 
-        help_features.add_argument(
+        help_config.add_argument(
             "-c", "--config", metavar="path", help="specify a config file path"
         )
 
@@ -898,12 +924,7 @@ if __name__ == "__main__":
             if len(extensions) == 0:
                 error("No extensions were found. Check your configuration.")
             else:
-                print("\nLocally Installed Chrome Extensions:")
-                print("------------------------------------\n")
-                for ext in extensions:
-                    print(f"* {ext['name']}")
-                    print(f"  - Version:\t{ext['version'].split('_')[0]}")
-                    print(f"  - Identifier: {ext['id']}\n")
+                get_extensions_table(extensions, extension_path)
 
         elif args.submit_all:
             submit_extensions(get_installed_extensions(extension_path))

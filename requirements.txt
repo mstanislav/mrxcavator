@@ -1,4 +1,6 @@
-PyInquirer==1.0.3
-requests==2.23.0
-tqdm==4.46.1
 validators==0.15.0
+asciichart==0.1
+tqdm==4.46.1
+termtables==0.2.1
+requests==2.23.0
+PyInquirer==1.0.3
