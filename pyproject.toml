@@ -1,12 +1,13 @@
 [tool.poetry]
 name = "mrxcavator"
-version = "0.4.7"
+version = "0.4.8"
 description = "CLI client for CRXcavator.io"
 authors = ["Mark Stanislav <mark.stanislav@gmail.com>"]
 license = "MIT"
 readme = 'README.md'
 repository = "https://github.com/mstanislav/mrxcavator"
 homepage = "https://github.com/mstanislav/mrxcavator"
+documentation = "https://mstanislav.github.io/mrxcavator/mrxcavator.html"
 include = ["docs/mrxcavator.html"]
 
 [tool.poetry.dependencies]
