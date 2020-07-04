@@ -322,7 +322,7 @@ def get_reports(extensions: list, export: bool) -> None:
         report = get_report(extension["id"])
         if report:
             summary = get_report_summary(report)
-            print(f"{summary}\n\n{80*'~'}")
+            print(f"{summary}\n{80*'~'}")
             if export is True:
                 export_report(extension["id"], summary, "")
 
