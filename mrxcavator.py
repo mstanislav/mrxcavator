@@ -692,6 +692,15 @@ def get_installed_extensions(path: str) -> list:
 
 
 def get_extensions_table(extensions: list, path: str) -> None:
+    """Prints a table of installed extensions.
+
+    Args:
+        extensions: A list of installed extension meta data.
+        path: A string for the path to installed Chrome extensions.
+
+    Returns:
+        None.
+    """
     print(f"\nExtensions Found in {path}")
 
     data = []
@@ -714,7 +723,18 @@ def get_extensions_table(extensions: list, path: str) -> None:
 
 
 def get_risk_graph(id: str):
+    """Prints a graph of an extension's risk scores over time.
+
+    Args:
+        id: An extension identifier string.
+
+    Returns:
+        None
+    """
     results = get_report(id)
+
+    if len(results) == 0:
+        error(f"No results were found for {id}.", True)
 
     data = []
     for item in results:
@@ -757,6 +777,7 @@ def select_extension(extensions: list) -> str:
     ]
 
     result = prompt(question)
+
     if "id" in result:
         return result["id"]
     else:
