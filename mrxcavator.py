@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.4.5"
+__version__ = "0.4.6"
 
 import os
 import re
@@ -26,6 +26,7 @@ CONFIG_FILE = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
 
 config = configparser.ConfigParser()
+extension_path = ""
 
 
 def extension_is_ignored(id: str) -> bool:
@@ -817,11 +818,7 @@ def select_extension(extensions: list) -> str:
         error("No extension was selected.\n", True)
         return ""
 
-
-def main():
-    global config
-    global extension_path
-
+def build_parser() -> object:
     if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         print("Please use Python >=3.6 with this program.\n")
         sys.exit(1)
@@ -942,100 +939,104 @@ def main():
             parser.print_help()
             sys.exit(1)
 
-        args = parser.parse_args()
-
-        if args.config:
-            config_file = args.config
-        else:
-            config_file = CONFIG_FILE
-
-        load_config(config_file)
-
-        extension_path = config.get("custom", "extension_path")
-
-        if args.submit:
-            if args.submit == "empty":
-                id = select_extension(get_installed_extensions(extension_path))
-            else:
-                id = args.submit
-
-            if submit_extension(id):
-                print(f"\n\tYou've submitted {id}.\n")
-
-        elif args.report:
-            if args.report == "empty":
-                id = select_extension(get_installed_extensions(extension_path))
-            else:
-                id = args.report
-
-            results = get_report(id)
-
-            if results:
-                report = get_report_summary(results)
-                print(report)
-            else:
-                error(f"The extension {id} was not found.")
-
-            if results and args.export:
-                export_report(id, report, args.export)
-
-        elif args.extension_path:
-            if set_extension_path(config_file, args.extension_path):
-                print(f"\n\tThe system extension path was set successfully!\n")
-
-        elif args.crxcavator_key:
-            if set_crxcavator_key(config_file, args.crxcavator_key):
-                print(f"\n\tThe CRXcavator API key was set successfully!\n")
-
-        elif args.crxcavator_uri:
-            if set_crxcavator_uri(config_file, args.crxcavator_uri):
-                print(f"\n\tThe CRXcavator API URI was set successfully!\n")
-
-        elif args.virustotal_key:
-            if set_virustotal_key(config_file, args.virustotal_key):
-                print(f"\n\tThe VirusTotal API key was set successfully!\n")
-
-        elif args.test_crxcavator_key:
-            if test_crxcavator_key():
-                print(f"\n\tThe CRXcavator API key was successfully tested!\n")
-
-        elif args.test_crxcavator_uri:
-            if test_crxcavator_uri():
-                print(f"\n\tThe CRXcavator API URI was successfully tested!\n")
-            else:
-                error("The CRXcavator API URI returned an unexpected result.")
-
-        elif args.test_virustotal_key:
-            if test_virustotal_key():
-                print(f"\n\tThe VirusTotal API key was successfully tested!\n")
-
-        elif args.extensions:
-            extensions = get_installed_extensions(extension_path)
-
-            if len(extensions) == 0:
-                error("No extensions were found. Check your configuration.")
-            else:
-                get_extensions_table(extensions, extension_path)
-
-        elif args.submit_all:
-            submit_extensions(get_installed_extensions(extension_path))
-
-        elif args.report_all:
-            if args.export:
-                export = True
-            else:
-                export = False
-
-            get_reports(get_installed_extensions(extension_path), export)
-
-        elif args.graph:
-            if args.graph == "empty":
-                id = select_extension(get_installed_extensions(extension_path))
-            else:
-                id = args.graph
-
-            get_risk_graph(id)
-
+        return parser
 
 if __name__ == "__main__":
-    main()
+    global config
+    global extension_path
+
+    parser = build_parser()
+
+    args = parser.parse_args()
+
+    if args.config:
+        config_file = args.config
+    else:
+        config_file = CONFIG_FILE
+
+    load_config(config_file)
+
+    extension_path = config.get("custom", "extension_path")
+
+    if args.submit:
+        if args.submit == "empty":
+            id = select_extension(get_installed_extensions(extension_path))
+        else:
+            id = args.submit
+
+        if submit_extension(id):
+            print(f"\n\tYou've submitted {id}.\n")
+
+    elif args.report:
+        if args.report == "empty":
+            id = select_extension(get_installed_extensions(extension_path))
+        else:
+            id = args.report
+
+        results = get_report(id)
+
+        if results:
+            report = get_report_summary(results)
+            print(report)
+        else:
+            error(f"The extension {id} was not found.")
+
+        if results and args.export:
+            export_report(id, report, args.export)
+
+    elif args.extension_path:
+        if set_extension_path(config_file, args.extension_path):
+            print(f"\n\tThe system extension path was set successfully!\n")
+
+    elif args.crxcavator_key:
+        if set_crxcavator_key(config_file, args.crxcavator_key):
+            print(f"\n\tThe CRXcavator API key was set successfully!\n")
+
+    elif args.crxcavator_uri:
+        if set_crxcavator_uri(config_file, args.crxcavator_uri):
+            print(f"\n\tThe CRXcavator API URI was set successfully!\n")
+
+    elif args.virustotal_key:
+        if set_virustotal_key(config_file, args.virustotal_key):
+            print(f"\n\tThe VirusTotal API key was set successfully!\n")
+
+    elif args.test_crxcavator_key:
+        if test_crxcavator_key():
+            print(f"\n\tThe CRXcavator API key was successfully tested!\n")
+
+    elif args.test_crxcavator_uri:
+        if test_crxcavator_uri():
+            print(f"\n\tThe CRXcavator API URI was successfully tested!\n")
+        else:
+            error("The CRXcavator API URI returned an unexpected result.")
+
+    elif args.test_virustotal_key:
+        if test_virustotal_key():
+            print(f"\n\tThe VirusTotal API key was successfully tested!\n")
+
+    elif args.extensions:
+        extensions = get_installed_extensions(extension_path)
+
+        if len(extensions) == 0:
+            error("No extensions were found. Check your configuration.")
+        else:
+            get_extensions_table(extensions, extension_path)
+
+    elif args.submit_all:
+        submit_extensions(get_installed_extensions(extension_path))
+
+    elif args.report_all:
+        if args.export:
+            export = True
+        else:
+            export = False
+
+        get_reports(get_installed_extensions(extension_path), export)
+
+    elif args.graph:
+        if args.graph == "empty":
+            id = select_extension(get_installed_extensions(extension_path))
+        else:
+            id = args.graph
+
+        get_risk_graph(id)
