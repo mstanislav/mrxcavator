@@ -13,8 +13,8 @@ import sys
 import json
 import argparse
 import requests
-import asciichart
-import termtables as tt
+import asciichartpy  # type: ignore
+import termtables  # type: ignore
 import validators  # type: ignore
 import configparser
 
@@ -691,7 +691,7 @@ def get_installed_extensions(path: str) -> list:
     return extensions
 
 
-def get_extensions_table(extensions: dict, path: str) -> None:
+def get_extensions_table(extensions: list, path: str) -> None:
     print(f"\nExtensions Found in {path}")
 
     data = []
@@ -704,12 +704,32 @@ def get_extensions_table(extensions: dict, path: str) -> None:
         "\033[1mIdentifier\033[0m",
     ]
 
-    tt.print(
+    termtables.print(
         data,
         header=header,
-        style=tt.styles.thin_double,
+        style=termtables.styles.thin_double,
         padding=(0, 1),
         alignment="lll",
+    )
+
+
+def get_risk_graph(id: str):
+    results = get_report(id)
+
+    data = []
+    for item in results:
+        data.append(item["data"]["risk"]["total"])
+
+    print(
+        asciichartpy.plot(
+            data,
+            {
+                "min": min(data),
+                "max": max(data),
+                "height": 10,
+                "format": "{:8.0f}",
+            },
+        )
     )
 
 
@@ -736,7 +756,11 @@ def select_extension(extensions: list) -> str:
         }
     ]
 
-    return prompt(question)["id"]
+    result = prompt(question)
+    if "id" in result:
+        return result["id"]
+    else:
+        return ""
 
 
 if __name__ == "__main__":
@@ -834,6 +858,15 @@ if __name__ == "__main__":
             "--extensions",
             action="store_true",
             help="list installed extensions",
+        )
+
+        help_features.add_argument(
+            "-g",
+            "--graph",
+            nargs="?",
+            const="empty",
+            metavar="id",
+            help="get a graph of an extension's risk",
         )
 
         help_misc.add_argument(
@@ -936,3 +969,11 @@ if __name__ == "__main__":
                 export = False
 
             get_reports(get_installed_extensions(extension_path), export)
+
+        elif args.graph:
+            if args.graph == "empty":
+                id = select_extension(get_installed_extensions(extension_path))
+            else:
+                id = args.graph
+
+            get_risk_graph(id)

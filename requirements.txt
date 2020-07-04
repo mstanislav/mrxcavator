@@ -1,5 +1,5 @@
 validators==0.15.0
-asciichart==0.1
+asciichartpy==1.5.21
 tqdm==4.46.1
 termtables==0.2.1
 requests==2.23.0
