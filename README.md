@@ -168,12 +168,12 @@ If no extension identifier is passed to the flag, a list of locally installed ex
 
 Extension Overview
 ============================================================
-  Extension Name:	  Honey
-  Extension ID:		  bmnlcjabgnpnenekpadlanbbkooimhnj
+  Extension Name:	Honey
+  Extension ID:		bmnlcjabgnpnenekpadlanbbkooimhnj
 
-  Newest Version:	  12.3.0 (2020-06-26)
-  Versions Known:	  42
-  Store Rating:		  4.84 stars
+  Newest Version:	12.3.0 (2020-06-26)
+  Versions Known:	42
+  Store Rating:		4.84 stars
 
   Total Risk Score:	657
 
@@ -191,7 +191,7 @@ Content Security Policy
   25	img-src
   25	manifest-src
   25	media-src
-  1	  object-src
+  1	object-src
   25	plugin-types
   25	sandbox
   10	script-src
@@ -205,10 +205,10 @@ RetireJS
 ============================================================
   130	Total
 ------------------------------------------------------------
-  0	  Low
+  0	Low
   40	Medium
   90	High
-  0	  Critical
+  0	Critical
 
 
 Web Store
@@ -222,12 +222,13 @@ Permissions
   135	Total
 ------------------------------------------------------------
   135	Required
-  0	  Optional
+  0	Optional
 ```
 
 ### Save an Extension's Report to a File
 ```
 ➜   python3 mrxcavator.py -r hdokiejnpimakedhajhdlcegeplioahd --export lastpass.txt
+
 Extension Overview
 ============================================================
   Extension Name:	LastPass: Free Password Manager
@@ -244,23 +245,23 @@ Content Security Policy
 ============================================================
   69	Total
 ------------------------------------------------------------
-  1	  child-src
+  1	child-src
   37	connect-src
-  1	  font-src
-  1	  form-action
-  1	  frame-ancestors
-  8	  frame-src
-  4	  img-src
-  1	  manifest-src
-  1	  media-src
-  1	  object-src
-  1	  plugin-types
-  1	  sandbox
-  1	  script-src
-  1	  strict-dynamic
-  7	  style-src
-  1	  upgrade-insecure-requests
-  1	  worker-src
+  1	font-src
+  1	form-action
+  1	frame-ancestors
+  8	frame-src
+  4	img-src
+  1	manifest-src
+  1	media-src
+  1	object-src
+  1	plugin-types
+  1	sandbox
+  1	script-src
+  1	strict-dynamic
+  7	style-src
+  1	upgrade-insecure-requests
+  1	worker-src
 
 
 RetireJS
@@ -270,7 +271,7 @@ RetireJS
   20	Low
   40	Medium
   90	High
-  0	  Critical
+  0	Critical
 
 
 Web Store
@@ -299,72 +300,117 @@ Retrieving extension report(s)...
 
 Extension Overview
 ============================================================
-  Extension Name:	YouTube
-  Extension ID:		blpcfgokakmgnkcojhhkbfbldkacnbeo
+  Extension Name:	Google Docs Offline
+  Extension ID:		ghbmnnjooekpmoecnnnilnnbdlolhkhi
 
-  Newest Version:	4.2.8 (2015-09-24)
-  Versions Known:	1
-  Store Rating:		4.52 stars
+  Newest Version:	1.9.1 (2020-03-04)
+  Versions Known:	5
+  Store Rating:		2.87 stars
 
-  Total Risk Score:	11
+  Total Risk Score:	423
+
+
+Content Security Policy
+============================================================
+  377	Total
+------------------------------------------------------------
+  25	child-src
+  25	connect-src
+  25	font-src
+  25	form-action
+  25	frame-ancestors
+  25	frame-src
+  25	img-src
+  25	manifest-src
+  25	media-src
+  1	object-src
+  25	plugin-types
+  25	sandbox
+  1	script-src
+  25	strict-dynamic
+  25	style-src
+  25	upgrade-insecure-requests
+  25	worker-src
 
 
 Web Store
 ============================================================
-  11	Total
+  6	Total
 ------------------------------------------------------------
   1	Address
   1	Email
-  5	Last Updated
-  1	Privacy Policy
-  1	Support Site
-  1	Users
-  1	Website
+  2	Last Updated
+  2	Rating
 
 
 Permissions
 ============================================================
-  0	Total
+  40	Total
 ------------------------------------------------------------
-  0	Required
+  40	Required
   0	Optional
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Extension Overview
 ============================================================
-  Extension Name:	Sheets
-  Extension ID:		felcaaldnbdncclmgdcncolpebgiejap
+  Extension Name:	Honey
+  Extension ID:		bmnlcjabgnpnenekpadlanbbkooimhnj
 
-  Newest Version:	1.2 (2017-10-12)
-  Versions Known:	1
-  Store Rating:		4.15 stars
+  Newest Version:	12.3.0 (2020-06-26)
+  Versions Known:	42
+  Store Rating:		4.84 stars
 
-  Total Risk Score:	11
+  Total Risk Score:	657
+
+
+Content Security Policy
+============================================================
+  386	Total
+------------------------------------------------------------
+  25	child-src
+  25	connect-src
+  25	font-src
+  25	form-action
+  25	frame-ancestors
+  25	frame-src
+  25	img-src
+  25	manifest-src
+  25	media-src
+  1	object-src
+  25	plugin-types
+  25	sandbox
+  10	script-src
+  25	strict-dynamic
+  25	style-src
+  25	upgrade-insecure-requests
+  25	worker-src
+
+
+RetireJS
+============================================================
+  130	Total
+------------------------------------------------------------
+  0	Low
+  40	Medium
+  90	High
+  0	Critical
 
 
 Web Store
 ============================================================
-  11	Total
+  0	Total
 ------------------------------------------------------------
-  1	Address
-  1	Email
-  5	Last Updated
-  1	Privacy Policy
-  1	Support Site
-  1	Users
-  1	Website
 
 
 Permissions
 ============================================================
-  0	Total
+  135	Total
 ------------------------------------------------------------
-  0	Required
+  135	Required
   0	Optional
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 [...snip...]
 ```
 
