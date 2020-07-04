@@ -4,6 +4,10 @@ version = "0.4"
 description = "CLI client for CRXcavator.io"
 authors = ["Mark Stanislav <mark.stanislav@gmail.com>"]
 license = "MIT"
+readme = 'README.md'
+repository = "https://github.com/mstanislav/mrxcavator"
+homepage = "https://github.com/mstanislav/mrxcavator"
+include = ["docs/mrxcavator.html"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
