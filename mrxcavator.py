@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.4.1"
+__version__ = "0.4.3"
 
 import os
 import re
