@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 
 import os
 import re
@@ -793,8 +793,7 @@ def select_extension(extensions: list) -> str:
         error("No extension was selected.\n", True)
         return ""
 
-
-if __name__ == "__main__":
+def main():
     if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         print("Please use Python >=3.6 with this program.\n")
         sys.exit(1)
@@ -1008,3 +1007,6 @@ if __name__ == "__main__":
                 id = args.graph
 
             get_risk_graph(id)
+
+if __name__ == "__main__":
+    main()

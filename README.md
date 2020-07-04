@@ -532,7 +532,7 @@ extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 ### Get mrxcavator's Version
 ```
 ➜  python3 mrxcavator.py --version
-v0.4.3
+v0.4.4
 ```
 
 ### Example config.ini Contents
