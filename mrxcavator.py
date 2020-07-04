@@ -818,7 +818,16 @@ def select_extension(extensions: list) -> str:
         error("No extension was selected.\n", True)
         return ""
 
-def build_parser() -> object:
+
+def build_parser():
+    """Returns a configured object for argparse functionality.
+
+    Args:
+        None.
+
+    Returns:
+        An object for argparse.
+    """
     if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         print("Please use Python >=3.6 with this program.\n")
         sys.exit(1)
@@ -941,10 +950,8 @@ def build_parser() -> object:
 
         return parser
 
-if __name__ == "__main__":
-    global config
-    global extension_path
 
+if __name__ == "__main__":
     parser = build_parser()
 
     args = parser.parse_args()
