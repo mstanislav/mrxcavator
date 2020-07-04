@@ -228,50 +228,66 @@ Permissions
 ### Save an Extension's Report to a File
 ```
 ➜   python3 mrxcavator.py -r hdokiejnpimakedhajhdlcegeplioahd --export lastpass.txt
+Extension Overview
+============================================================
+  Extension Name:	LastPass: Free Password Manager
+  Extension ID:		hdokiejnpimakedhajhdlcegeplioahd
 
-Overview
-================================================================================
-        Extension Name: LastPass: Free Password Manager
-        Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
-        Newest Version: 4.49.0.3 (2020-06-03)
-        Versions Known: 41
-        Store Rating:   4.54 stars
+  Newest Version:	4.51.0.1 (2020-07-02)
+  Versions Known:	43
+  Store Rating:		4.54 stars
 
-Risk
-================================================================================
-        CSP Policy:     69
-        RetireJS:       150
-        Web Store:      1
+  Total Risk Score:	354
 
-        Permissions:
-          >Required:    110
-          >Optional:    25
 
-        ** Risk Score:  355 **
+Content Security Policy
+============================================================
+  69	Total
+------------------------------------------------------------
+  1	  child-src
+  37	connect-src
+  1	  font-src
+  1	  form-action
+  1	  frame-ancestors
+  8	  frame-src
+  4	  img-src
+  1	  manifest-src
+  1	  media-src
+  1	  object-src
+  1	  plugin-types
+  1	  sandbox
+  1	  script-src
+  1	  strict-dynamic
+  7	  style-src
+  1	  upgrade-insecure-requests
+  1	  worker-src
+
+
+RetireJS
+============================================================
+  150	Total
+------------------------------------------------------------
+  20	Low
+  40	Medium
+  90	High
+  0	  Critical
+
+
+Web Store
+============================================================
+  0	Total
+------------------------------------------------------------
+
+
+Permissions
+============================================================
+  135	Total
+------------------------------------------------------------
+  110	Required
+  25	Optional
 
 
 >> Report saved in reports/lastpass.txt <<
-
-➜  cat reports/lastpass.txt
-Overview
-================================================================================
-        Extension Name: LastPass: Free Password Manager
-        Extension ID:   hdokiejnpimakedhajhdlcegeplioahd
-        Newest Version: 4.49.0.3 (2020-06-03)
-        Versions Known: 41
-        Store Rating:   4.54 stars
-
-Risk
-================================================================================
-        CSP Policy:     69
-        RetireJS:       150
-        Web Store:      1
-
-        Permissions:
-          >Required:    110
-          >Optional:    25
-
-        ** Risk Score:  355 **
 ```
 
 ### Get Reports For All Locally Installed Extensions
@@ -392,6 +408,23 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 └────────────────────────────────────────────┴───────────────┴──────────────────────────────────┘
 ```
 
+### Show a Graph of an Extension's Risk Score Over Time
+```
+➜  python3 mrxcavator.py -g bmnlcjabgnpnenekpadlanbbkooimhnj
+     668 ┤
+     655 ┤                                     ╭╮
+     641 ┤                                     │╰──
+     628 ┤                 ╭╮                  │
+     614 ┤                 ││               ╭──╯
+     601 ┤     ╭─╮╭─╮      ││        ╭──────╯
+     587 ┤     │ ││ │      ││        │
+     574 ┤     │ ││ │      │╰─╮      │
+     560 ┤     │ ││ │      │  │      │
+     547 ┤     │ ││ │      │  │      │
+     533 ┤     │ ││ │      │  │      │
+     520 ┼─────╯ ╰╯ ╰──────╯  ╰──────╯
+```
+
 ### Set the CRXcavator API URI Value
 ```
 ➜  python3 mrxcavator.py --crxcavator_uri https://api.crxcavator.io/v1
@@ -406,6 +439,13 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 	The CRXcavator API key was set successfully!
 ```
 
+### Set the VirusTotal API Key Value
+```
+➜  python3 mrxcavator.py --virustotal_key d42d8fb60105539a632d209ed35a42515722a79be2c39f5635d3790b25433acc
+
+	The VirusTotal API key was set successfully!
+```
+
 ### Test Current CRXcavator API Base URI Setting
 ```
 ➜  python3 mrxcavator.py --test_crxcavator_uri
@@ -418,6 +458,13 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 ➜  python3 mrxcavator.py --test_crxcavator_key
 
 	The CRXcavator API key was successfully tested!
+```
+
+### Test Current VirusTotal API Key Setting
+```
+➜  python3 mrxcavator.py  --test_virustotal_key
+
+	The VirusTotal API key was successfully tested!
 ```
 
 ### Use a Custom Configuration File

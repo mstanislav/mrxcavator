@@ -139,7 +139,7 @@ def export_report(id: str, report: str, filename: str) -> bool:
         filename = f"reports/{filename}"
 
     if save_file(filename, report):
-        print(f"\n\n>> Report saved in {filename} <<\n")
+        print(f"\n>> Report saved in {filename} <<\n")
         return True
     else:
         error(f"A report for {id} could not be saved.")
