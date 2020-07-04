@@ -31,14 +31,14 @@ The development of this CLI tool will have five "releases" that relate to the co
 3. Release 3 - 06/21/2020
     * Added --config (-c) that lets a user to specify a configuration filename
     * Added --extension_path that lets a user specify a path to their locally installed extensions
-    * Added --export, which can be used with --report to specify a filename where a report will be saved in 'reports/'
+    * Added --export, which can be used with --report to specify a filename where a report will be saved
     * Used `tqdm` to provide draw a progress bar for extension mass submission
     * Added --report_all to generate an extension report summary for all locally installed extensions
-    * `PyInquirer` now provides a menu of extensions when a report or submit flag is called, but no identifier is given
+    * `PyInquirer` now provides a menu of extensions when a report/submit flag is called, but no identifier is given
     * Bug Fix: Removed the extension version sub-release from the folder name
     * Bug Fix: --test_crxcavator_key no longer breaks when an API key is not set
     * Bug Fix: An extension report summary now gracefully handles missing sections of content
-    * Bug Fix: The Web Store "Star Rating" had entirely too much specificity; now it is rounded to two decimal places
+    * Bug Fix: The "Star Rating" had entirely too much specificity; now it is rounded to two decimal places
     * Bug Fix: An incorrect report identifier no longer returns a broken summary
 4. Release 4 - 07/05/2020
     * The --report_all feature now supports also exporting each to a file
