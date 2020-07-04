@@ -722,14 +722,14 @@ def get_extensions_table(extensions: list, path: str) -> None:
     )
 
 
-def get_risk_graph(id: str):
+def get_risk_graph(id: str) -> None:
     """Prints a graph of an extension's risk scores over time.
 
     Args:
         id: An extension identifier string.
 
     Returns:
-        None
+        None.
     """
     results = get_report(id)
 
