@@ -782,6 +782,7 @@ def select_extension(extensions: list) -> str:
         return result["id"]
     else:
         error("No extension was selected.\n", True)
+        return ""
 
 
 if __name__ == "__main__":
