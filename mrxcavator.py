@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.4.4"
+__version__ = "0.4.5"
 
 import os
 import re
@@ -79,6 +79,8 @@ def call_api(end_point: str, method: str, values=None, headers=None) -> dict:
     Returns:
         A dict of API results or an empty dict.
     """
+    global config
+
     endpoint = config.get("custom", "crxcavator_api_uri") + end_point
 
     if method == "GET":
@@ -279,6 +281,8 @@ def submit_extensions(extensions: list) -> None:
     Returns:
         None.
     """
+    global extension_path
+
     successful = []
     failed = []
 
@@ -345,6 +349,8 @@ def write_config(filename: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     try:
         with open(filename, "w") as fileHandle:
             config.write(fileHandle)
@@ -363,6 +369,8 @@ def build_config(filename: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     config["DEFAULT"] = {
         "crxcavator_api_uri": "https://api.crxcavator.io/v1",
         "crxcavator_api_key": "",
@@ -386,6 +394,8 @@ def load_config(filename: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     config.read(filename)
 
     if config.sections() == []:
@@ -407,6 +417,8 @@ def set_extension_path(filename: str, path: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     if os.path.isdir(os.path.expanduser(path)) is True:
         if path[-1] != "/":
             path = path + "/"
@@ -431,6 +443,8 @@ def set_crxcavator_key(filename: str, key: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     if len(key) != 32 or re.match("^[a-zA-Z]+$", key) is False:
         error(f"The provided API key, {key}, is incorrectly formatted.", True)
     else:
@@ -452,6 +466,8 @@ def set_crxcavator_uri(filename: str, uri: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     if validators.url(uri) is True:
         config.set("custom", "crxcavator_api_uri", uri)
 
@@ -473,6 +489,8 @@ def set_virustotal_key(filename: str, key: str) -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     if len(key) != 64 or re.match("^[a-f0-9]+$", key) is False:
         error(f"The provided API key, {key}, is incorrectly formatted.", True)
     else:
@@ -493,6 +511,8 @@ def test_crxcavator_key() -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     key = config.get("custom", "crxcavator_api_key")
 
     if key:
@@ -531,6 +551,8 @@ def test_virustotal_key() -> bool:
     Returns:
         A boolean result.
     """
+    global config
+
     key = config.get("custom", "virustotal_api_key")
 
     if key:
@@ -558,6 +580,8 @@ def get_crx_path(id: str = "") -> str:
     Returns:
         A string with the appropriate filesystem path for a(n) extension(s).
     """
+    global extension_path
+
     return os.path.expanduser(extension_path) + id
 
 
@@ -794,6 +818,9 @@ def select_extension(extensions: list) -> str:
         return ""
 
 def main():
+    global config
+    global extension_path
+
     if sys.version_info[0] < 3 or sys.version_info[1] < 6:
         print("Please use Python >=3.6 with this program.\n")
         sys.exit(1)
