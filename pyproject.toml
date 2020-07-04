@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mrxcavator"
-version = "0.4"
+version = "0.4.1"
 description = "CLI client for CRXcavator.io"
 authors = ["Mark Stanislav <mark.stanislav@gmail.com>"]
 license = "MIT"
