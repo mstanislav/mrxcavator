@@ -5,7 +5,13 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.4.8"
+__version__ = "0.5.0"
+
+# Last round of meta data addition to report summary view
+# Display VirusTotal results in a table for hosts found in an extension
+# Set a user's data path (e.g. ~/.mrxcavator/) to store reports, configuration
+# Double check that documentation is still accurate, type hinting is in place,
+# Single quotes in array
 
 import os
 import re
@@ -147,6 +153,51 @@ def export_report(id: str, report: str, filename: str) -> bool:
         return False
 
 
+def get_reports_table(extensions: list) -> None:
+    """Builds a table of installed extension details from CRXcavator.
+
+    Args:
+        extensions: A list of extension identifier strings.
+
+    Returns:
+        None.
+    """
+    data = []
+    for extension in extensions:
+        report = get_report(extension["id"])
+
+        if report:
+            version = report[-1]["version"]
+            webstore = report[-1]["data"]["webstore"]
+            risk = report[-1]["data"]["risk"]
+
+            data.append(
+                [
+                    webstore["name"],
+                    version,
+                    webstore["last_updated"],
+                    round(webstore["rating"], 2),
+                    risk["total"],
+                ]
+            )
+
+    header = [
+        "\033[1mName\033[0m",
+        "\033[1mVersion\033[0m",
+        "\033[1mUpdated\033[0m",
+        "\033[1mRating\033[0m",
+        "\033[1mRisk\033[0m",
+    ]
+
+    termtables.print(
+        data,
+        header=header,
+        style=termtables.styles.thin_double,
+        padding=(0, 1),
+        alignment="lllll",
+    )
+
+
 def get_report_summary(results: dict) -> str:
     """Prints a formatted report of information for the given extension.
 
@@ -196,31 +247,34 @@ def get_report_summary(results: dict) -> str:
         report += f"\n  {risk['retire'].get('high', '0')}\tHigh"
         report += f"\n  {risk['retire'].get('critical', '0')}\tCritical"
 
-    report += f"\n\n\nWeb Store\n{'='*60}"
-    report += f"\n  {risk['webstore'].get('total', '0')}\tTotal\n{'-'*60}"
+    webstore_total = risk["webstore"].get("total", "0")
 
-    del risk["webstore"]["total"]
+    if webstore_total > 0:
+        report += f"\n\n\nWeb Store\n{'='*60}"
+        report += f"\n  {risk['webstore'].get('total', '0')}\tTotal\n{'-'*60}"
 
-    for key in risk["webstore"].keys():
-        value = key.title().replace("_", " ")
-        report += f"\n  {risk['webstore'][key]}\t{value}"
+        del risk["webstore"]["total"]
 
-    perms_total = 0
+        for key in risk["webstore"].keys():
+            value = key.title().replace("_", " ")
+            report += f"\n  {risk['webstore'][key]}\t{value}"
+
     perms_required = 0
     perms_optional = 0
 
     if "permissions" in risk:
         perms_required = risk["permissions"].get("total", 0)
-        perms_total += perms_required
 
     if "optional_permissions" in risk:
         perms_optional = risk["optional_permissions"].get("total", 0)
-        perms_total += perms_optional
 
-    report += f"\n\n\nPermissions\n{'='*60}"
-    report += f"\n  {perms_total}\tTotal\n{'-'*60}"
-    report += f"\n  {perms_required}\tRequired"
-    report += f"\n  {perms_optional}\tOptional"
+    perms_total = perms_required + perms_optional
+
+    if perms_total > 0:
+        report += f"\n\n\nPermissions\n{'='*60}"
+        report += f"\n  {perms_total}\tTotal\n{'-'*60}"
+        report += f"\n  {perms_required}\tRequired"
+        report += f"\n  {perms_optional}\tOptional"
 
     return report + "\n"
 
@@ -333,7 +387,7 @@ def get_reports(extensions: list, export: bool) -> None:
         report = get_report(extension["id"])
         if report:
             summary = get_report_summary(report)
-            print(f"{summary}\n{80*'~'}")
+            print(f"{summary}\n{60*'~'}")
             if export is True:
                 export_report(extension["id"], summary, "")
 
@@ -755,9 +809,9 @@ def get_risk_graph(id: str) -> None:
         asciichartpy.plot(
             data,
             {
-                "min": min(data),
-                "max": max(data),
-                "height": 10,
+                "min": min(data) - 5,
+                "max": max(data) + 5,
+                "height": 25,
                 "format": "{:8.0f}",
             },
         )
@@ -884,6 +938,12 @@ def build_parser():
             "--report_all",
             action="store_true",
             help="retrieve a report for all installed extensions",
+        )
+
+        help_features.add_argument(
+            "--report_all_table",
+            action="store_true",
+            help="retrieve a table of details for all installed extensions",
         )
 
         help_features.add_argument(
@@ -1020,6 +1080,9 @@ def main():
             export = False
 
         get_reports(get_installed_extensions(extension_path), export)
+
+    elif args.report_all_table:
+        get_reports_table(get_installed_extensions(extension_path))
 
     elif args.graph:
         if args.graph == "empty":
