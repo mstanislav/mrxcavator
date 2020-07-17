@@ -8,15 +8,16 @@ __license__ = "MIT"
 __version__ = "0.5.0"
 
 # Last round of meta data addition to report summary view
-# Display VirusTotal results in a table for hosts found in an extension
-# Set a user's data path (e.g. ~/.mrxcavator/) to store reports, configuration
-# Double check that documentation is still accurate, type hinting is in place,
-# Single quotes in array
+# what up with quotes...
 
 import os
 import re
 import sys
+import math
+import time
 import json
+import itertools
+import datetime
 import argparse
 import requests
 import asciichartpy  # type: ignore
@@ -26,13 +27,178 @@ import configparser
 
 from packaging import version
 from tqdm import tqdm  # type: ignore
+from typing import Generator, Any
 from PyInquirer import prompt  # type: ignore
+from urllib.parse import urlparse
 
+
+ROOT_DIR = "~/.mrxcavator"
+REPORT_DIR = "reports"
 CONFIG_FILE = "config.ini"
 CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
 
 config = configparser.ConfigParser()
 extension_path = ""
+
+
+def chunker(seq: list, size: int) -> Generator:
+    """Returns a list of items in groups based on the passed-in size.
+
+    Args:
+        seq: A list of items
+        size: An integer for the number of items to "chunk" at a time.
+
+    Returns:
+        A list of items.
+    """
+    return (
+        seq[pos : pos + size] for pos in range(0, len(seq), size)  # noqa: E203
+    )
+
+
+def get_report_dir() -> str:
+    """Returns a string for the filesystem path of where to store reports.
+
+    Args:
+        None
+
+    Returns:
+        A string for the filesystem path for storing reports.
+    """
+    return os.path.expanduser(f"{ROOT_DIR}/{REPORT_DIR}/")
+
+
+def get_root_dir() -> str:
+    """Returns a string for the filesystem path for a local mrxcavator content.
+
+    Args:
+        None
+
+    Returns:
+        A string for the filesystem path for storing local mrxcavator content.
+    """
+    return os.path.expanduser(f"{ROOT_DIR}/")
+
+
+def get_virustotal(report: dict, key: str) -> list:
+    """Returns a list of VirusTotal results for the passed-in hostnames.
+
+    Args:
+        report: A dict of a CRXcavator extension report.
+        key: The VirusTotal API key as a string.
+
+    Returns:
+        A list of VirusTotal results for passed-in hostnames.
+    """
+    if "extcalls" not in report[-1]["data"]:
+        return []
+
+    urls = report[-1]["data"]["extcalls"]
+
+    data = []
+    for url in urls:
+        netloc = urlparse(url).netloc
+
+        if validators.domain(netloc) and netloc not in data:
+            data.append(netloc)
+
+    seconds = (130 * math.ceil(len(data) / 4)) - 65
+    duration = str(datetime.timedelta(seconds=seconds))
+
+    print(
+        f"\n** This API requires throttling. This extension will take "
+        f"approximately {duration} to complete. **\n"
+    )
+
+    print(f"Processing {len(data)} hosts...")
+
+    results = []
+    first_chunk = 1
+
+    for group in chunker(data, 4):
+        print(f" * {', '.join(group)}")
+
+        if first_chunk == 1:
+            first_chunk = 0
+        else:
+            time.sleep(65)
+
+        submit_virustotal(group, key)
+        time.sleep(65)
+        results.append(get_virustotal_reports(group, key))
+
+    return list(itertools.chain(*results))
+
+
+def get_virustotal_table(results: list) -> None:
+    """Builds a table of VirusTotal results of an extension's "external calls."
+
+    Args:
+        results: A list of VirusTotal results for passed-in hostnames.
+
+    Returns:
+        None.
+    """
+    if len(results) == 0:
+        error("No external calls were found for this extension.", True)
+
+    data = []
+    for result in results:
+        data.append(
+            [result["url"], result["vt"]["positives"], result["vt"]["total"]]
+        )
+
+    header = [
+        "\033[1mHostname\033[0m",
+        "\033[1mPositives\033[0m",
+        "\033[1mTotal\033[0m",
+    ]
+
+    termtables.print(
+        data,
+        header=header,
+        style=termtables.styles.thin_double,
+        padding=(0, 1),
+        alignment="lll",
+    )
+
+
+def submit_virustotal(hosts: list, key: str) -> bool:
+    """Returns a boolean for the state of submitting hostnames to VirusTotal.
+
+    Args:
+        hosts: A list of hostnames for the "external calls" of an extension.
+        key: The VirusTotal API key as a string.
+
+    Returns:
+        A boolean.
+    """
+    if call_api(
+        "/virustotal/report", "POST", {"apiKey": key, "urls": hosts}, {},
+    ):
+        return True
+    else:
+        return False
+
+
+def get_virustotal_reports(hosts: list, key: str) -> dict:
+    """Returns a dict of VirusTotal results for the passed-in hostnames.
+
+    Args:
+        hosts: A list of hostnames for the "external calls" of an extension.
+        key: The VirusTotal API key as a string.
+
+    Returns:
+        A dict of VirusTotal results for passed-in hostnames.
+    """
+    reports = call_api(
+        "/virustotal/results", "POST", {"apiKey": key, "urls": hosts}, {},
+    )
+
+    if reports:
+        return reports
+    else:
+        return {}
 
 
 def extension_is_ignored(id: str) -> bool:
@@ -111,19 +277,19 @@ def call_api(end_point: str, method: str, values=None, headers=None) -> dict:
     return {}
 
 
-def version_count(results: dict) -> int:
+def version_count(report: dict) -> int:
     """Returns a count of CRXcavator-tracked versions for an extension.
 
     Args:
-        results: A dict of CRXcavator extension results.
+        report: A dict of a CRXcavator extension report.
 
     Returns:
         An integer count of versions.
     """
     total = 0
 
-    for result in results:
-        if result["version"]:
+    for entry in report:
+        if entry["version"]:
             total += 1
 
     return total
@@ -141,11 +307,11 @@ def export_report(id: str, report: str, filename: str) -> bool:
         A boolean result for exporting the report summary to a file.
     """
     if filename == "empty" or filename == "":
-        filename = f"reports/{id}.txt"
+        filename = f"{get_report_dir()}{id}.txt"
     else:
-        filename = f"reports/{filename}"
+        filename = f"{get_report_dir()}{filename}"
 
-    if save_file(filename, report):
+    if save_report(filename, report):
         print(f"\n>> Report saved in {filename} <<\n")
         return True
     else:
@@ -198,66 +364,66 @@ def get_reports_table(extensions: list) -> None:
     )
 
 
-def get_report_summary(results: dict) -> str:
+def get_report_summary(report: dict) -> str:
     """Prints a formatted report of information for the given extension.
 
     Args:
-        results: A dict of all extension information.
+        report: A dict of a CRXcavator extension report.
 
     Returns:
         A string of the report summary.
     """
-    id = results[-1]["extension_id"]
-    version = results[-1]["version"]
-    versions = version_count(results)
+    id = report[-1]["extension_id"]
+    version = report[-1]["version"]
+    versions = version_count(report)
 
-    webstore = results[-1]["data"]["webstore"]
-    risk = results[-1]["data"]["risk"]
+    webstore = report[-1]["data"]["webstore"]
+    risk = report[-1]["data"]["risk"]
 
-    report = f"\nExtension Overview\n{'='*60}\n"
-    report += f"  Extension Name:\t{webstore['name']}\n"
-    report += f"  Extension ID:\t\t{id}\n\n"
-    report += f"  Newest Version:\t{version} ({webstore['last_updated']})\n"
-    report += f"  Versions Known:\t{versions}\n"
-    report += f"  Store Rating:\t\t{round(webstore['rating'],2)} stars\n\n"
-    report += f"  Total Risk Score:\t{risk['total']}"
+    output = f"\nExtension Overview\n{'='*60}\n"
+    output += f"  Extension Name:\t{webstore['name']}\n"
+    output += f"  Extension ID:\t\t{id}\n\n"
+    output += f"  Newest Version:\t{version} ({webstore['last_updated']})\n"
+    output += f"  Versions Known:\t{versions}\n"
+    output += f"  Store Rating:\t\t{round(webstore['rating'],2)} stars\n\n"
+    output += f"  Total Risk Score:\t{risk['total']}"
 
     if "csp" in risk:
-        report += f"\n\n\nContent Security Policy\n{'='*60}"
-        report += f"\n  {risk['csp'].get('total', 0)}\tTotal\n{'-'*60}"
+        output += f"\n\n\nContent Security Policy\n{'='*60}"
+        output += f"\n  {risk['csp'].get('total', 0)}\tTotal\n{'-'*60}"
 
         csp_total = risk["csp"]["total"]
         del risk["csp"]["total"]
 
         csp_attribute_total = 0
         for key in risk["csp"].keys():
-            report += f"\n  {risk['csp'][key]}\t{key}"
+            output += f"\n  {risk['csp'][key]}\t{key}"
             csp_attribute_total += int(risk["csp"][key])
 
         if csp_total > csp_attribute_total:
             remainder = csp_total - csp_attribute_total
             missing = int(remainder / 25)
-            report += f"\n  {remainder}\t{missing} attributes not set"
+            output += f"\n  {remainder}\t{missing} attributes not set"
 
     if "retire" in risk:
-        report += f"\n\n\nRetireJS\n{'='*60}"
-        report += f"\n  {risk['retire'].get('total', '0')}\tTotal\n{'-'*60}"
-        report += f"\n  {risk['retire'].get('low', '0')}\tLow"
-        report += f"\n  {risk['retire'].get('medium', '0')}\tMedium"
-        report += f"\n  {risk['retire'].get('high', '0')}\tHigh"
-        report += f"\n  {risk['retire'].get('critical', '0')}\tCritical"
+        output += f"\n\n\nRetireJS\n{'='*60}"
+        output += f"\n  {risk['retire'].get('total', '0')}\tTotal\n{'-'*60}"
+        output += f"\n  {risk['retire'].get('low', '0')}\tLow"
+        output += f"\n  {risk['retire'].get('medium', '0')}\tMedium"
+        output += f"\n  {risk['retire'].get('high', '0')}\tHigh"
+        output += f"\n  {risk['retire'].get('critical', '0')}\tCritical"
 
     webstore_total = risk["webstore"].get("total", "0")
 
     if webstore_total > 0:
-        report += f"\n\n\nWeb Store\n{'='*60}"
-        report += f"\n  {risk['webstore'].get('total', '0')}\tTotal\n{'-'*60}"
+        output += f"\n\n\nWeb Store\n{'='*60}"
+        output += f"\n  {risk['webstore'].get('total', '0')}\tTotal\n{'-'*60}"
 
         del risk["webstore"]["total"]
 
         for key in risk["webstore"].keys():
             value = key.title().replace("_", " ")
-            report += f"\n  {risk['webstore'][key]}\t{value}"
+            output += f"\n  {risk['webstore'][key]}\t{value}"
 
     perms_required = 0
     perms_optional = 0
@@ -271,15 +437,15 @@ def get_report_summary(results: dict) -> str:
     perms_total = perms_required + perms_optional
 
     if perms_total > 0:
-        report += f"\n\n\nPermissions\n{'='*60}"
-        report += f"\n  {perms_total}\tTotal\n{'-'*60}"
-        report += f"\n  {perms_required}\tRequired"
-        report += f"\n  {perms_optional}\tOptional"
+        output += f"\n\n\nPermissions\n{'='*60}"
+        output += f"\n  {perms_total}\tTotal\n{'-'*60}"
+        output += f"\n  {perms_required}\tRequired"
+        output += f"\n  {perms_optional}\tOptional"
 
-    return report + "\n"
+    return output + "\n"
 
 
-def save_file(filename: str, content: str) -> bool:
+def save_report(filename: str, content: str) -> bool:
     """Writes passed-in content to the passed-in filename.
 
     Args:
@@ -289,20 +455,19 @@ def save_file(filename: str, content: str) -> bool:
     Returns:
         A boolean result.
     """
-    if not os.path.isdir("reports"):
+    if not os.path.isdir(get_report_dir()):
         try:
-            os.mkdir("reports")
+            os.mkdir(get_report_dir())
         except IOError:
             error(
-                "Unable to create the 'reports' directory in this location.",
-                True,
+                f"Cannot create {get_report_dir()} - check permissions.", True,
             )
 
     try:
         with open(filename, "w") as fileHandle:
             fileHandle.write(content.strip())
     except IOError:
-        error(f"Cannot write to {filename}. Please check permissions.", True)
+        error(f"Cannot write to {filename} -  check permissions.", True)
 
     return True
 
@@ -401,6 +566,14 @@ def write_config(filename: str) -> bool:
     Returns:
         A boolean result.
     """
+    if not os.path.isdir(get_root_dir()):
+        try:
+            os.mkdir(get_root_dir())
+        except IOError:
+            error(
+                f"Cannot create {get_root_dir()} - check permissions.", True,
+            )
+
     try:
         with open(filename, "w") as fileHandle:
             config.write(fileHandle)
@@ -850,11 +1023,11 @@ def select_extension(extensions: list) -> str:
         return ""
 
 
-def build_parser():
+def build_parser() -> Any:
     """Returns a configured object for argparse functionality.
 
     Args:
-        None.
+        None
 
     Returns:
         An object for argparse.
@@ -871,7 +1044,10 @@ def build_parser():
         help_misc = parser.add_argument_group("Miscellaneous")
 
         help_config.add_argument(
-            "-c", "--config", metavar="path", help="specify a config file path"
+            "-c",
+            "--config",
+            metavar="filename",
+            help="specify a configuration filename",
         )
 
         help_config.add_argument(
@@ -943,7 +1119,7 @@ def build_parser():
         help_features.add_argument(
             "--report_all_table",
             action="store_true",
-            help="retrieve a table of details for all installed extensions",
+            help="retrieve a table of details for installed extensions",
         )
 
         help_features.add_argument(
@@ -970,6 +1146,15 @@ def build_parser():
             help="get a graph of an extension's risk",
         )
 
+        help_features.add_argument(
+            "-vt",
+            "--virustotal",
+            nargs="?",
+            const="empty",
+            metavar="id",
+            help="get VirusTotal data for an extension's external calls",
+        )
+
         help_misc.add_argument(
             "-v", "--version", action="version", version="v" + __version__
         )
@@ -988,7 +1173,15 @@ def build_parser():
         return parser
 
 
-def main():
+def main() -> None:
+    """Executes mrxcavator's essential functionality.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     global config
     global extension_path
 
@@ -996,9 +1189,9 @@ def main():
     args = parser.parse_args()
 
     if args.config:
-        config_file = args.config
+        config_file = f"{get_root_dir()}{args.config}"
     else:
-        config_file = CONFIG_FILE
+        config_file = f"{get_root_dir()}{CONFIG_FILE}"
 
     load_config(config_file)
 
@@ -1083,6 +1276,24 @@ def main():
 
     elif args.report_all_table:
         get_reports_table(get_installed_extensions(extension_path))
+
+    elif args.virustotal:
+        if args.virustotal == "empty":
+            id = select_extension(get_installed_extensions(extension_path))
+        else:
+            id = args.virustotal
+
+        key = config.get("custom", "virustotal_api_key")
+
+        if key == "":
+            error(f"No VirusTotal API key has been set yet.", True)
+
+        results = get_report(id)
+
+        if results:
+            get_virustotal_table(get_virustotal(results, key))
+        else:
+            error(f"The extension {id} was not found.")
 
     elif args.graph:
         if args.graph == "empty":

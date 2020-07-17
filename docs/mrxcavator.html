@@ -46,12 +46,12 @@ to the passed-in filename.</p>
 <p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.build_parser"><code class="name flex">
-<span>def <span class="ident">build_parser</span></span>(<span>)</span>
+<span>def <span class="ident">build_parser</span></span>(<span>) ‑> Any</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns a configured object for argparse functionality.</p>
 <h2 id="args">Args</h2>
-<p>None.</p>
+<p>None</p>
 <h2 id="returns">Returns</h2>
 <p>An object for argparse.</p></div>
 </dd>
@@ -74,6 +74,21 @@ of values for APIs that required parameters to be sent in the request.</p>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A dict of API results or an empty dict.</p></div>
+</dd>
+<dt id="mrxcavator.chunker"><code class="name flex">
+<span>def <span class="ident">chunker</span></span>(<span>seq: list, size: int) ‑> Generator</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a list of items in groups based on the passed-in size.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>seq</code></strong></dt>
+<dd>A list of items</dd>
+<dt><strong><code>size</code></strong></dt>
+<dd>An integer for the number of items to "chunk" at a time.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list of items.</p></div>
 </dd>
 <dt id="mrxcavator.error"><code class="name flex">
 <span>def <span class="ident">error</span></span>(<span>message: str, fatal=False) ‑> bool</span>
@@ -244,15 +259,25 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <h2 id="returns">Returns</h2>
 <p>A dict of report results.</p></div>
 </dd>
+<dt id="mrxcavator.get_report_dir"><code class="name flex">
+<span>def <span class="ident">get_report_dir</span></span>(<span>) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a string for the filesystem path of where to store reports.</p>
+<h2 id="args">Args</h2>
+<p>None</p>
+<h2 id="returns">Returns</h2>
+<p>A string for the filesystem path for storing reports.</p></div>
+</dd>
 <dt id="mrxcavator.get_report_summary"><code class="name flex">
-<span>def <span class="ident">get_report_summary</span></span>(<span>results: dict) ‑> str</span>
+<span>def <span class="ident">get_report_summary</span></span>(<span>report: dict) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Prints a formatted report of information for the given extension.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>results</code></strong></dt>
-<dd>A dict of all extension information.</dd>
+<dt><strong><code>report</code></strong></dt>
+<dd>A dict of a CRXcavator extension report.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>A string of the report summary.</p></div>
@@ -298,6 +323,59 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <h2 id="returns">Returns</h2>
 <p>None.</p></div>
 </dd>
+<dt id="mrxcavator.get_root_dir"><code class="name flex">
+<span>def <span class="ident">get_root_dir</span></span>(<span>) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a string for the filesystem path for a local mrxcavator content.</p>
+<h2 id="args">Args</h2>
+<p>None</p>
+<h2 id="returns">Returns</h2>
+<p>A string for the filesystem path for storing local mrxcavator content.</p></div>
+</dd>
+<dt id="mrxcavator.get_virustotal"><code class="name flex">
+<span>def <span class="ident">get_virustotal</span></span>(<span>report: dict, key: str) ‑> list</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a list of VirusTotal results for the passed-in hostnames.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>report</code></strong></dt>
+<dd>A dict of a CRXcavator extension report.</dd>
+<dt><strong><code>key</code></strong></dt>
+<dd>The VirusTotal API key as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list of VirusTotal results for passed-in hostnames.</p></div>
+</dd>
+<dt id="mrxcavator.get_virustotal_reports"><code class="name flex">
+<span>def <span class="ident">get_virustotal_reports</span></span>(<span>hosts: list, key: str) ‑> dict</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a dict of VirusTotal results for the passed-in hostnames.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>hosts</code></strong></dt>
+<dd>A list of hostnames for the "external calls" of an extension.</dd>
+<dt><strong><code>key</code></strong></dt>
+<dd>The VirusTotal API key as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A dict of VirusTotal results for passed-in hostnames.</p></div>
+</dd>
+<dt id="mrxcavator.get_virustotal_table"><code class="name flex">
+<span>def <span class="ident">get_virustotal_table</span></span>(<span>results: list) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Builds a table of VirusTotal results of an extension's "external calls."</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>results</code></strong></dt>
+<dd>A list of VirusTotal results for passed-in hostnames.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None.</p></div>
+</dd>
 <dt id="mrxcavator.load_config"><code class="name flex">
 <span>def <span class="ident">load_config</span></span>(<span>filename: str) ‑> bool</span>
 </code></dt>
@@ -312,13 +390,17 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.main"><code class="name flex">
-<span>def <span class="ident">main</span></span>(<span>)</span>
+<span>def <span class="ident">main</span></span>(<span>) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Executes mrxcavator's essential functionality.</p>
+<h2 id="args">Args</h2>
+<p>None</p>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
 </dd>
-<dt id="mrxcavator.save_file"><code class="name flex">
-<span>def <span class="ident">save_file</span></span>(<span>filename: str, content: str) ‑> bool</span>
+<dt id="mrxcavator.save_report"><code class="name flex">
+<span>def <span class="ident">save_report</span></span>(<span>filename: str, content: str) ‑> bool</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Writes passed-in content to the passed-in filename.</p>
@@ -433,6 +515,21 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <h2 id="returns">Returns</h2>
 <p>None.</p></div>
 </dd>
+<dt id="mrxcavator.submit_virustotal"><code class="name flex">
+<span>def <span class="ident">submit_virustotal</span></span>(<span>hosts: list, key: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns a boolean for the state of submitting hostnames to VirusTotal.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>hosts</code></strong></dt>
+<dd>A list of hostnames for the "external calls" of an extension.</dd>
+<dt><strong><code>key</code></strong></dt>
+<dd>The VirusTotal API key as a string.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A boolean.</p></div>
+</dd>
 <dt id="mrxcavator.test_crxcavator_key"><code class="name flex">
 <span>def <span class="ident">test_crxcavator_key</span></span>(<span>) ‑> bool</span>
 </code></dt>
@@ -464,14 +561,14 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <p>A boolean result.</p></div>
 </dd>
 <dt id="mrxcavator.version_count"><code class="name flex">
-<span>def <span class="ident">version_count</span></span>(<span>results: dict) ‑> int</span>
+<span>def <span class="ident">version_count</span></span>(<span>report: dict) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Returns a count of CRXcavator-tracked versions for an extension.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>results</code></strong></dt>
-<dd>A dict of CRXcavator extension results.</dd>
+<dt><strong><code>report</code></strong></dt>
+<dd>A dict of a CRXcavator extension report.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>An integer count of versions.</p></div>
@@ -505,6 +602,7 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <li><code><a title="mrxcavator.build_config" href="#mrxcavator.build_config">build_config</a></code></li>
 <li><code><a title="mrxcavator.build_parser" href="#mrxcavator.build_parser">build_parser</a></code></li>
 <li><code><a title="mrxcavator.call_api" href="#mrxcavator.call_api">call_api</a></code></li>
+<li><code><a title="mrxcavator.chunker" href="#mrxcavator.chunker">chunker</a></code></li>
 <li><code><a title="mrxcavator.error" href="#mrxcavator.error">error</a></code></li>
 <li><code><a title="mrxcavator.export_report" href="#mrxcavator.export_report">export_report</a></code></li>
 <li><code><a title="mrxcavator.extension_is_ignored" href="#mrxcavator.extension_is_ignored">extension_is_ignored</a></code></li>
@@ -517,13 +615,18 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <li><code><a title="mrxcavator.get_installed_extensions" href="#mrxcavator.get_installed_extensions">get_installed_extensions</a></code></li>
 <li><code><a title="mrxcavator.get_latest_local_version" href="#mrxcavator.get_latest_local_version">get_latest_local_version</a></code></li>
 <li><code><a title="mrxcavator.get_report" href="#mrxcavator.get_report">get_report</a></code></li>
+<li><code><a title="mrxcavator.get_report_dir" href="#mrxcavator.get_report_dir">get_report_dir</a></code></li>
 <li><code><a title="mrxcavator.get_report_summary" href="#mrxcavator.get_report_summary">get_report_summary</a></code></li>
 <li><code><a title="mrxcavator.get_reports" href="#mrxcavator.get_reports">get_reports</a></code></li>
 <li><code><a title="mrxcavator.get_reports_table" href="#mrxcavator.get_reports_table">get_reports_table</a></code></li>
 <li><code><a title="mrxcavator.get_risk_graph" href="#mrxcavator.get_risk_graph">get_risk_graph</a></code></li>
+<li><code><a title="mrxcavator.get_root_dir" href="#mrxcavator.get_root_dir">get_root_dir</a></code></li>
+<li><code><a title="mrxcavator.get_virustotal" href="#mrxcavator.get_virustotal">get_virustotal</a></code></li>
+<li><code><a title="mrxcavator.get_virustotal_reports" href="#mrxcavator.get_virustotal_reports">get_virustotal_reports</a></code></li>
+<li><code><a title="mrxcavator.get_virustotal_table" href="#mrxcavator.get_virustotal_table">get_virustotal_table</a></code></li>
 <li><code><a title="mrxcavator.load_config" href="#mrxcavator.load_config">load_config</a></code></li>
 <li><code><a title="mrxcavator.main" href="#mrxcavator.main">main</a></code></li>
-<li><code><a title="mrxcavator.save_file" href="#mrxcavator.save_file">save_file</a></code></li>
+<li><code><a title="mrxcavator.save_report" href="#mrxcavator.save_report">save_report</a></code></li>
 <li><code><a title="mrxcavator.select_extension" href="#mrxcavator.select_extension">select_extension</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_key" href="#mrxcavator.set_crxcavator_key">set_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.set_crxcavator_uri" href="#mrxcavator.set_crxcavator_uri">set_crxcavator_uri</a></code></li>
@@ -531,6 +634,7 @@ optional extentension ID may be passed in to append to the retuned path.</p>
 <li><code><a title="mrxcavator.set_virustotal_key" href="#mrxcavator.set_virustotal_key">set_virustotal_key</a></code></li>
 <li><code><a title="mrxcavator.submit_extension" href="#mrxcavator.submit_extension">submit_extension</a></code></li>
 <li><code><a title="mrxcavator.submit_extensions" href="#mrxcavator.submit_extensions">submit_extensions</a></code></li>
+<li><code><a title="mrxcavator.submit_virustotal" href="#mrxcavator.submit_virustotal">submit_virustotal</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_key" href="#mrxcavator.test_crxcavator_key">test_crxcavator_key</a></code></li>
 <li><code><a title="mrxcavator.test_crxcavator_uri" href="#mrxcavator.test_crxcavator_uri">test_crxcavator_uri</a></code></li>
 <li><code><a title="mrxcavator.test_virustotal_key" href="#mrxcavator.test_virustotal_key">test_virustotal_key</a></code></li>
