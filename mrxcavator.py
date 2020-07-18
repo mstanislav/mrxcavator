@@ -382,7 +382,7 @@ def get_report_summary(report: dict) -> str:
     output += f"  Extension Name:\t{webstore['name']}\n"
     output += f"  Extension ID:\t\t{id}\n"
 
-    if webstore['website'] != "":
+    if webstore["website"] != "":
         output += f"  Web Site:\t\t{webstore['website']}\n"
 
     output += f"\n  Newest Version:\t{version} ({webstore['last_updated']})"
@@ -548,8 +548,6 @@ def get_reports(extensions: list, export: bool) -> None:
     Returns:
         None.
     """
-    print(f"\nRetrieving extension report(s)...\n")
-
     for extension in extensions:
         report = get_report(extension["id"])
         if report:

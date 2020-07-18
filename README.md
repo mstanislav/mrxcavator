@@ -25,12 +25,13 @@ Python >=3.6 is required for application compatibility (e.g. `brew install pytho
 ### Help Output
 ```
 ➜  mrxcavator -h
-usage: mrxcavator    [-c path] [--extension_path path] [--crxcavator_key key]
-                     [--crxcavator_uri uri] [--virustotal_key key]
-                     [--test_crxcavator_key] [--test_crxcavator_uri]
-                     [--test_virustotal_key] [-s [id]] [--submit_all]
-                     [-r [id]] [--report_all] [--export [file]] [-e] [-g [id]]
-                     [-v] [-h]
+usage: mrxcavator    [-c filename] [--extension_path path]
+                     [--crxcavator_key key] [--crxcavator_uri uri]
+                     [--virustotal_key key] [--test_crxcavator_key]
+                     [--test_crxcavator_uri] [--test_virustotal_key] [-s [id]]
+                     [--submit_all] [-r [id]] [--report_all]
+                     [--report_all_table] [--export [file]] [-e] [-g [id]]
+                     [-vt [id]] [-v] [-h]
 
 Features:
   -s [id], --submit [id]
@@ -39,14 +40,17 @@ Features:
   -r [id], --report [id]
                         get an extension's report
   --report_all          retrieve a report for all installed extensions
+  --report_all_table    retrieve a table of details for installed extensions
   --export [file]       export result to a specific file
   -e, --extensions      list installed extensions
   -g [id], --graph [id]
                         get a graph of an extension's risk
+  -vt [id], --virustotal [id]
+                        get VirusTotal data for an extension's external calls
 
 Set Configuration:
-  -c path, --config path
-                        specify a config file path
+  -c filename, --config filename
+                        specify a configuration filename
   --extension_path path
                         set path to local Chrome extensions
   --crxcavator_key key  set CRXcavator API key
@@ -84,14 +88,15 @@ Submitting extensions found in ~/Library/Application Support/Google/Chrome/Defau
 
 Successful:
   > Application Launcher for Drive (by Google)
-  > Docs
+  > Bitwarden - Free Password Manager
+  > Cisco Webex Extension
   > Gmail
   > Google Docs Offline
   > Google Drive
   > Google Keep Chrome Extension
+  > Honey
   > Save to Google Drive
-  > Sheets
-  > Slides
+  > Save to Pocket
   > YouTube
   > Zoom
 ```
@@ -105,9 +110,10 @@ Extension Overview
 ============================================================
   Extension Name:	Honey
   Extension ID:		bmnlcjabgnpnenekpadlanbbkooimhnj
+  Web Site:		https://www.joinhoney.com
 
-  Newest Version:	12.3.0 (2020-06-26)
-  Versions Known:	42
+  Newest Version:	12.3.2 (2020-07-13)
+  Versions Known:	44
   Store Rating:		4.84 stars
 
   Total Risk Score:	657
@@ -146,12 +152,6 @@ RetireJS
   0	Critical
 
 
-Web Store
-============================================================
-  0	Total
-------------------------------------------------------------
-
-
 Permissions
 ============================================================
   135	Total
@@ -168,9 +168,10 @@ Extension Overview
 ============================================================
   Extension Name:	LastPass: Free Password Manager
   Extension ID:		hdokiejnpimakedhajhdlcegeplioahd
+  Web Site:		https://www.lastpass.com/
 
-  Newest Version:	4.51.0.1 (2020-07-02)
-  Versions Known:	43
+  Newest Version:	4.52.0.1 (2020-07-16)
+  Versions Known:	44
   Store Rating:		4.54 stars
 
   Total Risk Score:	354
@@ -209,12 +210,6 @@ RetireJS
   0	Critical
 
 
-Web Store
-============================================================
-  0	Total
-------------------------------------------------------------
-
-
 Permissions
 ============================================================
   135	Total
@@ -223,20 +218,18 @@ Permissions
   25	Optional
 
 
->> Report saved in reports/lastpass.txt <<
+>> Report saved in /Users/mstanislav/.mrxcavator/reports/lastpass.txt <<
 ```
 
 ### Get Reports For All Locally Installed Extensions
 ```
 ➜  mrxcavator --report_all
 
-Retrieving extension report(s)...
-
-
 Extension Overview
 ============================================================
   Extension Name:	Google Docs Offline
   Extension ID:		ghbmnnjooekpmoecnnnilnnbdlolhkhi
+  Web Site:		http://www.docs.google.com
 
   Newest Version:	1.9.1 (2020-03-04)
   Versions Known:	5
@@ -285,15 +278,16 @@ Permissions
   40	Required
   0	Optional
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Extension Overview
 ============================================================
   Extension Name:	Honey
   Extension ID:		bmnlcjabgnpnenekpadlanbbkooimhnj
+  Web Site:		https://www.joinhoney.com
 
-  Newest Version:	12.3.0 (2020-06-26)
-  Versions Known:	42
+  Newest Version:	12.3.2 (2020-07-13)
+  Versions Known:	44
   Store Rating:		4.84 stars
 
   Total Risk Score:	657
@@ -332,12 +326,6 @@ RetireJS
   0	Critical
 
 
-Web Store
-============================================================
-  0	Total
-------------------------------------------------------------
-
-
 Permissions
 ============================================================
   135	Total
@@ -345,8 +333,39 @@ Permissions
   135	Required
   0	Optional
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [...snip...]
+```
+
+### Get a Report Summary Table for All Locally Installed Extensions
+```
+➜  mrxcavator --report_all_table
+┌────────────────────────────────────────────┬───────────────┬────────────┬────────┬──────┐
+│ Name                                       │ Version       │ Updated    │ Rating │ Risk │
+╞════════════════════════════════════════════╪═══════════════╪════════════╪════════╪══════╡
+│ Google Docs Offline                        │ 1.9.1         │ 2020-03-04 │ 2.87   │ 423  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Honey                                      │ 12.3.2        │ 2020-07-13 │ 4.84   │ 657  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Gmail                                      │ 8.2           │ 2019-03-26 │ 4.53   │ 15   │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Bitwarden - Free Password Manager          │ 1.45.0        │ 2020-06-30 │ 4.84   │ 508  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Google Drive                               │ 14.2          │ 2018-10-16 │ 4.43   │ 41   │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Application Launcher for Drive (by Google) │ 3.2           │ 2014-11-10 │ 2.95   │ 399  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Cisco Webex Extension                      │ 1.9.0         │ 2020-06-15 │ 2.4    │ 392  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Google Keep Chrome Extension               │ 4.20282.540.1 │ 2020-07-13 │ 4.2    │ 497  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Zoom                                       │ 5.0.4169.0628 │ 2020-06-30 │ 2.76   │ 230  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Save to Pocket                             │ 3.0.6.8       │ 2019-07-24 │ 4.29   │ 478  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ Save to Google Drive                       │ 2.1.1         │ 2014-06-16 │ 4.06   │ 525  │
+├────────────────────────────────────────────┼───────────────┼────────────┼────────┼──────┤
+│ YouTube                                    │ 4.2.8         │ 2015-09-24 │ 4.52   │ 11   │
+└────────────────────────────────────────────┴───────────────┴────────────┴────────┴──────┘
 ```
 
 ### List Locally Installed Extensions
@@ -359,7 +378,7 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 ╞════════════════════════════════════════════╪═══════════════╪══════════════════════════════════╡
 │ Google Docs Offline                        │ 1.11.0        │ ghbmnnjooekpmoecnnnilnnbdlolhkhi │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
-│ Honey                                      │ 12.2.1        │ bmnlcjabgnpnenekpadlanbbkooimhnj │
+│ Honey                                      │ 12.3.2        │ bmnlcjabgnpnenekpadlanbbkooimhnj │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
 │ Gmail                                      │ 8.2           │ pjkljhegncpnkpknbcohdijeoejaedia │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
@@ -369,13 +388,9 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
 │ Application Launcher for Drive (by Google) │ 3.2           │ lmjegmlicamnimmfhcmpkclmigmmcbeh │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
-│ Slides                                     │ 0.10          │ aapocclcgogkmnckokdopfmhonfmgoek │
-├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
 │ Cisco Webex Extension                      │ 1.9.0         │ jlhmfgmfgeifomenelglieieghnjghma │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
-│ Docs                                       │ 0.10          │ aohghmighlieiainnegkcijnfilokake │
-├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
-│ Google Keep Chrome Extension               │ 4.20265.788.1 │ lpcaedmchfhocbbapmcbpinfpgnhiddi │
+│ Google Keep Chrome Extension               │ 4.20282.540.1 │ lpcaedmchfhocbbapmcbpinfpgnhiddi │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
 │ Zoom                                       │ 5.0.4169.628  │ hmbjbjdpkobdjplfobhljndfdfdipjhg │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
@@ -384,26 +399,59 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 │ Save to Google Drive                       │ 2.1.1         │ gmbmikajjgmnabiglmofipeabaddhgne │
 ├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
 │ YouTube                                    │ 4.2.8         │ blpcfgokakmgnkcojhhkbfbldkacnbeo │
-├────────────────────────────────────────────┼───────────────┼──────────────────────────────────┤
-│ Sheets                                     │ 1.2           │ felcaaldnbdncclmgdcncolpebgiejap │
 └────────────────────────────────────────────┴───────────────┴──────────────────────────────────┘
 ```
 
 ### Show a Graph of an Extension's Risk Score Over Time
 ```
-➜  mrxcavator --graph bmnlcjabgnpnenekpadlanbbkooimhnj
-     668 ┤
-     655 ┤                                     ╭╮
-     641 ┤                                     │╰──
-     628 ┤                 ╭╮                  │
-     614 ┤                 ││               ╭──╯
-     601 ┤     ╭─╮╭─╮      ││        ╭──────╯
-     587 ┤     │ ││ │      ││        │
-     574 ┤     │ ││ │      │╰─╮      │
-     560 ┤     │ ││ │      │  │      │
-     547 ┤     │ ││ │      │  │      │
-     533 ┤     │ ││ │      │  │      │
-     520 ┼─────╯ ╰╯ ╰──────╯  ╰──────╯
+➜  mrxcavator -g bmnlcjabgnpnenekpadlanbbkooimhnj
+
+674 ┤
+668 ┤                                     ╭╮
+662 ┤                                     ││
+656 ┤                                     │╰────
+650 ┤                                     │
+644 ┤                 ╭╮                  │
+638 ┤                 ││                  │
+631 ┤                 ││               ╭──╯
+625 ┤                 ││               │
+619 ┤                 ││               │
+613 ┤     ╭─╮         ││        ╭──────╯
+607 ┤     │ │╭─╮      ││        │
+601 ┤     │ ││ │      ││        │
+595 ┤     │ ││ │      ││        │
+589 ┤     │ ││ │      ││        │
+583 ┤     │ ││ │      │╰─╮      │
+577 ┤     │ ││ │      │  │      │
+571 ┤     │ ││ │      │  │      │
+565 ┤     │ ││ │      │  │      │
+559 ┤     │ ││ │      │  │      │
+552 ┤     │ ││ │      │  │      │
+546 ┤     │ ││ │      │  │      │
+540 ┤     │ ││ │      │  │      │
+534 ┤     │ ││ │      │  │      │
+528 ┼─────╯ ╰╯ ╰──────╯  ╰╮     │
+522 ┤                     ╰─────╯
+516 ┤
+```
+
+### Retrieve VirusTotal Results for an Extension's "External Call" Hostnames
+```
+➜  mrxcavator -vt hmbjbjdpkobdjplfobhljndfdfdipjhg
+
+** This API requires throttling. This extension will take approximately 0:01:05 to complete. **
+
+Processing 3 hosts...
+ * www.google.com, www.w3.org, www.zoom.us
+┌────────────────┬───────────┬───────┐
+│ Hostname       │ Positives │ Total │
+╞════════════════╪═══════════╪═══════╡
+│ www.google.com │ 0         │ 79    │
+├────────────────┼───────────┼───────┤
+│ www.w3.org     │ 1         │ 79    │
+├────────────────┼───────────┼───────┤
+│ www.zoom.us    │ 0         │ 79    │
+└────────────────┴───────────┴───────┘
 ```
 
 ### Set the CRXcavator API URI Value
@@ -443,18 +491,18 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 
 ### Test Current VirusTotal API Key Setting
 ```
-➜  mrxcavator  --test_virustotal_key
+➜  mrxcavator --test_virustotal_key
 
 	The VirusTotal API key was successfully tested!
 ```
 
 ### Use a Custom Configuration File
 ```
-➜  mrxcavator --config testing.ini
+➜  mrxcavator -c testing.ini
 
-	testing.ini does not exist, or is corrupted. Creating it...
+	/Users/mstanislav/.mrxcavator/testing.ini does not exist, or is corrupted. Creating it...
 
-➜  cat testing.ini
+➜  cat /Users/mstanislav/.mrxcavator/testing.ini
 [DEFAULT]
 crxcavator_api_uri = https://api.crxcavator.io/v1
 crxcavator_api_key =
@@ -466,11 +514,11 @@ extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 
 ### Get mrxcavator's Version
 ```
-➜  mrxcavator --version
-v0.4.8
+➜  mrxcavator -v
+v0.5.0
 ```
 
-### Example config.ini Contents
+### Example `config.ini` Contents
 ```
 ➜  cat config.ini
 [DEFAULT]
