@@ -10,7 +10,7 @@ The following overview was taken from the service's [about](https://crxcavator.i
 ## Using mrxcavator
 
 ### Installation
-Python >=3.6 is required for application compatibility (e.g. `brew install python` on macOS)
+**Python >=3.6.1 is required for application compatibility.**
 
 #### PyPI
 * Execute `pip3 install mrxcavator`
@@ -161,6 +161,7 @@ Permissions
 ```
 
 ### Save an Extension's Report to a File
+If no extension identifier is passed to the flag, a list of locally installed extensions will be given to select from.
 ```
 ➜  mrxcavator -r hdokiejnpimakedhajhdlcegeplioahd --export lastpass.txt
 
@@ -403,6 +404,7 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 ```
 
 ### Show a Graph of an Extension's Risk Score Over Time
+If no extension identifier is passed to the flag, a list of locally installed extensions will be given to select from.
 ```
 ➜  mrxcavator -g bmnlcjabgnpnenekpadlanbbkooimhnj
 
@@ -436,6 +438,7 @@ Extensions Found in ~/Library/Application Support/Google/Chrome/Default/Extensio
 ```
 
 ### Retrieve VirusTotal Results for an Extension's "External Call" Hostnames
+If no extension identifier is passed to the flag, a list of locally installed extensions will be given to select from.
 ```
 ➜  mrxcavator -vt hmbjbjdpkobdjplfobhljndfdfdipjhg
 
