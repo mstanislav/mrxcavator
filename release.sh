@@ -12,5 +12,8 @@ flake8 mrxcavator.py
 # Run `pdoc3` to update HTML documentation
 pdoc3 --html -c show_source_code=False mrxcavator.py -o docs --force
 
-# Run `poetry` to generate a requirements.txt file
+# Run `poetry export` to generate a requirements.txt file
 poetry export -f requirements.txt > requirements.txt
+
+# Run `poetry build` to build a release file for PyPI
+poetry build
