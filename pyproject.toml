@@ -11,12 +11,12 @@ documentation = "https://mstanislav.github.io/mrxcavator/mrxcavator.html"
 include = ["docs/mrxcavator.html"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
-validators = "0.15.0"
+python = "^3.6.1"
+validators = "^0.16.0"
 asciichartpy = "1.5.21"
-tqdm = "4.46.1"
-termtables = "0.2.1"
-requests = "2.23.0"
+tqdm = "^4.48.0"
+termtables = "^0.2.2"
+requests = "^2.24.0"
 PyInquirer = "1.0.3"
 
 [tool.poetry.dev-dependencies]

@@ -7,8 +7,6 @@ __author__ = "Mark Stanislav"
 __license__ = "MIT"
 __version__ = "0.5.0"
 
-# Last round of meta data addition to report summary view
-# what up with quotes...
 
 import os
 import re
@@ -382,11 +380,15 @@ def get_report_summary(report: dict) -> str:
 
     output = f"\nExtension Overview\n{'='*60}\n"
     output += f"  Extension Name:\t{webstore['name']}\n"
-    output += f"  Extension ID:\t\t{id}\n\n"
-    output += f"  Newest Version:\t{version} ({webstore['last_updated']})\n"
-    output += f"  Versions Known:\t{versions}\n"
-    output += f"  Store Rating:\t\t{round(webstore['rating'],2)} stars\n\n"
-    output += f"  Total Risk Score:\t{risk['total']}"
+    output += f"  Extension ID:\t\t{id}\n"
+
+    if webstore['website'] != "":
+        output += f"  Web Site:\t\t{webstore['website']}\n"
+
+    output += f"\n  Newest Version:\t{version} ({webstore['last_updated']})"
+    output += f"\n  Versions Known:\t{versions}"
+    output += f"\n  Store Rating:\t\t{round(webstore['rating'],2)} stars\n"
+    output += f"\n  Total Risk Score:\t{risk['total']}"
 
     if "csp" in risk:
         output += f"\n\n\nContent Security Policy\n{'='*60}"
