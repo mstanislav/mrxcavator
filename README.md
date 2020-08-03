@@ -30,8 +30,8 @@ usage: mrxcavator    [-c filename] [--extension_path path]
                      [--virustotal_key key] [--test_crxcavator_key]
                      [--test_crxcavator_uri] [--test_virustotal_key] [-s [id]]
                      [--submit_all] [-r [id]] [--report_all]
-                     [--report_all_table] [--export [file]] [-e] [-g [id]]
-                     [-vt [id]] [-v] [-h]
+                     [--report_all_table] [--export [filename]]
+                     [--input [filename]] [-e] [-g [id]] [-vt [id]] [-v] [-h]
 
 Features:
   -s [id], --submit [id]
@@ -41,7 +41,8 @@ Features:
                         get an extension's report
   --report_all          retrieve a report for all installed extensions
   --report_all_table    retrieve a table of details for installed extensions
-  --export [file]       export result to a specific file
+  --export [filename]   export a report to a specific filename
+  --input [filename]    load a specific filename for extension identifiers
   -e, --extensions      list installed extensions
   -g [id], --graph [id]
                         get a graph of an extension's risk
@@ -79,6 +80,7 @@ If no extension identifier is passed to the flag, a list of locally installed ex
 ```
 
 ### Submit All Locally Installed Extensions
+This feature can use the `--input [filename]` option to pass in a file containing extension identifiers to use instead of the filesystem folder.
 ```
 ➜  mrxcavator --submit_all
 
@@ -108,56 +110,56 @@ If no extension identifier is passed to the flag, a list of locally installed ex
 
 Extension Overview
 ============================================================
-  Extension Name:	Honey
-  Extension ID:		bmnlcjabgnpnenekpadlanbbkooimhnj
-  Web Site:		https://www.joinhoney.com
+  Extension Name:       Honey
+  Extension ID:         bmnlcjabgnpnenekpadlanbbkooimhnj
+  Web Site:             https://www.joinhoney.com
 
-  Newest Version:	12.3.2 (2020-07-13)
-  Versions Known:	44
-  Store Rating:		4.84 stars
+  Newest Version:       12.4.0 (2020-07-23)
+  Versions Known:       45
+  Store Rating:         4.84 stars
 
-  Total Risk Score:	657
+  Total Risk Score:     604
 
 
 Content Security Policy
 ============================================================
-  386	Total
+  386   Total
 ------------------------------------------------------------
-  25	child-src
-  25	connect-src
-  25	font-src
-  25	form-action
-  25	frame-ancestors
-  25	frame-src
-  25	img-src
-  25	manifest-src
-  25	media-src
-  1	object-src
-  25	plugin-types
-  25	sandbox
-  10	script-src
-  25	strict-dynamic
-  25	style-src
-  25	upgrade-insecure-requests
-  25	worker-src
+  25    child-src
+  25    connect-src
+  25    font-src
+  25    form-action
+  25    frame-ancestors
+  25    frame-src
+  25    img-src
+  25    manifest-src
+  25    media-src
+  1     object-src
+  25    plugin-types
+  25    sandbox
+  10    script-src
+  25    strict-dynamic
+  25    style-src
+  25    upgrade-insecure-requests
+  25    worker-src
 
 
 RetireJS
 ============================================================
-  130	Total
+  80    Total
 ------------------------------------------------------------
-  0	Low
-  40	Medium
-  90	High
-  0	Critical
+  0     Low
+  80    Medium
+  0     High
+  0     Critical
 
 
 Permissions
 ============================================================
-  135	Total
+  135   Total
 ------------------------------------------------------------
-  135	Required
-  0	Optional
+  135   Required
+  0     Optional
 ```
 
 ### Save an Extension's Report to a File
@@ -167,177 +169,198 @@ If no extension identifier is passed to the flag, a list of locally installed ex
 
 Extension Overview
 ============================================================
-  Extension Name:	LastPass: Free Password Manager
-  Extension ID:		hdokiejnpimakedhajhdlcegeplioahd
-  Web Site:		https://www.lastpass.com/
+  Extension Name:       LastPass: Free Password Manager
+  Extension ID:         hdokiejnpimakedhajhdlcegeplioahd
+  Web Site:             https://www.lastpass.com/
 
-  Newest Version:	4.52.0.1 (2020-07-16)
-  Versions Known:	44
-  Store Rating:		4.54 stars
+  Newest Version:       4.53.0.2 (2020-07-29)
+  Versions Known:       45
+  Store Rating:         4.54 stars
 
-  Total Risk Score:	354
+  Total Risk Score:     395
 
 
 Content Security Policy
 ============================================================
-  69	Total
+  70    Total
 ------------------------------------------------------------
-  1	child-src
-  37	connect-src
-  1	font-src
-  1	form-action
-  1	frame-ancestors
-  8	frame-src
-  4	img-src
-  1	manifest-src
-  1	media-src
-  1	object-src
-  1	plugin-types
-  1	sandbox
-  1	script-src
-  1	strict-dynamic
-  7	style-src
-  1	upgrade-insecure-requests
-  1	worker-src
+  1     child-src
+  37    connect-src
+  1     font-src
+  1     form-action
+  1     frame-ancestors
+  8     frame-src
+  5     img-src
+  1     manifest-src
+  1     media-src
+  1     object-src
+  1     plugin-types
+  1     sandbox
+  1     script-src
+  1     strict-dynamic
+  7     style-src
+  1     upgrade-insecure-requests
+  1     worker-src
 
 
 RetireJS
 ============================================================
-  150	Total
+  190   Total
 ------------------------------------------------------------
-  20	Low
-  40	Medium
-  90	High
-  0	Critical
+  20    Low
+  80    Medium
+  90    High
+  0     Critical
 
 
 Permissions
 ============================================================
-  135	Total
+  135   Total
 ------------------------------------------------------------
-  110	Required
-  25	Optional
+  110   Required
+  25    Optional
+
+
+External Calls
+============================================================
+  - https://www.dropbox.com/logout
+  - https://www.netflix.com/Login
+  - https://blog.lastpass.com/2019/03/new-improved-look-lastpass.html/
+  - http://nowhere.co
+  - https://lastpass.com/?securitychallenge=1
+  - https://lastpass.com/
+  - https://mint.intuit.com/login.event?task=S
+  - https://accounts.lastpass.com/federated/oidcredirect.html
+  - https://lastpass.com/forgot.php
+  - https://www.logmeininc.com/legal/privacy?fromwebsite=1
+  - https://lastpass.com/safariAppExtension.php?source=dropdown
+  - https://lastpass.com/?ac=1
+  - https://graph.microsoft.com/v1.0/me?$select=id,displayName,mail&$expand=extensions
+  - https://lastpass.com/experience-update
+  - https://lastpass.com/fake/fake.php
+  - https://support.logmeininc.com/lastpass/help/lastpass-authenticator-lp030014
+  - https://lastpass.com/features_joinpremium4.php?a=1
+  - https://www.lastpass.com/families/
+  - https://www.lastpass.com/families
+  - https://lastpass.eu/
+  - http://link.lastpass.com/InpUsrLpEmb
 
 
 >> Report saved in /Users/mstanislav/.mrxcavator/reports/lastpass.txt <<
 ```
 
 ### Get Reports For All Locally Installed Extensions
+This feature can use the `--input [filename]` option to pass in a file containing extension identifiers to use instead of the filesystem folder.
 ```
 ➜  mrxcavator --report_all
 
 Extension Overview
 ============================================================
-  Extension Name:	Google Docs Offline
-  Extension ID:		ghbmnnjooekpmoecnnnilnnbdlolhkhi
-  Web Site:		http://www.docs.google.com
+  Extension Name:       Honey
+  Extension ID:         bmnlcjabgnpnenekpadlanbbkooimhnj
+  Web Site:             https://www.joinhoney.com
 
-  Newest Version:	1.9.1 (2020-03-04)
-  Versions Known:	5
-  Store Rating:		2.87 stars
+  Newest Version:       12.4.0 (2020-07-23)
+  Versions Known:       45
+  Store Rating:         4.84 stars
 
-  Total Risk Score:	423
+  Total Risk Score:     604
 
 
 Content Security Policy
 ============================================================
-  377	Total
+  386   Total
 ------------------------------------------------------------
-  25	child-src
-  25	connect-src
-  25	font-src
-  25	form-action
-  25	frame-ancestors
-  25	frame-src
-  25	img-src
-  25	manifest-src
-  25	media-src
-  1	object-src
-  25	plugin-types
-  25	sandbox
-  1	script-src
-  25	strict-dynamic
-  25	style-src
-  25	upgrade-insecure-requests
-  25	worker-src
+  25    child-src
+  25    connect-src
+  25    font-src
+  25    form-action
+  25    frame-ancestors
+  25    frame-src
+  25    img-src
+  25    manifest-src
+  25    media-src
+  1     object-src
+  25    plugin-types
+  25    sandbox
+  10    script-src
+  25    strict-dynamic
+  25    style-src
+  25    upgrade-insecure-requests
+  25    worker-src
 
 
-Web Store
+RetireJS
 ============================================================
-  6	Total
+  80    Total
 ------------------------------------------------------------
-  1	Address
-  1	Email
-  2	Last Updated
-  2	Rating
+  0     Low
+  80    Medium
+  0     High
+  0     Critical
 
 
 Permissions
 ============================================================
-  40	Total
+  135   Total
 ------------------------------------------------------------
-  40	Required
-  0	Optional
+  135   Required
+  0     Optional
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Extension Overview
 ============================================================
-  Extension Name:	Honey
-  Extension ID:		bmnlcjabgnpnenekpadlanbbkooimhnj
-  Web Site:		https://www.joinhoney.com
+  Extension Name:       Zoom
+  Extension ID:         hmbjbjdpkobdjplfobhljndfdfdipjhg
 
-  Newest Version:	12.3.2 (2020-07-13)
-  Versions Known:	44
-  Store Rating:		4.84 stars
+  Newest Version:       5.0.4169.0628 (2020-06-30)
+  Versions Known:       26
+  Store Rating:         2.76 stars
 
-  Total Risk Score:	657
-
-
-Content Security Policy
-============================================================
-  386	Total
-------------------------------------------------------------
-  25	child-src
-  25	connect-src
-  25	font-src
-  25	form-action
-  25	frame-ancestors
-  25	frame-src
-  25	img-src
-  25	manifest-src
-  25	media-src
-  1	object-src
-  25	plugin-types
-  25	sandbox
-  10	script-src
-  25	strict-dynamic
-  25	style-src
-  25	upgrade-insecure-requests
-  25	worker-src
+  Total Risk Score:     251
 
 
 RetireJS
 ============================================================
-  130	Total
+  180   Total
 ------------------------------------------------------------
-  0	Low
-  40	Medium
-  90	High
-  0	Critical
+  10    Low
+  140   Medium
+  30    High
+  0     Critical
+
+
+Web Store
+============================================================
+  6     Total
+------------------------------------------------------------
+  1     Address
+  1     Last Updated
+  2     Rating
+  1     Rating Users
+  1     Website
 
 
 Permissions
 ============================================================
-  135	Total
+  65    Total
 ------------------------------------------------------------
-  135	Required
-  0	Optional
+  65    Required
+  0     Optional
+
+
+External Calls
+============================================================
+  - https://www.google.com/accounts/Logout
+  - http://www.w3.org/1998/Math/MathML
+  - https://www.zoom.us
 
 [...snip...]
 ```
 
 ### Get a Report Summary Table for All Locally Installed Extensions
+This feature can use the `--input [filename]` option to pass in a file containing extension identifiers to use instead of the filesystem folder.
 ```
 ➜  mrxcavator --report_all_table
 ┌────────────────────────────────────────────┬───────────────┬────────────┬────────┬──────┐
