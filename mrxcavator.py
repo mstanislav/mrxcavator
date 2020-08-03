@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 
 import os
@@ -37,6 +37,53 @@ CRX_PATH = "~/Library/Application Support/Google/Chrome/Default/Extensions/"
 
 config = configparser.ConfigParser()
 extension_path = ""
+
+
+def extensions_from_file(filename: str) -> list:
+    """Returns a list of extension dicts based on the passed-in file.
+
+    Args:
+        filename: A file containing a list of extension identifiers.
+
+    Returns:
+        A list of extensions.
+    """
+    try:
+        with open(filename, "r") as fileHandle:
+            extensions = []
+
+            for extension in fileHandle.read().splitlines():
+                if len(extension) == 32 and extension:
+                    extensions.append(
+                        {"id": extension, "name": extension, "version": "TBD"}
+                    )
+
+            return extensions
+
+    except IOError:
+        error(f"Cannot read {filename}. Please check permissions.", True)
+
+    return []
+
+
+def get_extcalls(results: list) -> list:
+    """Returns a list of unique, valid URIs based on the passed-in list.
+
+    Args:
+        results: A list of "external calls" from a CRXcavator report.
+
+    Returns:
+        A list of items.
+    """
+    data = []
+
+    for url in results:
+        netloc = urlparse(url).netloc
+
+        if validators.domain(netloc) and url not in data:
+            data.append(url)
+
+    return data
 
 
 def chunker(seq: list, size: int) -> Generator:
@@ -444,6 +491,11 @@ def get_report_summary(report: dict) -> str:
         output += f"\n  {perms_required}\tRequired"
         output += f"\n  {perms_optional}\tOptional"
 
+    if "extcalls" in report[-1]["data"]:
+        output += f"\n\n\nExternal Calls\n{'='*60}"
+        for result in get_extcalls(report[-1]["data"]["extcalls"]):
+            output += f"\n  - {result}"
+
     return output + "\n"
 
 
@@ -508,7 +560,12 @@ def submit_extensions(extensions: list, path: str) -> None:
     print(f"\nSubmitting extensions found in {path}\n")
 
     for extension in tqdm(extensions, bar_format="{l_bar}{bar}"):
-        if submit_extension(extension["id"]):
+        if isinstance(extension, dict):
+            submit = submit_extension(extension["id"])
+        else:
+            submit = submit_extension(extension)
+
+        if submit:
             successful.append(extension["name"])
         else:
             failed.append(extension["name"])
@@ -549,7 +606,11 @@ def get_reports(extensions: list, export: bool) -> None:
         None.
     """
     for extension in extensions:
-        report = get_report(extension["id"])
+        if isinstance(extension, dict):
+            report = get_report(extension["id"])
+        else:
+            report = get_report(extension)
+
         if report:
             summary = get_report_summary(report)
             print(f"{summary}\n{60*'~'}")
@@ -730,7 +791,7 @@ def test_crxcavator_key() -> bool:
         else:
             return False
     else:
-        error(f"No CRXcavator API key has been set yet.")
+        error("No CRXcavator API key has been set yet.")
         return False
 
 
@@ -773,7 +834,7 @@ def test_virustotal_key() -> bool:
         else:
             return False
     else:
-        error(f"No VirusTotal API key has been set yet.")
+        error("No VirusTotal API key has been set yet.")
         return False
 
 
@@ -1126,8 +1187,16 @@ def build_parser() -> Any:
             "--export",
             nargs="?",
             const="empty",
-            metavar="file",
-            help="export result to a specific file",
+            metavar="filename",
+            help="export a report to a specific filename",
+        )
+
+        help_features.add_argument(
+            "--input",
+            nargs="?",
+            const="empty",
+            metavar="filename",
+            help="load a specific filename for extension identifiers",
         )
 
         help_features.add_argument(
@@ -1225,33 +1294,33 @@ def main() -> None:
 
     elif args.extension_path:
         if set_extension_path(config_file, args.extension_path):
-            print(f"\n\tThe system extension path was set successfully!\n")
+            print("\n\tThe system extension path was set successfully!\n")
 
     elif args.crxcavator_key:
         if set_crxcavator_key(config_file, args.crxcavator_key):
-            print(f"\n\tThe CRXcavator API key was set successfully!\n")
+            print("\n\tThe CRXcavator API key was set successfully!\n")
 
     elif args.crxcavator_uri:
         if set_crxcavator_uri(config_file, args.crxcavator_uri):
-            print(f"\n\tThe CRXcavator API URI was set successfully!\n")
+            print("\n\tThe CRXcavator API URI was set successfully!\n")
 
     elif args.virustotal_key:
         if set_virustotal_key(config_file, args.virustotal_key):
-            print(f"\n\tThe VirusTotal API key was set successfully!\n")
+            print("\n\tThe VirusTotal API key was set successfully!\n")
 
     elif args.test_crxcavator_key:
         if test_crxcavator_key():
-            print(f"\n\tThe CRXcavator API key was successfully tested!\n")
+            print("\n\tThe CRXcavator API key was successfully tested!\n")
 
     elif args.test_crxcavator_uri:
         if test_crxcavator_uri():
-            print(f"\n\tThe CRXcavator API URI was successfully tested!\n")
+            print("\n\tThe CRXcavator API URI was successfully tested!\n")
         else:
             error("The CRXcavator API URI returned an unexpected result.")
 
     elif args.test_virustotal_key:
         if test_virustotal_key():
-            print(f"\n\tThe VirusTotal API key was successfully tested!\n")
+            print("\n\tThe VirusTotal API key was successfully tested!\n")
 
     elif args.extensions:
         extensions = get_installed_extensions(extension_path)
@@ -1262,9 +1331,12 @@ def main() -> None:
             get_extensions_table(extensions, extension_path)
 
     elif args.submit_all:
-        submit_extensions(
-            get_installed_extensions(extension_path), extension_path
-        )
+        if args.input:
+            submit_extensions(extensions_from_file(args.input), args.input)
+        else:
+            submit_extensions(
+                get_installed_extensions(extension_path), extension_path
+            )
 
     elif args.report_all:
         if args.export:
@@ -1272,10 +1344,16 @@ def main() -> None:
         else:
             export = False
 
-        get_reports(get_installed_extensions(extension_path), export)
+        if args.input:
+            get_reports(extensions_from_file(args.input), export)
+        else:
+            get_reports(get_installed_extensions(extension_path), export)
 
     elif args.report_all_table:
-        get_reports_table(get_installed_extensions(extension_path))
+        if args.input:
+            get_reports_table(extensions_from_file(args.input))
+        else:
+            get_reports_table(get_installed_extensions(extension_path))
 
     elif args.virustotal:
         if args.virustotal == "empty":
@@ -1286,7 +1364,7 @@ def main() -> None:
         key = config.get("custom", "virustotal_api_key")
 
         if key == "":
-            error(f"No VirusTotal API key has been set yet.", True)
+            error("No VirusTotal API key has been set yet.", True)
 
         results = get_report(id)
 

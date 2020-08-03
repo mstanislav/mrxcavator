@@ -131,3 +131,6 @@ dmypy.json
 # mrxcavator
 *.ini
 reports/*
+
+# vscode
+.vscode/*
