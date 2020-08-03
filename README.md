@@ -80,7 +80,7 @@ If no extension identifier is passed to the flag, a list of locally installed ex
 ```
 
 ### Submit All Locally Installed Extensions
-This feature can use the `--input [filename]` option to pass in a file containing extension identifiers to use instead of the filesystem folder.
+This feature supports `--input [filename]` to load extension identifiers from a text file.
 ```
 ➜  mrxcavator --submit_all
 
@@ -250,7 +250,7 @@ External Calls
 ```
 
 ### Get Reports For All Locally Installed Extensions
-This feature can use the `--input [filename]` option to pass in a file containing extension identifiers to use instead of the filesystem folder.
+This feature supports `--input [filename]` to load extension identifiers from a text file.
 ```
 ➜  mrxcavator --report_all
 
@@ -360,7 +360,7 @@ External Calls
 ```
 
 ### Get a Report Summary Table for All Locally Installed Extensions
-This feature can use the `--input [filename]` option to pass in a file containing extension identifiers to use instead of the filesystem folder.
+This feature supports `--input [filename]` to load extension identifiers from a text file.
 ```
 ➜  mrxcavator --report_all_table
 ┌────────────────────────────────────────────┬───────────────┬────────────┬────────┬──────┐
