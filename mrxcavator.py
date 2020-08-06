@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.6.1"
+__version__ = "0.6.2"
 
 
 import os
@@ -316,6 +316,10 @@ def call_api(end_point: str, method: str, values=None, headers=None) -> dict:
         error("404 - API Not Found - Check your API configuration.", True)
     elif response.status_code == 500:
         error("500 - Server Error - Check your API configuration.", True)
+    elif response.status_code == 502:
+        error("502 - Bad Gateway - Retrying in five seconds...", False)
+        time.sleep(5)
+        call_api(end_point, method, values, headers)
     else:
         error("An unknown API error has occurred.", True)
 
