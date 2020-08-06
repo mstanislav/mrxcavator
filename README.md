@@ -541,7 +541,7 @@ extension_path = ~/Library/Application Support/Google/Chrome/Default/Extensions/
 ### Get mrxcavator's Version
 ```
 ➜  mrxcavator -v
-v0.5.0
+v0.6.1
 ```
 
 ### Example `config.ini` Contents

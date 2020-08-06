@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 
 import os
@@ -385,6 +385,7 @@ def get_reports_table(extensions: list) -> None:
             data.append(
                 [
                     webstore["name"],
+                    extension["id"],
                     version,
                     webstore["last_updated"],
                     round(webstore["rating"], 2),
@@ -394,6 +395,7 @@ def get_reports_table(extensions: list) -> None:
 
     header = [
         "\033[1mName\033[0m",
+        "\033[1mIdentifier\033[0m",
         "\033[1mVersion\033[0m",
         "\033[1mUpdated\033[0m",
         "\033[1mRating\033[0m",
@@ -405,7 +407,7 @@ def get_reports_table(extensions: list) -> None:
         header=header,
         style=termtables.styles.thin_double,
         padding=(0, 1),
-        alignment="lllll",
+        alignment="llllll",
     )
 
 
