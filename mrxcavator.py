@@ -5,7 +5,7 @@
 
 __author__ = "Mark Stanislav"
 __license__ = "MIT"
-__version__ = "0.6.2"
+__version__ = "0.6.3"
 
 
 import os
@@ -219,7 +219,10 @@ def submit_virustotal(hosts: list, key: str) -> bool:
         A boolean.
     """
     if call_api(
-        "/virustotal/report", "POST", {"apiKey": key, "urls": hosts}, {},
+        "/virustotal/report",
+        "POST",
+        {"apiKey": key, "urls": hosts},
+        {},
     ):
         return True
     else:
@@ -237,7 +240,10 @@ def get_virustotal_reports(hosts: list, key: str) -> dict:
         A dict of VirusTotal results for passed-in hostnames.
     """
     reports = call_api(
-        "/virustotal/results", "POST", {"apiKey": key, "urls": hosts}, {},
+        "/virustotal/results",
+        "POST",
+        {"apiKey": key, "urls": hosts},
+        {},
     )
 
     if reports:
@@ -520,7 +526,8 @@ def save_report(filename: str, content: str) -> bool:
             os.mkdir(get_report_dir())
         except IOError:
             error(
-                f"Cannot create {get_report_dir()} - check permissions.", True,
+                f"Cannot create {get_report_dir()} - check permissions.",
+                True,
             )
 
     try:
@@ -638,7 +645,8 @@ def write_config(filename: str) -> bool:
             os.mkdir(get_root_dir())
         except IOError:
             error(
-                f"Cannot create {get_root_dir()} - check permissions.", True,
+                f"Cannot create {get_root_dir()} - check permissions.",
+                True,
             )
 
     try:
@@ -867,10 +875,12 @@ def find_extension_directories(path: str) -> list:
         A list containing Chrome extension directories.
     """
     directories = []
+    path = get_crx_path()
 
-    for dir in next(os.walk(get_crx_path()))[1]:
-        if len(dir) == 32:
-            directories.append(dir)
+    if os.path.isdir(os.path.expanduser(path)) is True:
+        for dir in next(os.walk(path))[1]:
+            if len(dir) == 32:
+                directories.append(dir)
 
     return directories
 
