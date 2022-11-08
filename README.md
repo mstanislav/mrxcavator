@@ -2,9 +2,7 @@
 
 mrxcavator is a CLI client implementation for the service [CRXcavator.io](https://crxcavator.io).
 
-[![OpenSSF Scorecard]
-(https://api.securityscorecards.dev/projects/github.com/mstanislav/mrxcavator/badge)]
-(https://api.securityscorecards.dev/projects/github.com/mstanislav/mrxcavator)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/mstanislav/mrxcavator/badge)](https://api.securityscorecards.dev/projects/github.com/mstanislav/mrxcavator)
 
 ## Overview
 
